@@ -33,7 +33,7 @@ while IFS= read -r test_json; do
   # - XDG_CONFIG_HOME points to empty dir (no global config)
   # - Working directory is repo_root (runok.yml symlinked to target config)
   # shellcheck disable=SC2086 # Intentional word splitting: $command contains multiple arguments
-  result=$(cd "$repo_root" && XDG_CONFIG_HOME="$empty_xdg" runok check --output-format json -- $command 2> /dev/null)
+  result=$(cd "$repo_root" && XDG_CONFIG_HOME="$empty_xdg" runok check --output-format json -- $command 2> /dev/null) || true
   actual=$(echo "$result" | jq -r '.decision')
 
   total=$((total + 1))
