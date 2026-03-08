@@ -1,0 +1,76 @@
+# Read-only git commands.
+#
+# Allows git subcommands that do not modify the repository.
+# Destructive subcommands (push, commit, rebase, etc.) are not included.
+
+rules:
+  # --- Status / inspection ---
+  - allow: 'git status *'
+  - allow: 'git diff *'
+  - allow: 'git log *'
+  - allow: 'git show *'
+  - allow: 'git shortlog *'
+  - allow: 'git describe *'
+  - allow: 'git rev-parse *'
+  - allow: 'git rev-list *'
+  - allow: 'git cat-file *'
+  - allow: 'git ls-files *'
+  - allow: 'git ls-tree *'
+  - allow: 'git ls-remote *'
+  - allow: 'git name-rev *'
+  - allow: 'git verify-commit *'
+  - allow: 'git verify-tag *'
+
+  # --- Blame / annotation ---
+  - allow: 'git blame *'
+  - allow: 'git annotate *'
+
+  # --- Search ---
+  - allow: 'git grep *'
+
+  # --- Branch (read-only: list, show) ---
+  - allow: 'git branch'
+  - allow: 'git branch -a|--all'
+  - allow: 'git branch -r|--remotes'
+  - allow: 'git branch -l|--list *'
+  - allow: 'git branch -v|--verbose'
+  - allow: 'git branch -vv'
+  - allow: 'git branch --contains *'
+  - allow: 'git branch --merged *'
+  - allow: 'git branch --no-merged *'
+  - allow: 'git branch --show-current'
+
+  # --- Tag (read-only: list, verify) ---
+  - allow: 'git tag'
+  - allow: 'git tag -l|--list *'
+  - allow: 'git tag -v|--verify *'
+  - allow: 'git tag --contains *'
+  - allow: 'git tag --merged *'
+
+  # --- Remote (read-only: list, show) ---
+  - allow: 'git remote'
+  - allow: 'git remote -v|--verbose'
+  - allow: 'git remote show *'
+  - allow: 'git remote get-url *'
+
+  # --- Config (read-only: get, list) ---
+  - allow: 'git config --get *'
+  - allow: 'git config --get-all *'
+  - allow: 'git config --list'
+  - allow: 'git config -l'
+  - allow: 'git config --get-regexp *'
+
+  # --- Stash (read-only: list, show) ---
+  - allow: 'git stash list *'
+  - allow: 'git stash show *'
+
+  # --- Reflog (read-only) ---
+  - allow: 'git reflog *'
+
+  # --- Count / stats ---
+  - allow: 'git count-objects *'
+  - allow: 'git for-each-ref *'
+
+  # --- Help ---
+  - allow: 'git help *'
+  - allow: 'git --version'

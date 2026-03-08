@@ -1,0 +1,101 @@
+# Read-only Unix commands.
+#
+# Allows common Unix commands that do not modify the filesystem.
+# Commands with destructive flags are excluded via negation patterns.
+
+rules:
+  # --- File viewing ---
+  - allow: 'cat *'
+  - allow: 'head *'
+  - allow: 'tail *'
+  - allow: 'less *'
+  - allow: 'more *'
+  - allow: 'bat *'
+
+  # --- File information ---
+  - allow: 'ls *'
+  - allow: 'stat *'
+  - allow: 'file *'
+  - allow: 'wc *'
+  - allow: 'du *'
+  - allow: 'df *'
+
+  # --- Search ---
+  - allow: 'find *'
+  - allow: 'grep *'
+  - allow: 'rg *'
+  - allow: 'ag *'
+  - allow: 'fd *'
+  - allow: 'fzf *'
+  - allow: 'which *'
+  - allow: 'whereis *'
+  - allow: 'type *'
+  - allow: 'command -v *'
+
+  # --- Text processing (read-only) ---
+  - allow: 'awk *'
+  - allow: 'sed !-i *'
+  - allow: 'sed !--in-place *'
+  - allow: 'sort *'
+  - allow: 'uniq *'
+  - allow: 'cut *'
+  - allow: 'tr *'
+  - allow: 'paste *'
+  - allow: 'join *'
+  - allow: 'comm *'
+  - allow: 'diff *'
+  - allow: 'colordiff *'
+  - allow: 'jq *'
+  - allow: 'yq *'
+  - allow: 'xq *'
+
+  # --- System information ---
+  - allow: 'uname *'
+  - allow: 'hostname'
+  - allow: 'whoami'
+  - allow: 'id'
+  - allow: 'id *'
+  - allow: 'date *'
+  - allow: 'uptime'
+  - allow: 'ps *'
+  - allow: 'top -l *'
+  - allow: 'free *'
+  - allow: 'lsof *'
+  - allow: 'env'
+  - allow: 'printenv *'
+  - allow: 'echo *'
+  - allow: 'printf *'
+
+  # --- Directory navigation ---
+  - allow: 'pwd'
+  - allow: 'tree *'
+  - allow: 'realpath *'
+  - allow: 'basename *'
+  - allow: 'dirname *'
+
+  # --- Network (read-only) ---
+  - allow: 'curl -X|--request GET *'
+  - allow: 'ping *'
+  - allow: 'dig *'
+  - allow: 'nslookup *'
+  - allow: 'host *'
+  - allow: 'traceroute *'
+  - allow: 'ss *'
+  - allow: 'netstat *'
+
+  # --- Hashing / checksums ---
+  - allow: 'md5sum *'
+  - allow: 'sha256sum *'
+  - allow: 'shasum *'
+  - allow: 'cksum *'
+
+  # --- Miscellaneous ---
+  - allow: 'man *'
+  - allow: 'true'
+  - allow: 'false'
+  - allow: 'test *'
+  - allow: 'expr *'
+  - allow: 'seq *'
+  - allow: 'yes *'
+  - allow: 'xdg-open *'
+  - allow: 'open *'

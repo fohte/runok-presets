@@ -1,0 +1,18 @@
+# Wrapper command definitions for recursive evaluation.
+#
+# These patterns tell runok which commands wrap other commands,
+# so that the inner command can be evaluated against rules.
+
+definitions:
+  wrappers:
+    - 'bash -c <cmd>'
+    - 'sh -c <cmd>'
+    - 'sudo <cmd>'
+    - 'sudo -u * <cmd>'
+    - 'xargs <cmd>'
+    - 'xargs -I * <cmd>'
+    - 'time <cmd>'
+    - 'env <cmd>'
+    - 'env *=* <cmd>'
+    - "find <paths>... -exec <cmd> \\;"
+    - "find <paths>... -execdir <cmd> \\;"
