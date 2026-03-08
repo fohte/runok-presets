@@ -53,7 +53,7 @@ rules:
   - allow: 'git branch --show-current'
   - allow: 'git branch --contains|--merged|--no-merged *'
   - allow: 'git tag'
-  - allow: 'git tag [-n *] [-l|--list] *'
+  - allow: 'git tag [-n *] -l|--list *'
   - allow: 'git tag -v|--verify *'
   - allow: 'git tag --contains|--merged|--no-merged *'
   - allow: 'git remote -v|--verbose'
