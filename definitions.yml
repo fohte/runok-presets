@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fohte/runok/main/schema/runok.schema.json
+
 # Wrapper command definitions for recursive evaluation.
 #
 # These patterns tell runok which commands wrap other commands,

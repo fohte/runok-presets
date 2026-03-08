@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fohte/runok/main/schema/runok.schema.json
+
 # Base preset that bundles all standard presets.
 #
 # Usage in your runok.yml:
