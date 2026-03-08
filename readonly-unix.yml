@@ -24,7 +24,7 @@ rules:
   - allow: 'file *'
   - allow: 'du *'
   - allow: 'df *'
-  - allow: 'find !-delete|!-fprint|!-fprint0|!-fprintf|!-fls *'
+  - allow: 'find !-delete|-fprint|-fprint0|-fprintf|-fls *'
   - allow: 'fd *'
   - allow: 'basename *'
   - allow: 'dirname *'
@@ -46,7 +46,7 @@ rules:
   # awk/gawk excluded: language-internal features (> "file" redirection,
   # system()) allow arbitrary file writes and command execution that cannot
   # be controlled through CLI argument matching.
-  - allow: 'sort !-o *'
+  - allow: 'sort !-o|--output *'
   - allow: 'uniq *'
   - allow: 'cut *'
   - allow: 'tr *'
@@ -68,7 +68,7 @@ rules:
   # ── File comparison ──
   - allow: 'diff *'
   - allow: 'diff3 *'
-  - allow: 'sdiff !-o *'
+  - allow: 'sdiff !-o|--output *'
   - allow: 'cmp *'
   - allow: 'comm *'
 
@@ -123,7 +123,7 @@ rules:
   - allow: 'hostid'
   - allow: 'nproc'
   - allow: 'uptime'
-  - allow: 'date !-s *'
+  - allow: 'date !-s|--set *'
   - allow: 'cal *'
   - allow: 'ncal *'
 
