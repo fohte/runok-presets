@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fohte/runok/main/schema/runok.schema.json
+
+# Read-only git commands.
+#
+# Allows git subcommands that do not modify the repository.
+# Destructive subcommands (push, commit, rebase, etc.) are not included.
+
+rules:
+  # ── Fully read-only subcommands ──
+  - allow: 'git status *'
+  - allow: 'git log *'
+  - allow: 'git diff *'
+  - allow: 'git show *'
+  - allow: 'git blame *'
+  - allow: 'git annotate *'
+  - allow: 'git shortlog *'
+  - allow: 'git describe *'
+  - allow: 'git grep *'
+  - allow: 'git help *'
+  - allow: 'git version'
+  - allow: 'git ls-files *'
+  - allow: 'git ls-tree *'
+  - allow: 'git ls-remote *'
+  - allow: 'git cat-file *'
+  - allow: 'git rev-parse *'
+  - allow: 'git rev-list *'
+  - allow: 'git name-rev *'
+  - allow: 'git diff-tree *'
+  - allow: 'git diff-index *'
+  - allow: 'git diff-files *'
+  - allow: 'git difftool !--extcmd *'
+  - allow: 'git for-each-ref *'
+  - allow: 'git show-ref *'
+  - allow: 'git show-branch *'
+  - allow: 'git verify-commit *'
+  - allow: 'git verify-tag *'
+  - allow: 'git count-objects *'
+  # fsck: --lost-found writes dangling objects to .git/lost-found/ but
+  # does not modify existing data or repository state.
+  - allow: 'git fsck *'
+  - allow: 'git cherry *'
+  - allow: 'git merge-base *'
+  - allow: 'git merge-tree *'
+  - allow: 'git range-diff *'
+  - allow: 'git whatchanged *'
+  - allow: 'git check-ignore *'
+  - allow: 'git check-attr *'
+  - allow: 'git reflog show *'
+
+  # ── Subcommands allowed in read-only mode only ──
+  - allow: 'git branch'
+  - allow: 'git branch [-a|--all] [-r|--remotes] [-v|--verbose] [--sort *] [-l|--list *]'
+  - allow: 'git branch --show-current'
+  - allow: 'git branch --contains|--merged|--no-merged *'
+  - allow: 'git tag'
+  - allow: 'git tag [-n *] [-l|--list] *'
+  - allow: 'git tag -v|--verify *'
+  - allow: 'git tag --contains|--merged|--no-merged *'
+  - allow: 'git remote -v|--verbose'
+  - allow: 'git remote show *'
+  - allow: 'git remote get-url *'
+  - allow: 'git config --get *'
+  - allow: 'git config --get-all *'
+  - allow: 'git config -l|--list *'

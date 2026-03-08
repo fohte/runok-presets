@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fohte/runok/main/schema/runok.schema.json
+
+# Base preset that bundles all standard presets.
+#
+# Usage in your runok.yml:
+#   extends:
+#     - 'github:fohte/runok-presets/base'
+
+extends:
+  - ./definitions.yml
+  - ./readonly-unix.yml
+  - ./readonly-git.yml
+
+rules:
+  # Any command with --help or --version is safe to run.
+  - allow: '* --help'
+  - allow: '* --version'

@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fohte/runok/main/schema/runok.schema.json
+
+# Wrapper command definitions for recursive evaluation.
+#
+# These patterns tell runok which commands wrap other commands,
+# so that the inner command can be evaluated against rules.
+
+definitions:
+  wrappers:
+    - 'bash -c <cmd>'
+    - 'sh -c <cmd>'
+    - 'sudo <opts> <cmd>'
+    - 'xargs <opts> <cmd>'
+    - 'time <cmd>'
+    - 'env <opts> <vars> <cmd>'
+    - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
