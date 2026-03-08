@@ -25,7 +25,7 @@ jobs:
 
       # Update major version tag (e.g., v1) to allow referencing presets as:
       #   extends: github:fohte/runok-presets/base@v1
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: ${{ steps.release.outputs.release_created }}
         with:
           fetch-depth: 0
