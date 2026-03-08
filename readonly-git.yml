@@ -35,6 +35,8 @@ rules:
   - allow: 'git verify-commit *'
   - allow: 'git verify-tag *'
   - allow: 'git count-objects *'
+  # fsck: --lost-found writes dangling objects to .git/lost-found/ but
+  # does not modify existing data or repository state.
   - allow: 'git fsck *'
   - allow: 'git cherry *'
   - allow: 'git merge-base *'

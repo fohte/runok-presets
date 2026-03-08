@@ -43,8 +43,9 @@ rules:
 
   # ── Text processing ──
   - allow: 'sed !-i|--in-place *'
-  - allow: 'awk !-i *'
-  - allow: 'gawk !-i|--include *'
+  # awk/gawk excluded: language-internal features (> "file" redirection,
+  # system()) allow arbitrary file writes and command execution that cannot
+  # be controlled through CLI argument matching.
   - allow: 'sort !-o *'
   - allow: 'uniq *'
   - allow: 'cut *'
@@ -141,6 +142,8 @@ rules:
   # ── Process information ──
   - allow: 'ps *'
   - allow: 'pgrep *'
+  # top: interactive mode can send signals, but this preset targets LLM
+  # agents which operate non-interactively. No filesystem writes involved.
   - allow: 'top *'
 
   # ── Environment and configuration ──
