@@ -14,7 +14,7 @@ total=0
 
 # Create an empty directory for XDG_CONFIG_HOME to ignore global config.
 empty_xdg=$(mktemp -d)
-trap 'rm -r "$empty_xdg"' EXIT
+trap 'rm -r "$empty_xdg"; rm -f "$repo_root/runok.yml"' EXIT
 
 while IFS= read -r test_json; do
   command=$(echo "$test_json" | jq -r '.command')
@@ -47,8 +47,10 @@ while IFS= read -r test_json; do
   fi
 done < <(yq -o=json '.tests[]' "$repo_root/tests/test-cases.yml" | jq -c '.')
 
-# Clean up temporary runok.yml
-rm -f "$repo_root/runok.yml"
+if [ "$total" -eq 0 ]; then
+  echo "ERROR: no test cases found"
+  exit 1
+fi
 
 echo ""
 echo "$((total - failures))/$total passed"
