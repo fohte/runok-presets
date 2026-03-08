@@ -53,6 +53,7 @@ rules:
   - allow: 'join *'
   - allow: 'fold *'
   - allow: 'fmt *'
+  - allow: 'col *'
   - allow: 'column *'
   - allow: 'rev *'
   - allow: 'expand *'
@@ -165,6 +166,13 @@ rules:
   - allow: 'numfmt *'
   - allow: 'seq *'
   - allow: 'jot *'
+
+  # ── Shell builtins ──
+  - allow: ': *'
+  - allow: '[ *'
+  - allow: 'cd *'
+  - allow: 'pwd'
+  - allow: 'read *'
 
   # ── Output ──
   - allow: 'echo *'
