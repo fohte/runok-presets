@@ -6,10 +6,6 @@ on:
 
 name: release-please
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
@@ -33,6 +29,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         with:
           fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Update major version tag
         if: ${{ steps.release.outputs.release_created }}
