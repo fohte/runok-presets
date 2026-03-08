@@ -4,7 +4,7 @@
 # Destructive subcommands (push, commit, rebase, etc.) are not included.
 
 rules:
-  # ── 完全に読み取り専用なサブコマンド ──
+  # ── Fully read-only subcommands ──
   - allow: 'git status *'
   - allow: 'git log *'
   - allow: 'git diff *'
@@ -43,7 +43,7 @@ rules:
   - allow: 'git check-attr *'
   - allow: 'git reflog *'
 
-  # ── 読み取りモードのみ許可するサブコマンド ──
+  # ── Subcommands allowed in read-only mode only ──
   - allow: 'git branch'
   - allow: 'git branch [-a|--all] [-r|--remotes] [-v|--verbose] [--sort *] [-l|--list *]'
   - allow: 'git branch --show-current'

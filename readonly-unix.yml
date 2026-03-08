@@ -4,7 +4,7 @@
 # Commands with destructive flags are excluded via negation patterns.
 
 rules:
-  # ── ファイル内容表示 ──
+  # ── File viewing ──
   - allow: 'cat *'
   - allow: 'tac *'
   - allow: 'head *'
@@ -14,7 +14,7 @@ rules:
   - allow: 'more *'
   - allow: 'bat *'
 
-  # ── ディレクトリ・ファイル情報 ──
+  # ── Directory and file information ──
   - allow: 'ls *'
   - allow: 'dir *'
   - allow: 'tree *'
@@ -31,7 +31,7 @@ rules:
   - allow: 'pathchk *'
   - allow: 'lsof *'
 
-  # ── テキスト検索 ──
+  # ── Text search ──
   - allow: 'grep *'
   - allow: 'egrep *'
   - allow: 'fgrep *'
@@ -39,7 +39,7 @@ rules:
   - allow: 'ag *'
   - allow: 'ack *'
 
-  # ── テキスト処理 ──
+  # ── Text processing ──
   - allow: 'sed !-i *'
   - allow: 'awk *'
   - allow: 'gawk !-i *'
@@ -61,20 +61,20 @@ rules:
   - allow: 'jq *'
   - allow: 'yq !-i|--inplace *'
 
-  # ── ファイル比較 ──
+  # ── File comparison ──
   - allow: 'diff *'
   - allow: 'diff3 *'
   - allow: 'sdiff !-o *'
   - allow: 'cmp *'
   - allow: 'comm *'
 
-  # ── バイナリ・ダンプ表示 ──
+  # ── Binary and dump display ──
   - allow: 'od *'
   - allow: 'hexdump *'
   - allow: 'xxd *'
   - allow: 'strings *'
 
-  # ── チェックサム・ハッシュ ──
+  # ── Checksums and hashes ──
   - allow: 'cksum *'
   - allow: 'sum *'
   - allow: 'md5 *'
@@ -87,7 +87,7 @@ rules:
   - allow: 'shasum *'
   - allow: 'b2sum *'
 
-  # ── 圧縮ファイル表示 ──
+  # ── Compressed file viewing ──
   - allow: 'zcat *'
   - allow: 'bzcat *'
   - allow: 'xzcat !-z|--rm *'
@@ -107,12 +107,12 @@ rules:
   - allow: 'zipinfo *'
   - allow: 'zipgrep *'
 
-  # ── アーカイブ一覧表示 (読み取りモードのみ) ──
+  # ── Archive listing (read-only mode) ──
   - allow: 'tar -t|--list *'
   - allow: 'unzip -l *'
   - allow: 'unzip -t *'
 
-  # ── システム情報 ──
+  # ── System information ──
   - allow: 'uname *'
   - allow: 'arch'
   - allow: 'hostname'
@@ -123,7 +123,7 @@ rules:
   - allow: 'cal *'
   - allow: 'ncal *'
 
-  # ── ユーザー・グループ情報 ──
+  # ── User and group information ──
   - allow: 'id *'
   - allow: 'whoami'
   - allow: 'who *'
@@ -135,19 +135,19 @@ rules:
   - allow: 'finger *'
   - allow: 'pinky *'
 
-  # ── プロセス情報 ──
+  # ── Process information ──
   - allow: 'ps *'
   - allow: 'pgrep *'
   - allow: 'top *'
 
-  # ── 環境・設定表示 ──
+  # ── Environment and configuration ──
   - allow: 'printenv *'
   - allow: 'locale *'
   - allow: 'getconf *'
   - allow: 'tty'
   - allow: 'tput *'
 
-  # ── コマンド検索 ──
+  # ── Command lookup ──
   - allow: 'which *'
   - allow: 'whereis *'
   - allow: 'whatis *'
@@ -155,7 +155,7 @@ rules:
   - allow: 'man *'
   - allow: 'type *'
 
-  # ── 計算・数値 ──
+  # ── Math and numbers ──
   - allow: 'expr *'
   - allow: 'bc *'
   - allow: 'dc *'
@@ -164,7 +164,7 @@ rules:
   - allow: 'seq *'
   - allow: 'jot *'
 
-  # ── 出力 ──
+  # ── Output ──
   - allow: 'echo *'
   - allow: 'printf *'
   - allow: 'yes *'
@@ -172,24 +172,24 @@ rules:
   - allow: 'false'
   - allow: 'test *'
 
-  # ── その他ユーティリティ ──
+  # ── Miscellaneous utilities ──
   - allow: 'sleep *'
 
-  # ── エンコード・デコード ──
+  # ── Encoding and decoding ──
   - allow: 'base32 *'
   - allow: 'base64 *'
   - allow: 'basenc *'
 
-  # ── DNS 問い合わせ ──
+  # ── DNS queries ──
   - allow: 'dig *'
   - allow: 'nslookup *'
   - allow: 'host *'
   - allow: 'whois *'
 
-  # ── ネットワーク情報表示 ──
+  # ── Network information ──
   - allow: 'netstat *'
 
-  # ── ELF/オブジェクト情報 ──
+  # ── ELF/object information ──
   - allow: 'nm *'
   - allow: 'objdump *'
   - allow: 'readelf *'
