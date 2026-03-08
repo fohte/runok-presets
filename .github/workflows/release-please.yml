@@ -22,3 +22,17 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # Update major version tag (e.g., v1) to allow referencing presets as:
+      #   extends: github:fohte/runok-presets/base@v1
+      - uses: actions/checkout@v6
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Update major version tag
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          git tag --force "v${{ steps.release.outputs.major }}" "${{ steps.release.outputs.tag_name }}"
+          git push --force origin "refs/tags/v${{ steps.release.outputs.major }}"
