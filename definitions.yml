@@ -7,12 +7,8 @@ definitions:
   wrappers:
     - 'bash -c <cmd>'
     - 'sh -c <cmd>'
-    - 'sudo <cmd>'
-    - 'sudo -u * <cmd>'
-    - 'xargs <cmd>'
-    - 'xargs -I * <cmd>'
+    - 'sudo <opts> <cmd>'
+    - 'xargs <opts> <cmd>'
     - 'time <cmd>'
-    - 'env <cmd>'
-    - 'env *=* <cmd>'
-    - "find <paths>... -exec <cmd> \\;"
-    - "find <paths>... -execdir <cmd> \\;"
+    - 'env <opts> <vars> <cmd>'
+    - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"

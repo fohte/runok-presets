@@ -4,98 +4,194 @@
 # Commands with destructive flags are excluded via negation patterns.
 
 rules:
-  # --- File viewing ---
+  # ── ファイル内容表示 ──
   - allow: 'cat *'
+  - allow: 'tac *'
   - allow: 'head *'
   - allow: 'tail *'
+  - allow: 'nl *'
   - allow: 'less *'
   - allow: 'more *'
   - allow: 'bat *'
 
-  # --- File information ---
+  # ── ディレクトリ・ファイル情報 ──
   - allow: 'ls *'
+  - allow: 'dir *'
+  - allow: 'tree *'
   - allow: 'stat *'
   - allow: 'file *'
-  - allow: 'wc *'
   - allow: 'du *'
   - allow: 'df *'
+  - allow: 'find !-delete *'
+  - allow: 'fd *'
+  - allow: 'basename *'
+  - allow: 'dirname *'
+  - allow: 'readlink *'
+  - allow: 'realpath *'
+  - allow: 'pathchk *'
+  - allow: 'lsof *'
 
-  # --- Search ---
-  - allow: 'find *'
+  # ── テキスト検索 ──
   - allow: 'grep *'
+  - allow: 'egrep *'
+  - allow: 'fgrep *'
   - allow: 'rg *'
   - allow: 'ag *'
-  - allow: 'fd *'
-  - allow: 'fzf *'
-  - allow: 'which *'
-  - allow: 'whereis *'
-  - allow: 'type *'
-  - allow: 'command -v *'
+  - allow: 'ack *'
 
-  # --- Text processing (read-only) ---
-  - allow: 'awk *'
+  # ── テキスト処理 ──
   - allow: 'sed !-i *'
-  - allow: 'sed !--in-place *'
-  - allow: 'sort *'
+  - allow: 'awk *'
+  - allow: 'gawk !-i *'
+  - allow: 'sort !-o *'
   - allow: 'uniq *'
   - allow: 'cut *'
   - allow: 'tr *'
   - allow: 'paste *'
   - allow: 'join *'
-  - allow: 'comm *'
-  - allow: 'diff *'
-  - allow: 'colordiff *'
+  - allow: 'fold *'
+  - allow: 'fmt *'
+  - allow: 'column *'
+  - allow: 'rev *'
+  - allow: 'expand *'
+  - allow: 'unexpand *'
+  - allow: 'colrm *'
+  - allow: 'pr *'
+  - allow: 'wc *'
   - allow: 'jq *'
-  - allow: 'yq *'
-  - allow: 'xq *'
+  - allow: 'yq !-i|--inplace *'
 
-  # --- System information ---
+  # ── ファイル比較 ──
+  - allow: 'diff *'
+  - allow: 'diff3 *'
+  - allow: 'sdiff !-o *'
+  - allow: 'cmp *'
+  - allow: 'comm *'
+
+  # ── バイナリ・ダンプ表示 ──
+  - allow: 'od *'
+  - allow: 'hexdump *'
+  - allow: 'xxd *'
+  - allow: 'strings *'
+
+  # ── チェックサム・ハッシュ ──
+  - allow: 'cksum *'
+  - allow: 'sum *'
+  - allow: 'md5 *'
+  - allow: 'md5sum *'
+  - allow: 'sha1sum *'
+  - allow: 'sha224sum *'
+  - allow: 'sha256sum *'
+  - allow: 'sha384sum *'
+  - allow: 'sha512sum *'
+  - allow: 'shasum *'
+  - allow: 'b2sum *'
+
+  # ── 圧縮ファイル表示 ──
+  - allow: 'zcat *'
+  - allow: 'bzcat *'
+  - allow: 'xzcat !-z|--rm *'
+  - allow: 'zstdcat !-z|--rm|-o *'
+  - allow: 'zgrep *'
+  - allow: 'bzgrep *'
+  - allow: 'zegrep *'
+  - allow: 'zfgrep *'
+  - allow: 'zdiff *'
+  - allow: 'zcmp *'
+  - allow: 'bzdiff *'
+  - allow: 'bzcmp *'
+  - allow: 'zmore *'
+  - allow: 'zless *'
+  - allow: 'bzmore *'
+  - allow: 'bzless *'
+  - allow: 'zipinfo *'
+  - allow: 'zipgrep *'
+
+  # ── アーカイブ一覧表示 (読み取りモードのみ) ──
+  - allow: 'tar -t|--list *'
+  - allow: 'unzip -l *'
+  - allow: 'unzip -t *'
+
+  # ── システム情報 ──
   - allow: 'uname *'
+  - allow: 'arch'
   - allow: 'hostname'
-  - allow: 'whoami'
-  - allow: 'id'
-  - allow: 'id *'
-  - allow: 'date *'
+  - allow: 'hostid'
+  - allow: 'nproc'
   - allow: 'uptime'
+  - allow: 'date !-s *'
+  - allow: 'cal *'
+  - allow: 'ncal *'
+
+  # ── ユーザー・グループ情報 ──
+  - allow: 'id *'
+  - allow: 'whoami'
+  - allow: 'who *'
+  - allow: 'w'
+  - allow: 'users'
+  - allow: 'groups *'
+  - allow: 'logname'
+  - allow: 'last *'
+  - allow: 'finger *'
+  - allow: 'pinky *'
+
+  # ── プロセス情報 ──
   - allow: 'ps *'
-  - allow: 'top -l *'
-  - allow: 'free *'
-  - allow: 'lsof *'
-  - allow: 'env'
+  - allow: 'pgrep *'
+  - allow: 'top *'
+
+  # ── 環境・設定表示 ──
   - allow: 'printenv *'
+  - allow: 'locale *'
+  - allow: 'getconf *'
+  - allow: 'tty'
+  - allow: 'tput *'
+
+  # ── コマンド検索 ──
+  - allow: 'which *'
+  - allow: 'whereis *'
+  - allow: 'whatis *'
+  - allow: 'apropos *'
+  - allow: 'man *'
+  - allow: 'type *'
+
+  # ── 計算・数値 ──
+  - allow: 'expr *'
+  - allow: 'bc *'
+  - allow: 'dc *'
+  - allow: 'factor *'
+  - allow: 'numfmt *'
+  - allow: 'seq *'
+  - allow: 'jot *'
+
+  # ── 出力 ──
   - allow: 'echo *'
   - allow: 'printf *'
-
-  # --- Directory navigation ---
-  - allow: 'pwd'
-  - allow: 'tree *'
-  - allow: 'realpath *'
-  - allow: 'basename *'
-  - allow: 'dirname *'
-
-  # --- Network (read-only) ---
-  - allow: 'curl -X|--request GET *'
-  - allow: 'ping *'
-  - allow: 'dig *'
-  - allow: 'nslookup *'
-  - allow: 'host *'
-  - allow: 'traceroute *'
-  - allow: 'ss *'
-  - allow: 'netstat *'
-
-  # --- Hashing / checksums ---
-  - allow: 'md5sum *'
-  - allow: 'sha256sum *'
-  - allow: 'shasum *'
-  - allow: 'cksum *'
-
-  # --- Miscellaneous ---
-  - allow: 'man *'
+  - allow: 'yes *'
   - allow: 'true'
   - allow: 'false'
   - allow: 'test *'
-  - allow: 'expr *'
-  - allow: 'seq *'
-  - allow: 'yes *'
-  - allow: 'xdg-open *'
-  - allow: 'open *'
+
+  # ── その他ユーティリティ ──
+  - allow: 'sleep *'
+
+  # ── エンコード・デコード ──
+  - allow: 'base32 *'
+  - allow: 'base64 *'
+  - allow: 'basenc *'
+
+  # ── DNS 問い合わせ ──
+  - allow: 'dig *'
+  - allow: 'nslookup *'
+  - allow: 'host *'
+  - allow: 'whois *'
+
+  # ── ネットワーク情報表示 ──
+  - allow: 'netstat *'
+
+  # ── ELF/オブジェクト情報 ──
+  - allow: 'nm *'
+  - allow: 'objdump *'
+  - allow: 'readelf *'
+  - allow: 'otool *'
+  - allow: 'ldd *'

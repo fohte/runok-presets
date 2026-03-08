@@ -2,7 +2,7 @@
 #
 # Usage in your runok.yml:
 #   extends:
-#     - 'github:fohte/runok-presets@v1'
+#     - 'github:fohte/runok-presets/base'
 
 extends:
   - ./definitions.yml
