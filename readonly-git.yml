@@ -8,10 +8,10 @@
 rules:
   # ── Fully read-only subcommands ──
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] status *'
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] log *'
-  # diff: --output writes to a file, so it must be excluded.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] log !--output *'
+  # diff/log/show: --output writes to a file, so it must be excluded.
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff !--output *'
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] show *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] show !--output *'
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] blame *'
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] annotate *'
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] shortlog *'
