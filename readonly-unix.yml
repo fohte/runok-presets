@@ -24,7 +24,7 @@ rules:
   - allow: 'file *'
   - allow: 'du *'
   - allow: 'df *'
-  - allow: 'find !-delete *'
+  - allow: 'find !-delete|!-fprint|!-fprint0|!-fprintf|!-fls *'
   - allow: 'fd *'
   - allow: 'basename *'
   - allow: 'dirname *'
@@ -42,9 +42,9 @@ rules:
   - allow: 'ack *'
 
   # ── Text processing ──
-  - allow: 'sed !-i *'
+  - allow: 'sed !-i|--in-place *'
   - allow: 'awk !-i *'
-  - allow: 'gawk !-i *'
+  - allow: 'gawk !-i|--include *'
   - allow: 'sort !-o *'
   - allow: 'uniq *'
   - allow: 'cut *'
@@ -74,7 +74,7 @@ rules:
   # ── Binary and dump display ──
   - allow: 'od *'
   - allow: 'hexdump *'
-  - allow: 'xxd *'
+  - allow: 'xxd !-r|--revert *'
   - allow: 'strings *'
 
   # ── Checksums and hashes ──

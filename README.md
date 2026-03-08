@@ -32,7 +32,3 @@ extends:
   - 'github:fohte/runok-presets/definitions'
   - 'github:fohte/runok-presets/readonly-git'
 ```
-
-## License
-
-See [LICENSE](LICENSE) for details.

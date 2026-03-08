@@ -28,7 +28,7 @@ rules:
   - allow: 'git diff-tree *'
   - allow: 'git diff-index *'
   - allow: 'git diff-files *'
-  - allow: 'git difftool *'
+  - allow: 'git difftool !--extcmd *'
   - allow: 'git for-each-ref *'
   - allow: 'git show-ref *'
   - allow: 'git show-branch *'
@@ -43,7 +43,7 @@ rules:
   - allow: 'git whatchanged *'
   - allow: 'git check-ignore *'
   - allow: 'git check-attr *'
-  - allow: 'git reflog *'
+  - allow: 'git reflog show *'
 
   # ── Subcommands allowed in read-only mode only ──
   - allow: 'git branch'
