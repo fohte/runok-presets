@@ -43,7 +43,7 @@ rules:
 
   # ── Text processing ──
   - allow: 'sed !-i *'
-  - allow: 'awk *'
+  - allow: 'awk !-i *'
   - allow: 'gawk !-i *'
   - allow: 'sort !-o *'
   - allow: 'uniq *'
