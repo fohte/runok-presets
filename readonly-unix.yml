@@ -24,7 +24,7 @@ rules:
   - allow: 'file *'
   - allow: 'du *'
   - allow: 'df *'
-  - allow: 'find !-delete|-fprint|-fprint0|-fprintf|-fls *'
+  - allow: 'find !-delete|-exec|-execdir|-ok|-okdir|-fprint|-fprint0|-fprintf|-fls *'
   - allow: 'fd *'
   - allow: 'basename *'
   - allow: 'dirname *'

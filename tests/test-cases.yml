@@ -97,6 +97,22 @@ tests:
     expected: ask
     config: readonly-unix.yml
     description: 'xxd -r reverts hex dump to binary, excluded by negation'
+  - command: 'find . -name "*.log" -exec rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -exec can run arbitrary commands, excluded by negation'
+  - command: 'find . -name "*.log" -execdir rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -execdir can run arbitrary commands, excluded by negation'
+  - command: 'find . -name "*.log" -ok rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -ok can run arbitrary commands, excluded by negation'
+  - command: 'find . -name "*.log" -okdir rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -okdir can run arbitrary commands, excluded by negation'
 
   # ── readonly-unix.yml: commands not in allow list ──
   - command: 'rm -rf /tmp/test'
@@ -269,9 +285,9 @@ tests:
     config: base.yml
     description: 'cat inside find -exec is allowed by readonly-unix.yml'
   - command: 'find . -name "*.log" -exec rm {} \;'
-    expected: allow
+    expected: ask
     config: base.yml
-    description: 'KNOWN ISSUE: find -exec rm should be ask but find pattern matches first'
+    description: 'find -exec rm is excluded by negation in find pattern'
   - command: 'env FOO=bar cat /etc/hosts'
     expected: allow
     config: base.yml
