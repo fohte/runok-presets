@@ -161,8 +161,28 @@ tests:
     expected: ask
     config: readonly-unix.yml
     description: 'tar --checkpoint-action executes arbitrary commands, excluded by negation'
+  - command: 'bat --pager less file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'bat --pager executes arbitrary commands, excluded by negation'
+  - command: 'man -P less grep'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'man -P executes arbitrary commands, excluded by negation'
+  - command: 'man --pager less grep'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'man --pager executes arbitrary commands, excluded by negation'
 
   # ── readonly-unix.yml: commands not in allow list ──
+  - command: 'bc -e "system(\"id\")"'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'bc excluded due to GNU system() function'
+  - command: 'dc -e "!id"'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'dc excluded due to GNU ! command'
   - command: 'rm -rf /tmp/test'
     expected: ask
     config: readonly-unix.yml

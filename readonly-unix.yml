@@ -14,7 +14,7 @@ rules:
   - allow: 'nl *'
   - allow: 'less !-o|-O|--log-file|--LOG-FILE *'
   - allow: 'more *'
-  - allow: 'bat *'
+  - allow: 'bat !--pager *'
 
   # ── Directory and file information ──
   - allow: 'ls *'
@@ -158,13 +158,14 @@ rules:
   - allow: 'whereis *'
   - allow: 'whatis *'
   - allow: 'apropos *'
-  - allow: 'man *'
+  - allow: 'man !-P|--pager *'
   - allow: 'type *'
 
   # ── Math and numbers ──
   - allow: 'expr *'
-  - allow: 'bc *'
-  - allow: 'dc *'
+  # bc/dc excluded: GNU bc has system() and GNU dc has ! command, both
+  # allowing arbitrary command execution via language-internal features
+  # that cannot be controlled through CLI argument matching.
   - allow: 'factor *'
   - allow: 'numfmt *'
   - allow: 'seq *'
