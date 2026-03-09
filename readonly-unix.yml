@@ -43,9 +43,6 @@ rules:
 
   # ── Text processing ──
   - allow: 'sed !-i|--in-place *'
-  # awk/gawk excluded: language-internal features (> "file" redirection,
-  # system()) allow arbitrary file writes and command execution that cannot
-  # be controlled through CLI argument matching.
   - allow: 'sort !-o|--output|--compress-program *'
   - allow: 'uniq *'
   - allow: 'cut *'
@@ -163,9 +160,6 @@ rules:
 
   # ── Math and numbers ──
   - allow: 'expr *'
-  # bc/dc excluded: GNU bc has system() and GNU dc has ! command, both
-  # allowing arbitrary command execution via language-internal features
-  # that cannot be controlled through CLI argument matching.
   - allow: 'factor *'
   - allow: 'numfmt *'
   - allow: 'seq *'
@@ -208,7 +202,3 @@ rules:
   - allow: 'objdump *'
   - allow: 'readelf *'
   - allow: 'otool *'
-  # ldd: on Linux, ldd may execute the target binary to resolve dependencies.
-  # This is a known risk but acceptable for LLM agent use cases where the
-  # target binaries are typically trusted system files.
-  - allow: 'ldd *'
