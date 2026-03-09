@@ -1,0 +1,292 @@
+# Each test case has a command, expected decision, and config file.
+# decision: allow, deny, ask, default
+# config: preset file to test (relative to repository root)
+#
+# Note: When a command matches no rule and no `defaults.action` is configured,
+# runok returns "ask" (the built-in default). Since presets do not set
+# `defaults.action`, unmatched commands produce "ask", not "default".
+
+tests:
+  # ── readonly-unix.yml: commands that should be allowed ──
+  - command: 'cat /etc/hosts'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'ls -la /tmp'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'grep -r pattern .'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'find . -name "*.txt"'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'sed s/foo/bar/ file.txt'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'jq .name package.json'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'diff a.txt b.txt'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'uname -a'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'hostname'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'ps aux'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'sleep 1'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'wc -l file.txt'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'head -n 10 file.txt'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'tail -f /var/log/syslog'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'tar -t -f archive.tar.gz'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'md5sum file.txt'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'base64 file.txt'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'echo hello'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'pwd'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'which bash'
+    expected: allow
+    config: readonly-unix.yml
+  - command: 'dig example.com'
+    expected: allow
+    config: readonly-unix.yml
+
+  # ── readonly-unix.yml: commands excluded by negation ──
+  - command: 'sed -i s/foo/bar/ file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'sed -i is in-place edit, excluded by negation'
+  - command: 'sed --in-place s/foo/bar/ file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'sed --in-place is in-place edit, excluded by negation'
+  - command: 'yq -i ".key = \"value\"" file.yml'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'yq -i is in-place edit, excluded by negation'
+  - command: 'sort -o output.txt input.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'sort -o writes to file, excluded by negation'
+  - command: 'date -s "2024-01-01"'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'date -s sets system time, excluded by negation'
+  - command: 'xxd -r dump.hex'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'xxd -r reverts hex dump to binary, excluded by negation'
+
+  # ── readonly-unix.yml: commands not in allow list ──
+  - command: 'rm -rf /tmp/test'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'file deletion command not included'
+  - command: 'curl https://example.com'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'network communication command not included'
+  - command: 'chmod 755 file.sh'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'permission change not included'
+  - command: 'kill -9 1234'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'process control not included'
+  - command: 'wget https://example.com'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'network download not included'
+  - command: 'mv file1 file2'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'file move not included'
+  - command: 'cp file1 file2'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'file copy not included'
+  - command: 'mkdir /tmp/newdir'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'directory creation not included'
+
+  # ── readonly-git.yml: commands that should be allowed ──
+  - command: 'git status'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git log --oneline -10'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git diff HEAD~1'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git show HEAD'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git blame README.md'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git branch'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git branch --show-current'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git branch -a'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git tag -l'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git remote -v'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git remote get-url origin'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git config --get user.name'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git config --list'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git rev-parse HEAD'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git reflog show'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git ls-files'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git grep pattern'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git describe --tags'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git show-ref'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git merge-base HEAD main'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git tag --contains HEAD'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git tag -v v1.0.0'
+    expected: allow
+    config: readonly-git.yml
+  - command: 'git branch --contains HEAD'
+    expected: allow
+    config: readonly-git.yml
+
+  # ── readonly-git.yml: commands not in allow list ──
+  - command: 'git add .'
+    expected: ask
+    config: readonly-git.yml
+    description: 'staging is a write operation'
+  - command: 'git commit -m "test"'
+    expected: ask
+    config: readonly-git.yml
+    description: 'commit is a write operation'
+  - command: 'git push origin main'
+    expected: ask
+    config: readonly-git.yml
+    description: 'push is a write operation'
+  - command: 'git branch new-branch'
+    expected: ask
+    config: readonly-git.yml
+    description: 'branch creation is a write operation'
+  - command: 'git config user.name "test"'
+    expected: ask
+    config: readonly-git.yml
+    description: 'config set is a write operation'
+  - command: 'git reset --hard HEAD'
+    expected: ask
+    config: readonly-git.yml
+    description: 'reset is a write operation'
+  - command: 'git checkout -- file.txt'
+    expected: ask
+    config: readonly-git.yml
+    description: 'file restore is a write operation'
+  - command: 'git rebase main'
+    expected: ask
+    config: readonly-git.yml
+    description: 'rebase is a write operation'
+  - command: 'git merge feature'
+    expected: ask
+    config: readonly-git.yml
+    description: 'merge is a write operation'
+  - command: 'git stash'
+    expected: ask
+    config: readonly-git.yml
+    description: 'stash is a write operation'
+
+  # ── Known issues: patterns that should exclude but currently allow ──
+  - command: 'git tag v1.0.0'
+    expected: allow
+    config: readonly-git.yml
+    description: 'KNOWN ISSUE: tag creation should be excluded but pattern allows it'
+
+  # ── base.yml: wrapper recursive evaluation (definitions.yml) ──
+  - command: 'bash -c "cat /etc/hosts"'
+    expected: allow
+    config: base.yml
+    description: 'cat inside bash -c is allowed by readonly-unix.yml'
+  - command: 'bash -c "rm -rf /"'
+    expected: ask
+    config: base.yml
+    description: 'rm inside bash -c matches no rule'
+  - command: 'sudo cat /etc/shadow'
+    expected: allow
+    config: base.yml
+    description: 'cat inside sudo is allowed by readonly-unix.yml'
+  - command: 'find . -name "*.log" -exec cat {} \;'
+    expected: allow
+    config: base.yml
+    description: 'cat inside find -exec is allowed by readonly-unix.yml'
+  - command: 'find . -name "*.log" -exec rm {} \;'
+    expected: allow
+    config: base.yml
+    description: 'KNOWN ISSUE: find -exec rm should be ask but find pattern matches first'
+  - command: 'env FOO=bar cat /etc/hosts'
+    expected: allow
+    config: base.yml
+    description: 'cat inside env is allowed by readonly-unix.yml'
+  - command: 'xargs -I{} cat {}'
+    expected: allow
+    config: base.yml
+    description: 'cat inside xargs is allowed by readonly-unix.yml'
+
+  # ── base.yml: integration (extends applies all rules) ──
+  - command: 'git log --oneline'
+    expected: allow
+    config: base.yml
+    description: 'readonly-git.yml rules applied via base.yml extends'
+  - command: 'cat /etc/hosts'
+    expected: allow
+    config: base.yml
+    description: 'readonly-unix.yml rules applied via base.yml extends'
