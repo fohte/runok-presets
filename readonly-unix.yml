@@ -12,7 +12,7 @@ rules:
   - allow: 'head *'
   - allow: 'tail *'
   - allow: 'nl *'
-  - allow: 'less *'
+  - allow: 'less !-o|-O|--log-file|--LOG-FILE *'
   - allow: 'more *'
   - allow: 'bat *'
 
@@ -25,7 +25,7 @@ rules:
   - allow: 'du *'
   - allow: 'df *'
   - allow: 'find !-delete|-exec|-execdir|-ok|-okdir|-fprint|-fprint0|-fprintf|-fls *'
-  - allow: 'fd *'
+  - allow: 'fd !-x|--exec|-X|--exec-batch *'
   - allow: 'basename *'
   - allow: 'dirname *'
   - allow: 'readlink *'
@@ -37,16 +37,16 @@ rules:
   - allow: 'grep *'
   - allow: 'egrep *'
   - allow: 'fgrep *'
-  - allow: 'rg *'
-  - allow: 'ag *'
-  - allow: 'ack *'
+  - allow: 'rg !--pre *'
+  - allow: 'ag !--pager *'
+  - allow: 'ack !--pager *'
 
   # ── Text processing ──
   - allow: 'sed !-i|--in-place *'
   # awk/gawk excluded: language-internal features (> "file" redirection,
   # system()) allow arbitrary file writes and command execution that cannot
   # be controlled through CLI argument matching.
-  - allow: 'sort !-o|--output *'
+  - allow: 'sort !-o|--output|--compress-program *'
   - allow: 'uniq *'
   - allow: 'cut *'
   - allow: 'tr *'
@@ -112,7 +112,7 @@ rules:
   - allow: 'zipgrep *'
 
   # ── Archive listing (read-only mode) ──
-  - allow: 'tar -t|--list *'
+  - allow: 'tar -t|--list !--use-compress-program|--checkpoint-action *'
   - allow: 'unzip -l *'
   - allow: 'unzip -t *'
 
@@ -207,4 +207,7 @@ rules:
   - allow: 'objdump *'
   - allow: 'readelf *'
   - allow: 'otool *'
+  # ldd: on Linux, ldd may execute the target binary to resolve dependencies.
+  # This is a known risk but acceptable for LLM agent use cases where the
+  # target binaries are typically trusted system files.
   - allow: 'ldd *'
