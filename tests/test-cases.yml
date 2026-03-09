@@ -252,44 +252,41 @@ tests:
     description: 'KNOWN ISSUE: tag creation should be excluded but pattern allows it'
 
   # ── base.yml: wrapper recursive evaluation (definitions.yml) ──
-  # These tests require runok with extends resolution support (> v0.1.2).
-  # TODO: Uncomment when a new runok release includes the extends fix.
-  #
-  # - command: 'bash -c "cat /etc/hosts"'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'cat inside bash -c is allowed by readonly-unix.yml'
-  # - command: 'bash -c "rm -rf /"'
-  #   expected: ask
-  #   config: base.yml
-  #   description: 'rm inside bash -c matches no rule'
-  # - command: 'sudo cat /etc/shadow'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'cat inside sudo is allowed by readonly-unix.yml'
-  # - command: 'find . -name "*.log" -exec cat {} \;'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'cat inside find -exec is allowed by readonly-unix.yml'
-  # - command: 'find . -name "*.log" -exec rm {} \;'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'KNOWN ISSUE: find -exec rm should be ask but find pattern matches first'
-  # - command: 'env FOO=bar cat /etc/hosts'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'cat inside env is allowed by readonly-unix.yml'
-  # - command: 'xargs -I{} cat {}'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'cat inside xargs is allowed by readonly-unix.yml'
-  #
-  # # ── base.yml: integration (extends applies all rules) ──
-  # - command: 'git log --oneline'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'readonly-git.yml rules applied via base.yml extends'
-  # - command: 'cat /etc/hosts'
-  #   expected: allow
-  #   config: base.yml
-  #   description: 'readonly-unix.yml rules applied via base.yml extends'
+  - command: 'bash -c "cat /etc/hosts"'
+    expected: allow
+    config: base.yml
+    description: 'cat inside bash -c is allowed by readonly-unix.yml'
+  - command: 'bash -c "rm -rf /"'
+    expected: ask
+    config: base.yml
+    description: 'rm inside bash -c matches no rule'
+  - command: 'sudo cat /etc/shadow'
+    expected: allow
+    config: base.yml
+    description: 'cat inside sudo is allowed by readonly-unix.yml'
+  - command: 'find . -name "*.log" -exec cat {} \;'
+    expected: allow
+    config: base.yml
+    description: 'cat inside find -exec is allowed by readonly-unix.yml'
+  - command: 'find . -name "*.log" -exec rm {} \;'
+    expected: allow
+    config: base.yml
+    description: 'KNOWN ISSUE: find -exec rm should be ask but find pattern matches first'
+  - command: 'env FOO=bar cat /etc/hosts'
+    expected: allow
+    config: base.yml
+    description: 'cat inside env is allowed by readonly-unix.yml'
+  - command: 'xargs -I{} cat {}'
+    expected: allow
+    config: base.yml
+    description: 'cat inside xargs is allowed by readonly-unix.yml'
+
+  # ── base.yml: integration (extends applies all rules) ──
+  - command: 'git log --oneline'
+    expected: allow
+    config: base.yml
+    description: 'readonly-git.yml rules applied via base.yml extends'
+  - command: 'cat /etc/hosts'
+    expected: allow
+    config: base.yml
+    description: 'readonly-unix.yml rules applied via base.yml extends'
