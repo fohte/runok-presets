@@ -285,11 +285,11 @@ tests:
     config: readonly-git.yml
     description: 'stash is a write operation'
 
-  # ── Known issues: patterns that should exclude but currently allow ──
+  # ── readonly-git.yml: tag creation is a write operation ──
   - command: 'git tag v1.0.0'
-    expected: allow
+    expected: ask
     config: readonly-git.yml
-    description: 'KNOWN ISSUE: tag creation should be excluded but pattern allows it'
+    description: 'tag creation is a write operation'
 
   # ── base.yml: wrapper recursive evaluation (definitions.yml) ──
   - command: 'bash -c "cat /etc/hosts"'
