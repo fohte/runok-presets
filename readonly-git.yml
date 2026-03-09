@@ -6,12 +6,16 @@
 # Destructive subcommands (push, commit, rebase, etc.) are not included.
 
 rules:
+  # ── Options that write to files ──
+  # --output writes output to a file instead of stdout. This applies to
+  # diff, log, show, shortlog, whatchanged, and other diff-based commands.
+  - ask: 'git * --output* *'
+
   # ── Fully read-only subcommands ──
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] status *'
-  # diff/log/show: --output writes to a file, so it must be excluded.
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] log !--output *'
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff !--output *'
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] show !--output *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] log *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] show *'
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] blame *'
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] annotate *'
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] shortlog *'

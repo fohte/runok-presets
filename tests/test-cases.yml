@@ -203,6 +203,46 @@ tests:
     expected: allow
     config: readonly-git.yml
 
+  # ── readonly-git.yml: global options (-C, --git-dir, --work-tree) ──
+  - command: 'git -C /tmp status'
+    expected: allow
+    config: readonly-git.yml
+    description: '-C global option should be accepted'
+  - command: 'git --git-dir /tmp/.git log --oneline'
+    expected: allow
+    config: readonly-git.yml
+    description: '--git-dir global option should be accepted'
+  - command: 'git --work-tree /tmp diff HEAD'
+    expected: allow
+    config: readonly-git.yml
+    description: '--work-tree global option should be accepted'
+  - command: 'git -C /tmp --git-dir /tmp/.git --work-tree /tmp status'
+    expected: allow
+    config: readonly-git.yml
+    description: 'all global options combined should be accepted'
+
+  # ── readonly-git.yml: --output should be blocked (writes to file) ──
+  - command: 'git diff --output=/tmp/out HEAD'
+    expected: ask
+    config: readonly-git.yml
+    description: 'diff --output writes to a file'
+  - command: 'git log --output=/tmp/out'
+    expected: ask
+    config: readonly-git.yml
+    description: 'log --output writes to a file'
+  - command: 'git show --output=/tmp/out HEAD'
+    expected: ask
+    config: readonly-git.yml
+    description: 'show --output writes to a file'
+  - command: 'git shortlog --output=/tmp/out'
+    expected: ask
+    config: readonly-git.yml
+    description: 'shortlog --output writes to a file'
+  - command: 'git whatchanged --output=/tmp/out'
+    expected: ask
+    config: readonly-git.yml
+    description: 'whatchanged --output writes to a file'
+
   # ── readonly-git.yml: commands not in allow list ──
   - command: 'git add .'
     expected: ask
