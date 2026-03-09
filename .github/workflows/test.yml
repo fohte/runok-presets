@@ -83,4 +83,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: Run preset E2E tests
-        run: bash tests/run.sh
+        run: tests/run
