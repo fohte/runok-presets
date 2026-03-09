@@ -97,8 +97,92 @@ tests:
     expected: ask
     config: readonly-unix.yml
     description: 'xxd -r reverts hex dump to binary, excluded by negation'
+  - command: 'find . -name "*.log" -exec rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -exec can run arbitrary commands, excluded by negation'
+  - command: 'find . -name "*.log" -execdir rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -execdir can run arbitrary commands, excluded by negation'
+  - command: 'find . -name "*.log" -ok rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -ok can run arbitrary commands, excluded by negation'
+  - command: 'find . -name "*.log" -okdir rm {} \;'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'find -okdir can run arbitrary commands, excluded by negation'
+  - command: 'less -o /tmp/out file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'less -o writes to file, excluded by negation'
+  - command: 'less -O /tmp/out file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'less -O overwrites file, excluded by negation'
+  - command: 'fd -x rm'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'fd -x executes arbitrary commands, excluded by negation'
+  - command: 'fd --exec rm'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'fd --exec executes arbitrary commands, excluded by negation'
+  - command: 'fd -X rm'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'fd -X executes arbitrary commands, excluded by negation'
+  - command: 'fd --exec-batch rm'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'fd --exec-batch executes arbitrary commands, excluded by negation'
+  - command: 'rg --pre pdftotext pattern'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'rg --pre executes arbitrary commands, excluded by negation'
+  - command: 'ag --pager less pattern'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'ag --pager executes arbitrary commands, excluded by negation'
+  - command: 'ack --pager less pattern'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'ack --pager executes arbitrary commands, excluded by negation'
+  - command: 'sort --compress-program gzip file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'sort --compress-program executes arbitrary commands, excluded by negation'
+  - command: 'tar -t --use-compress-program gzip -f archive.tar'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'tar --use-compress-program executes arbitrary commands, excluded by negation'
+  - command: 'tar --list --checkpoint-action exec=rm -f archive.tar'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'tar --checkpoint-action executes arbitrary commands, excluded by negation'
+  - command: 'bat --pager less file.txt'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'bat --pager executes arbitrary commands, excluded by negation'
+  - command: 'man -P less grep'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'man -P executes arbitrary commands, excluded by negation'
+  - command: 'man --pager less grep'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'man --pager executes arbitrary commands, excluded by negation'
 
   # ── readonly-unix.yml: commands not in allow list ──
+  - command: 'bc -e "system(\"id\")"'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'bc excluded due to GNU system() function'
+  - command: 'dc -e "!id"'
+    expected: ask
+    config: readonly-unix.yml
+    description: 'dc excluded due to GNU ! command'
   - command: 'rm -rf /tmp/test'
     expected: ask
     config: readonly-unix.yml
@@ -309,9 +393,9 @@ tests:
     config: base.yml
     description: 'cat inside find -exec is allowed by readonly-unix.yml'
   - command: 'find . -name "*.log" -exec rm {} \;'
-    expected: allow
+    expected: ask
     config: base.yml
-    description: 'KNOWN ISSUE: find -exec rm should be ask but find pattern matches first'
+    description: 'find -exec rm is excluded by negation in find pattern'
   - command: 'env FOO=bar cat /etc/hosts'
     expected: allow
     config: base.yml
