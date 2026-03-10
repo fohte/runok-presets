@@ -10,7 +10,7 @@
 #[test] allow: git shortlog -sn | head -10
 #[test] allow: git ls-files | grep "\.ts$"
 #[test] allow: ps aux | grep nginx
-#[test] allow: cat /etc/passwd | cut -d: -f1 | sort -u
+#[test] allow: cat /etc/passwd | cut -d: -f1 | sort
 #[test] allow: diff <(git show HEAD:README.md) <(cat README.md)
 #[test] allow: cat /etc/hosts
 extends:

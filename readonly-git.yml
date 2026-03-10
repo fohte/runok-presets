@@ -102,7 +102,7 @@ rules:
   # ── Subcommands allowed in read-only mode only ──
   #[test] allow: git branch
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch'
-  #[test] allow: git branch -a -v
+  #[test] allow: git branch -a --sort=-committerdate
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose] [--sort *] [-l|--list *]'
   #[test] allow: git branch --show-current
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --show-current'
