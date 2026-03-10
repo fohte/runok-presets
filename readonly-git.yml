@@ -23,86 +23,86 @@ rules:
   #[test] allow: git --work-tree /tmp diff HEAD
   #[test] allow: git -C /tmp --git-dir /tmp/.git --work-tree /tmp status
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] status *'
-  #[test] allow: git log --oneline -10
+  #[test] allow: git log --oneline --graph -20
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] log *'
-  #[test] allow: git diff HEAD~1
+  #[test] allow: git diff --stat HEAD~3
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff *'
-  #[test] allow: git show HEAD
+  #[test] allow: git show HEAD:README.md
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show *'
   #[test] allow: git blame README.md
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] blame *'
-  #[test] allow: git annotate README.md
+  #[test] allow: git annotate -L 10,20 src/main.rs
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] annotate *'
-  #[test] allow: git shortlog
+  #[test] allow: git shortlog -sn --no-merges
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] shortlog *'
   #[test] allow: git describe --tags
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] describe *'
-  #[test] allow: git grep pattern
+  #[test] allow: git grep -n "TODO" -- "*.py"
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] grep *'
-  #[test] allow: git help log
+  #[test] allow: git help diff
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] help *'
   #[test] allow: git version
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] version'
-  #[test] allow: git ls-files
+  #[test] allow: git ls-files --others --exclude-standard
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-files *'
-  #[test] allow: git ls-tree HEAD
+  #[test] allow: git ls-tree -r --name-only HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-tree *'
-  #[test] allow: git ls-remote origin
+  #[test] allow: git ls-remote --tags origin
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-remote *'
-  #[test] allow: git cat-file -t HEAD
+  #[test] allow: git cat-file -p HEAD^{tree}
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] cat-file *'
-  #[test] allow: git rev-parse HEAD
+  #[test] allow: git rev-parse --short HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] rev-parse *'
-  #[test] allow: git rev-list HEAD
+  #[test] allow: git rev-list --count HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] rev-list *'
-  #[test] allow: git name-rev HEAD
+  #[test] allow: git name-rev --name-only HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] name-rev *'
-  #[test] allow: git diff-tree HEAD
+  #[test] allow: git diff-tree --no-commit-id --name-only -r HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-tree *'
-  #[test] allow: git diff-index HEAD
+  #[test] allow: git diff-index --cached HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-index *'
   #[test] allow: git diff-files
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-files *'
-  #[test] allow: git difftool HEAD~1
+  #[test] allow: git difftool --no-prompt HEAD~1
   #[test] ask: git difftool --extcmd=/tmp/evil HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] difftool !--extcmd *'
-  #[test] allow: git for-each-ref refs/heads
+  #[test] allow: git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/heads
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] for-each-ref *'
   #[test] allow: git show-ref
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-ref *'
-  #[test] allow: git show-branch
+  #[test] allow: git show-branch --all
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-branch *'
-  #[test] allow: git verify-commit HEAD
+  #[test] allow: git verify-commit HEAD~1
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] verify-commit *'
-  #[test] allow: git verify-tag v1.0.0
+  #[test] allow: git verify-tag v2.0.0
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] verify-tag *'
-  #[test] allow: git count-objects
+  #[test] allow: git count-objects -v
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] count-objects *'
   # fsck: --lost-found writes dangling objects to .git/lost-found/ but
   # does not modify existing data or repository state.
   #[test] allow: git fsck
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] fsck *'
-  #[test] allow: git cherry main
+  #[test] allow: git cherry -v main
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] cherry *'
-  #[test] allow: git merge-base HEAD main
+  #[test] allow: git merge-base --fork-point main HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] merge-base *'
-  #[test] allow: git merge-tree HEAD main
+  #[test] allow: git merge-tree --write-tree HEAD main
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] merge-tree *'
-  #[test] allow: git range-diff main..HEAD
+  #[test] allow: git range-diff main~3..main~1 HEAD~2..HEAD
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] range-diff *'
-  #[test] allow: git whatchanged
+  #[test] allow: git whatchanged --since="1 week ago"
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] whatchanged *'
-  #[test] allow: git check-ignore node_modules
+  #[test] allow: git check-ignore -v node_modules dist .env
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-ignore *'
-  #[test] allow: git check-attr diff README.md
+  #[test] allow: git check-attr -a -- src/main.rs
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-attr *'
-  #[test] allow: git reflog show
+  #[test] allow: git reflog show --date=relative
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog show *'
 
   # ── Subcommands allowed in read-only mode only ──
   #[test] allow: git branch
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch'
-  #[test] allow: git branch -a
+  #[test] allow: git branch -a -v
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose] [--sort *] [-l|--list *]'
   #[test] allow: git branch --show-current
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --show-current'
@@ -110,23 +110,23 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --contains|--merged|--no-merged *'
   #[test] allow: git tag
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag'
-  #[test] allow: git tag -l
+  #[test] allow: git tag -l "v1.*"
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag [-n *] -l|--list *'
   #[test] allow: git tag -v v1.0.0
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag -v|--verify *'
-  #[test] allow: git tag --contains HEAD
+  #[test] allow: git tag --contains v1.0.0
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag --contains|--merged|--no-merged *'
   #[test] allow: git remote -v
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote -v|--verbose'
-  #[test] allow: git remote show origin
+  #[test] allow: git remote show upstream
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote show *'
   #[test] allow: git remote get-url origin
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote get-url *'
-  #[test] allow: git config --get user.name
+  #[test] allow: git config --get remote.origin.url
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get *'
-  #[test] allow: git config --get-all user.name
+  #[test] allow: git config --get-all remote.origin.fetch
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-all *'
-  #[test] allow: git config --list
+  #[test] allow: git config --list --show-origin
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config -l|--list *'
 
   # ── Commands not in allow list ──

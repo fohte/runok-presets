@@ -9,19 +9,19 @@ rules:
   # ── File viewing ──
   #[test] allow: cat /etc/hosts
   - allow: 'cat *'
-  #[test] allow: tac file.txt
+  #[test] allow: tac /var/log/syslog
   - allow: 'tac *'
-  #[test] allow: head -n 10 file.txt
+  #[test] allow: head -n 20 /etc/passwd
   - allow: 'head *'
   #[test] allow: tail -f /var/log/syslog
   - allow: 'tail *'
-  #[test] allow: nl file.txt
+  #[test] allow: nl -ba src/main.c
   - allow: 'nl *'
   #[test] allow: less file.txt
   #[test] ask: less -o /tmp/out file.txt
   #[test] ask: less -O /tmp/out file.txt
   - allow: 'less !-o|-O|--log-file|--LOG-FILE *'
-  #[test] allow: more file.txt
+  #[test] allow: more /etc/hosts
   - allow: 'more *'
   #[test] ask: bat --pager less file.txt
   - allow: 'bat !--pager *'
@@ -29,15 +29,15 @@ rules:
   # ── Directory and file information ──
   #[test] allow: ls -la /tmp
   - allow: 'ls *'
-  #[test] allow: dir /tmp
+  #[test] allow: dir /var/log
   - allow: 'dir *'
-  #[test] allow: tree .
+  #[test] allow: tree -L 2 src/
   - allow: 'tree *'
-  #[test] allow: stat file.txt
+  #[test] allow: stat /etc/passwd
   - allow: 'stat *'
-  #[test] allow: file image.png
+  #[test] allow: file /usr/bin/env
   - allow: 'file *'
-  #[test] allow: du -sh .
+  #[test] allow: du -sh /var/log/*
   - allow: 'du *'
   #[test] allow: df -h
   - allow: 'df *'
@@ -52,166 +52,166 @@ rules:
   #[test] ask: fd -X rm
   #[test] ask: fd --exec-batch rm
   - allow: 'fd !-x|--exec|-X|--exec-batch *'
-  #[test] allow: basename /tmp/file.txt
+  #[test] allow: basename /usr/local/bin/python3
   - allow: 'basename *'
-  #[test] allow: dirname /tmp/file.txt
+  #[test] allow: dirname /usr/local/bin/python3
   - allow: 'dirname *'
-  #[test] allow: readlink /usr/bin/python
+  #[test] allow: readlink -f /usr/bin/python3
   - allow: 'readlink *'
-  #[test] allow: realpath .
+  #[test] allow: realpath ../project
   - allow: 'realpath *'
-  #[test] allow: pathchk filename
+  #[test] allow: pathchk /tmp/output.log
   - allow: 'pathchk *'
-  #[test] allow: lsof -i :8080
+  #[test] allow: lsof -i :3000
   - allow: 'lsof *'
 
   # ── Text search ──
-  #[test] allow: grep -r pattern .
+  #[test] allow: grep -rn TODO src/
   - allow: 'grep *'
-  #[test] allow: egrep "pattern" file.txt
+  #[test] allow: egrep "^(import|from)" src/*.py
   - allow: 'egrep *'
-  #[test] allow: fgrep "literal" file.txt
+  #[test] allow: fgrep "error" /var/log/syslog
   - allow: 'fgrep *'
-  #[test] allow: rg pattern .
+  #[test] allow: rg "fn main" src/
   #[test] ask: rg --pre pdftotext pattern
   - allow: 'rg !--pre *'
-  #[test] allow: ag pattern .
+  #[test] allow: ag "TODO|FIXME" src/
   #[test] ask: ag --pager less pattern
   - allow: 'ag !--pager *'
-  #[test] allow: ack pattern .
+  #[test] allow: ack --type=python "def " src/
   #[test] ask: ack --pager less pattern
   - allow: 'ack !--pager *'
 
   # ── Text processing ──
-  #[test] allow: sed s/foo/bar/ file.txt
+  #[test] allow: sed -n '1,10p' /etc/passwd
   #[test] ask: sed -i s/foo/bar/ file.txt
   #[test] ask: sed --in-place s/foo/bar/ file.txt
   - allow: 'sed !-i|--in-place *'
   #[test] ask: sort -o output.txt input.txt
   #[test] ask: sort --compress-program gzip file.txt
   - allow: 'sort !-o|--output|--compress-program *'
-  #[test] allow: uniq file.txt
+  #[test] allow: sort access.log | uniq -c
   - allow: 'uniq *'
-  #[test] allow: cut -d: -f1 /etc/passwd
+  #[test] allow: cat /etc/passwd | cut -d: -f1
   - allow: 'cut *'
-  #[test] allow: tr a-z A-Z
+  #[test] allow: echo hello | tr '[:lower:]' '[:upper:]'
   - allow: 'tr *'
-  #[test] allow: paste a.txt b.txt
+  #[test] allow: paste -d, names.txt emails.txt
   - allow: 'paste *'
-  #[test] allow: join a.txt b.txt
+  #[test] allow: join -t: /etc/passwd /etc/group
   - allow: 'join *'
-  #[test] allow: fold -w 80 file.txt
+  #[test] allow: fold -s -w 72 README.md
   - allow: 'fold *'
-  #[test] allow: fmt file.txt
+  #[test] allow: fmt -w 80 README.md
   - allow: 'fmt *'
-  #[test] allow: col -b
+  #[test] allow: col -bx
   - allow: 'col *'
-  #[test] allow: column -t file.txt
+  #[test] allow: column -t -s, data.csv
   - allow: 'column *'
-  #[test] allow: rev file.txt
+  #[test] allow: echo hello | rev
   - allow: 'rev *'
-  #[test] allow: expand file.txt
+  #[test] allow: expand -t 4 Makefile
   - allow: 'expand *'
-  #[test] allow: unexpand file.txt
+  #[test] allow: unexpand --first-only Makefile
   - allow: 'unexpand *'
-  #[test] allow: colrm 1 5
+  #[test] allow: colrm 40 72
   - allow: 'colrm *'
-  #[test] allow: pr file.txt
+  #[test] allow: pr -h "Report" data.txt
   - allow: 'pr *'
-  #[test] allow: wc -l file.txt
+  #[test] allow: find . -name "*.go" | wc -l
   - allow: 'wc *'
   #[test] allow: jq .name package.json
   - allow: 'jq *'
-  #[test] allow: yq '.key' file.yml
+  #[test] allow: yq '.dependencies' pubspec.yaml
   #[test] ask: yq -i ".key = \"value\"" file.yml
   - allow: 'yq !-i|--inplace *'
 
   # ── File comparison ──
-  #[test] allow: diff a.txt b.txt
+  #[test] allow: diff <(sort file1.txt) <(sort file2.txt)
   - allow: 'diff *'
-  #[test] allow: diff3 a.txt b.txt c.txt
+  #[test] allow: diff3 mine.conf base.conf theirs.conf
   - allow: 'diff3 *'
-  #[test] allow: sdiff a.txt b.txt
+  #[test] allow: sdiff old.conf new.conf
   #[test] ask: sdiff -o merged.txt a.txt b.txt
   - allow: 'sdiff !-o|--output *'
-  #[test] allow: cmp a.txt b.txt
+  #[test] allow: cmp binary1 binary2
   - allow: 'cmp *'
-  #[test] allow: comm a.txt b.txt
+  #[test] allow: comm -12 sorted1.txt sorted2.txt
   - allow: 'comm *'
 
   # ── Binary and dump display ──
-  #[test] allow: od -x file.bin
+  #[test] allow: od -A x -t x1z firmware.bin
   - allow: 'od *'
-  #[test] allow: hexdump -C file.bin
+  #[test] allow: hexdump -C /dev/urandom -n 64
   - allow: 'hexdump *'
-  #[test] allow: xxd file.bin
+  #[test] allow: xxd -l 128 firmware.bin
   #[test] ask: xxd -r dump.hex
   - allow: 'xxd !-r|--revert *'
-  #[test] allow: strings binary
+  #[test] allow: strings /usr/bin/env
   - allow: 'strings *'
 
   # ── Checksums and hashes ──
-  #[test] allow: cksum file.txt
+  #[test] allow: cksum /etc/hosts
   - allow: 'cksum *'
-  #[test] allow: sum file.txt
+  #[test] allow: sum /etc/hosts
   - allow: 'sum *'
-  #[test] allow: md5 file.txt
+  #[test] allow: md5 /etc/hosts
   - allow: 'md5 *'
-  #[test] allow: md5sum file.txt
+  #[test] allow: md5sum /etc/passwd
   - allow: 'md5sum *'
-  #[test] allow: sha1sum file.txt
+  #[test] allow: sha1sum package-lock.json
   - allow: 'sha1sum *'
-  #[test] allow: sha224sum file.txt
+  #[test] allow: sha224sum archive.tar.gz
   - allow: 'sha224sum *'
-  #[test] allow: sha256sum file.txt
+  #[test] allow: sha256sum download.iso
   - allow: 'sha256sum *'
-  #[test] allow: sha384sum file.txt
+  #[test] allow: sha384sum release.tar.gz
   - allow: 'sha384sum *'
-  #[test] allow: sha512sum file.txt
+  #[test] allow: sha512sum backup.img
   - allow: 'sha512sum *'
-  #[test] allow: shasum file.txt
+  #[test] allow: shasum -a 256 package.tgz
   - allow: 'shasum *'
-  #[test] allow: b2sum file.txt
+  #[test] allow: b2sum large-file.dat
   - allow: 'b2sum *'
 
   # ── Compressed file viewing ──
-  #[test] allow: zcat file.gz
+  #[test] allow: zcat access.log.gz
   - allow: 'zcat *'
-  #[test] allow: bzcat file.bz2
+  #[test] allow: bzcat archive.tar.bz2
   - allow: 'bzcat *'
-  #[test] allow: xzcat file.xz
+  #[test] allow: xzcat backup.tar.xz
   #[test] ask: xzcat -z file
   - allow: 'xzcat !-z|--rm *'
-  #[test] allow: zstdcat file.zst
+  #[test] allow: zstdcat database.sql.zst
   #[test] ask: zstdcat -o output file.zst
   - allow: 'zstdcat !-z|--rm|-o *'
-  #[test] allow: zgrep pattern file.gz
+  #[test] allow: zgrep "ERROR" /var/log/syslog.1.gz
   - allow: 'zgrep *'
-  #[test] allow: bzgrep pattern file.bz2
+  #[test] allow: bzgrep "404" access.log.bz2
   - allow: 'bzgrep *'
-  #[test] allow: zegrep pattern file.gz
+  #[test] allow: zegrep "WARN|ERROR" app.log.gz
   - allow: 'zegrep *'
-  #[test] allow: zfgrep pattern file.gz
+  #[test] allow: zfgrep "Connection refused" syslog.gz
   - allow: 'zfgrep *'
-  #[test] allow: zdiff a.gz b.gz
+  #[test] allow: zdiff config.old.gz config.new.gz
   - allow: 'zdiff *'
-  #[test] allow: zcmp a.gz b.gz
+  #[test] allow: zcmp backup1.gz backup2.gz
   - allow: 'zcmp *'
-  #[test] allow: bzdiff a.bz2 b.bz2
+  #[test] allow: bzdiff dump1.sql.bz2 dump2.sql.bz2
   - allow: 'bzdiff *'
-  #[test] allow: bzcmp a.bz2 b.bz2
+  #[test] allow: bzcmp archive1.bz2 archive2.bz2
   - allow: 'bzcmp *'
-  #[test] allow: zmore file.gz
+  #[test] allow: zmore /var/log/syslog.2.gz
   - allow: 'zmore *'
-  #[test] allow: zless file.gz
+  #[test] allow: zless /var/log/auth.log.gz
   - allow: 'zless *'
-  #[test] allow: bzmore file.bz2
+  #[test] allow: bzmore archive.log.bz2
   - allow: 'bzmore *'
-  #[test] allow: bzless file.bz2
+  #[test] allow: bzless debug.log.bz2
   - allow: 'bzless *'
-  #[test] allow: zipinfo archive.zip
+  #[test] allow: zipinfo release-v2.0.zip
   - allow: 'zipinfo *'
-  #[test] allow: zipgrep pattern archive.zip
+  #[test] allow: zipgrep "class Main" source.zip
   - allow: 'zipgrep *'
 
   # ── Archive listing (read-only mode) ──
@@ -219,9 +219,9 @@ rules:
   #[test] ask: tar -t --use-compress-program gzip -f archive.tar
   #[test] ask: tar --list --checkpoint-action exec=rm -f archive.tar
   - allow: 'tar -t|--list !--use-compress-program|--checkpoint-action *'
-  #[test] allow: unzip -l archive.zip
+  #[test] allow: unzip -l dist.zip
   - allow: 'unzip -l *'
-  #[test] allow: unzip -t archive.zip
+  #[test] allow: unzip -t download.zip
   - allow: 'unzip -t *'
 
   # ── System information ──
@@ -240,107 +240,107 @@ rules:
   #[test] allow: date +%Y-%m-%d
   #[test] ask: date -s "2024-01-01"
   - allow: 'date !-s|--set *'
-  #[test] allow: cal 2024
+  #[test] allow: cal 12 2024
   - allow: 'cal *'
-  #[test] allow: ncal -w
+  #[test] allow: ncal -3
   - allow: 'ncal *'
 
   # ── User and group information ──
-  #[test] allow: id
+  #[test] allow: id -un
   - allow: 'id *'
   #[test] allow: whoami
   - allow: 'whoami'
-  #[test] allow: who
+  #[test] allow: who -b
   - allow: 'who *'
   #[test] allow: w
   - allow: 'w'
   #[test] allow: users
   - allow: 'users'
-  #[test] allow: groups
+  #[test] allow: groups root
   - allow: 'groups *'
   #[test] allow: logname
   - allow: 'logname'
-  #[test] allow: last -10
+  #[test] allow: last -n 5
   - allow: 'last *'
-  #[test] allow: finger root
+  #[test] allow: finger -l root
   - allow: 'finger *'
-  #[test] allow: pinky root
+  #[test] allow: pinky -l root
   - allow: 'pinky *'
 
   # ── Process information ──
-  #[test] allow: ps aux
+  #[test] allow: ps aux | grep nginx
   - allow: 'ps *'
-  #[test] allow: pgrep bash
+  #[test] allow: pgrep -la node
   - allow: 'pgrep *'
   # top: interactive mode can send signals, but this preset targets LLM
   # agents which operate non-interactively. No filesystem writes involved.
-  #[test] allow: top -l 1
+  #[test] allow: top -l 1 -n 10
   - allow: 'top *'
 
   # ── Environment and configuration ──
-  #[test] allow: printenv HOME
+  #[test] allow: printenv PATH
   - allow: 'printenv *'
-  #[test] allow: locale
+  #[test] allow: locale -a
   - allow: 'locale *'
-  #[test] allow: getconf PAGE_SIZE
+  #[test] allow: getconf LONG_BIT
   - allow: 'getconf *'
   #[test] allow: tty
   - allow: 'tty'
-  #[test] allow: tput cols
+  #[test] allow: tput lines
   - allow: 'tput *'
 
   # ── Command lookup ──
   #[test] allow: which bash
   - allow: 'which *'
-  #[test] allow: whereis bash
+  #[test] allow: whereis python3
   - allow: 'whereis *'
-  #[test] allow: whatis ls
+  #[test] allow: whatis grep
   - allow: 'whatis *'
-  #[test] allow: apropos editor
+  #[test] allow: apropos "text editor"
   - allow: 'apropos *'
   #[test] allow: man grep
   #[test] ask: man -P less grep
   #[test] ask: man --pager less grep
   - allow: 'man !-P|--pager *'
-  #[test] allow: type ls
+  #[test] allow: type -a python3
   - allow: 'type *'
 
   # ── Math and numbers ──
-  #[test] allow: expr 1 + 2
+  #[test] allow: expr 100 / 3
   - allow: 'expr *'
-  #[test] allow: factor 42
+  #[test] allow: factor 1234567
   - allow: 'factor *'
-  #[test] allow: numfmt --to=iec 1048576
+  #[test] allow: numfmt --to=iec 1073741824
   - allow: 'numfmt *'
-  #[test] allow: seq 1 10
+  #[test] allow: seq -s, 1 5
   - allow: 'seq *'
-  #[test] allow: jot 5
+  #[test] allow: jot -r 10 1 100
   - allow: 'jot *'
 
   # ── Shell builtins ──
-  #[test] allow: : noop
+  #[test] allow: : this is a comment
   - allow: ': *'
-  #[test] allow: [ -f file.txt ]
+  #[test] allow: [ -d /tmp ]
   - allow: '[ *'
   #[test] allow: cd /tmp
   - allow: 'cd *'
   #[test] allow: pwd
   - allow: 'pwd'
-  #[test] allow: read -r line
+  #[test] allow: read -r -p "Enter: " input
   - allow: 'read *'
 
   # ── Output ──
-  #[test] allow: echo hello
+  #[test] allow: echo $PATH | tr ':' '\n'
   - allow: 'echo *'
-  #[test] allow: printf "%s\n" hello
+  #[test] allow: printf "%-20s %s\n" key value
   - allow: 'printf *'
-  #[test] allow: yes hello
+  #[test] allow: yes n
   - allow: 'yes *'
   #[test] allow: true
   - allow: 'true'
   #[test] allow: false
   - allow: 'false'
-  #[test] allow: test -f file.txt
+  #[test] allow: test -d /var/log
   - allow: 'test *'
 
   # ── Miscellaneous utilities ──
@@ -348,35 +348,35 @@ rules:
   - allow: 'sleep *'
 
   # ── Encoding and decoding ──
-  #[test] allow: base32 file.txt
+  #[test] allow: base32 -d encoded.txt
   - allow: 'base32 *'
   #[test] allow: base64 file.txt
   - allow: 'base64 *'
-  #[test] allow: basenc --base16 file.txt
+  #[test] allow: basenc --base64url token.bin
   - allow: 'basenc *'
 
   # ── DNS queries ──
   #[test] allow: dig example.com
   - allow: 'dig *'
-  #[test] allow: nslookup example.com
+  #[test] allow: nslookup -type=MX example.com
   - allow: 'nslookup *'
-  #[test] allow: host example.com
+  #[test] allow: host -t AAAA example.com
   - allow: 'host *'
-  #[test] allow: whois example.com
+  #[test] allow: whois -h whois.arin.net 8.8.8.8
   - allow: 'whois *'
 
   # ── Network information ──
-  #[test] allow: netstat -an
+  #[test] allow: netstat -tlnp
   - allow: 'netstat *'
 
   # ── ELF/object information ──
-  #[test] allow: nm a.out
+  #[test] allow: nm -D /usr/lib/libc.so
   - allow: 'nm *'
-  #[test] allow: objdump -d a.out
+  #[test] allow: objdump -d -M intel /usr/bin/ls
   - allow: 'objdump *'
-  #[test] allow: readelf -h a.out
+  #[test] allow: readelf -S /usr/bin/ls
   - allow: 'readelf *'
-  #[test] allow: otool -L /bin/ls
+  #[test] allow: otool -L /usr/local/bin/node
   - allow: 'otool *'
 
   # ── Commands not in allow list ──
