@@ -22,5 +22,7 @@ extends:
 #[test] allow: xargs -I{} cat {}
 rules:
   # Any command with --help or --version is safe to run.
+  #[test] allow: ls --help
   - allow: '* --help'
+  #[test] allow: git --version
   - allow: '* --version'

@@ -9,15 +9,19 @@ rules:
   # ── File viewing ──
   #[test] allow: cat /etc/hosts
   - allow: 'cat *'
+  #[test] allow: tac file.txt
   - allow: 'tac *'
   #[test] allow: head -n 10 file.txt
   - allow: 'head *'
   #[test] allow: tail -f /var/log/syslog
   - allow: 'tail *'
+  #[test] allow: nl file.txt
   - allow: 'nl *'
+  #[test] allow: less file.txt
   #[test] ask: less -o /tmp/out file.txt
   #[test] ask: less -O /tmp/out file.txt
   - allow: 'less !-o|-O|--log-file|--LOG-FILE *'
+  #[test] allow: more file.txt
   - allow: 'more *'
   #[test] ask: bat --pager less file.txt
   - allow: 'bat !--pager *'
@@ -25,11 +29,17 @@ rules:
   # ── Directory and file information ──
   #[test] allow: ls -la /tmp
   - allow: 'ls *'
+  #[test] allow: dir /tmp
   - allow: 'dir *'
+  #[test] allow: tree .
   - allow: 'tree *'
+  #[test] allow: stat file.txt
   - allow: 'stat *'
+  #[test] allow: file image.png
   - allow: 'file *'
+  #[test] allow: du -sh .
   - allow: 'du *'
+  #[test] allow: df -h
   - allow: 'df *'
   #[test] allow: find . -name "*.txt"
   #[test] ask: find . -name "*.log" -exec rm {} \;
@@ -42,22 +52,33 @@ rules:
   #[test] ask: fd -X rm
   #[test] ask: fd --exec-batch rm
   - allow: 'fd !-x|--exec|-X|--exec-batch *'
+  #[test] allow: basename /tmp/file.txt
   - allow: 'basename *'
+  #[test] allow: dirname /tmp/file.txt
   - allow: 'dirname *'
+  #[test] allow: readlink /usr/bin/python
   - allow: 'readlink *'
+  #[test] allow: realpath .
   - allow: 'realpath *'
+  #[test] allow: pathchk filename
   - allow: 'pathchk *'
+  #[test] allow: lsof -i :8080
   - allow: 'lsof *'
 
   # ── Text search ──
   #[test] allow: grep -r pattern .
   - allow: 'grep *'
+  #[test] allow: egrep "pattern" file.txt
   - allow: 'egrep *'
+  #[test] allow: fgrep "literal" file.txt
   - allow: 'fgrep *'
+  #[test] allow: rg pattern .
   #[test] ask: rg --pre pdftotext pattern
   - allow: 'rg !--pre *'
+  #[test] allow: ag pattern .
   #[test] ask: ag --pager less pattern
   - allow: 'ag !--pager *'
+  #[test] allow: ack pattern .
   #[test] ask: ack --pager less pattern
   - allow: 'ack !--pager *'
 
@@ -69,74 +90,128 @@ rules:
   #[test] ask: sort -o output.txt input.txt
   #[test] ask: sort --compress-program gzip file.txt
   - allow: 'sort !-o|--output|--compress-program *'
+  #[test] allow: uniq file.txt
   - allow: 'uniq *'
+  #[test] allow: cut -d: -f1 /etc/passwd
   - allow: 'cut *'
+  #[test] allow: tr a-z A-Z
   - allow: 'tr *'
+  #[test] allow: paste a.txt b.txt
   - allow: 'paste *'
+  #[test] allow: join a.txt b.txt
   - allow: 'join *'
+  #[test] allow: fold -w 80 file.txt
   - allow: 'fold *'
+  #[test] allow: fmt file.txt
   - allow: 'fmt *'
+  #[test] allow: col -b
   - allow: 'col *'
+  #[test] allow: column -t file.txt
   - allow: 'column *'
+  #[test] allow: rev file.txt
   - allow: 'rev *'
+  #[test] allow: expand file.txt
   - allow: 'expand *'
+  #[test] allow: unexpand file.txt
   - allow: 'unexpand *'
+  #[test] allow: colrm 1 5
   - allow: 'colrm *'
+  #[test] allow: pr file.txt
   - allow: 'pr *'
   #[test] allow: wc -l file.txt
   - allow: 'wc *'
   #[test] allow: jq .name package.json
   - allow: 'jq *'
+  #[test] allow: yq '.key' file.yml
   #[test] ask: yq -i ".key = \"value\"" file.yml
   - allow: 'yq !-i|--inplace *'
 
   # ── File comparison ──
   #[test] allow: diff a.txt b.txt
   - allow: 'diff *'
+  #[test] allow: diff3 a.txt b.txt c.txt
   - allow: 'diff3 *'
+  #[test] allow: sdiff a.txt b.txt
+  #[test] ask: sdiff -o merged.txt a.txt b.txt
   - allow: 'sdiff !-o|--output *'
+  #[test] allow: cmp a.txt b.txt
   - allow: 'cmp *'
+  #[test] allow: comm a.txt b.txt
   - allow: 'comm *'
 
   # ── Binary and dump display ──
+  #[test] allow: od -x file.bin
   - allow: 'od *'
+  #[test] allow: hexdump -C file.bin
   - allow: 'hexdump *'
+  #[test] allow: xxd file.bin
   #[test] ask: xxd -r dump.hex
   - allow: 'xxd !-r|--revert *'
+  #[test] allow: strings binary
   - allow: 'strings *'
 
   # ── Checksums and hashes ──
+  #[test] allow: cksum file.txt
   - allow: 'cksum *'
+  #[test] allow: sum file.txt
   - allow: 'sum *'
+  #[test] allow: md5 file.txt
   - allow: 'md5 *'
   #[test] allow: md5sum file.txt
   - allow: 'md5sum *'
+  #[test] allow: sha1sum file.txt
   - allow: 'sha1sum *'
+  #[test] allow: sha224sum file.txt
   - allow: 'sha224sum *'
+  #[test] allow: sha256sum file.txt
   - allow: 'sha256sum *'
+  #[test] allow: sha384sum file.txt
   - allow: 'sha384sum *'
+  #[test] allow: sha512sum file.txt
   - allow: 'sha512sum *'
+  #[test] allow: shasum file.txt
   - allow: 'shasum *'
+  #[test] allow: b2sum file.txt
   - allow: 'b2sum *'
 
   # ── Compressed file viewing ──
+  #[test] allow: zcat file.gz
   - allow: 'zcat *'
+  #[test] allow: bzcat file.bz2
   - allow: 'bzcat *'
+  #[test] allow: xzcat file.xz
+  #[test] ask: xzcat -z file
   - allow: 'xzcat !-z|--rm *'
+  #[test] allow: zstdcat file.zst
+  #[test] ask: zstdcat -o output file.zst
   - allow: 'zstdcat !-z|--rm|-o *'
+  #[test] allow: zgrep pattern file.gz
   - allow: 'zgrep *'
+  #[test] allow: bzgrep pattern file.bz2
   - allow: 'bzgrep *'
+  #[test] allow: zegrep pattern file.gz
   - allow: 'zegrep *'
+  #[test] allow: zfgrep pattern file.gz
   - allow: 'zfgrep *'
+  #[test] allow: zdiff a.gz b.gz
   - allow: 'zdiff *'
+  #[test] allow: zcmp a.gz b.gz
   - allow: 'zcmp *'
+  #[test] allow: bzdiff a.bz2 b.bz2
   - allow: 'bzdiff *'
+  #[test] allow: bzcmp a.bz2 b.bz2
   - allow: 'bzcmp *'
+  #[test] allow: zmore file.gz
   - allow: 'zmore *'
+  #[test] allow: zless file.gz
   - allow: 'zless *'
+  #[test] allow: bzmore file.bz2
   - allow: 'bzmore *'
+  #[test] allow: bzless file.bz2
   - allow: 'bzless *'
+  #[test] allow: zipinfo archive.zip
   - allow: 'zipinfo *'
+  #[test] allow: zipgrep pattern archive.zip
   - allow: 'zipgrep *'
 
   # ── Archive listing (read-only mode) ──
@@ -144,83 +219,128 @@ rules:
   #[test] ask: tar -t --use-compress-program gzip -f archive.tar
   #[test] ask: tar --list --checkpoint-action exec=rm -f archive.tar
   - allow: 'tar -t|--list !--use-compress-program|--checkpoint-action *'
+  #[test] allow: unzip -l archive.zip
   - allow: 'unzip -l *'
+  #[test] allow: unzip -t archive.zip
   - allow: 'unzip -t *'
 
   # ── System information ──
   #[test] allow: uname -a
   - allow: 'uname *'
+  #[test] allow: arch
   - allow: 'arch'
   #[test] allow: hostname
   - allow: 'hostname'
+  #[test] allow: hostid
   - allow: 'hostid'
+  #[test] allow: nproc
   - allow: 'nproc'
+  #[test] allow: uptime
   - allow: 'uptime'
+  #[test] allow: date +%Y-%m-%d
   #[test] ask: date -s "2024-01-01"
   - allow: 'date !-s|--set *'
+  #[test] allow: cal 2024
   - allow: 'cal *'
+  #[test] allow: ncal -w
   - allow: 'ncal *'
 
   # ── User and group information ──
+  #[test] allow: id
   - allow: 'id *'
+  #[test] allow: whoami
   - allow: 'whoami'
+  #[test] allow: who
   - allow: 'who *'
+  #[test] allow: w
   - allow: 'w'
+  #[test] allow: users
   - allow: 'users'
+  #[test] allow: groups
   - allow: 'groups *'
+  #[test] allow: logname
   - allow: 'logname'
+  #[test] allow: last -10
   - allow: 'last *'
+  #[test] allow: finger root
   - allow: 'finger *'
+  #[test] allow: pinky root
   - allow: 'pinky *'
 
   # ── Process information ──
   #[test] allow: ps aux
   - allow: 'ps *'
+  #[test] allow: pgrep bash
   - allow: 'pgrep *'
   # top: interactive mode can send signals, but this preset targets LLM
   # agents which operate non-interactively. No filesystem writes involved.
+  #[test] allow: top -l 1
   - allow: 'top *'
 
   # ── Environment and configuration ──
+  #[test] allow: printenv HOME
   - allow: 'printenv *'
+  #[test] allow: locale
   - allow: 'locale *'
+  #[test] allow: getconf PAGE_SIZE
   - allow: 'getconf *'
+  #[test] allow: tty
   - allow: 'tty'
+  #[test] allow: tput cols
   - allow: 'tput *'
 
   # ── Command lookup ──
   #[test] allow: which bash
   - allow: 'which *'
+  #[test] allow: whereis bash
   - allow: 'whereis *'
+  #[test] allow: whatis ls
   - allow: 'whatis *'
+  #[test] allow: apropos editor
   - allow: 'apropos *'
+  #[test] allow: man grep
   #[test] ask: man -P less grep
   #[test] ask: man --pager less grep
   - allow: 'man !-P|--pager *'
+  #[test] allow: type ls
   - allow: 'type *'
 
   # ── Math and numbers ──
+  #[test] allow: expr 1 + 2
   - allow: 'expr *'
+  #[test] allow: factor 42
   - allow: 'factor *'
+  #[test] allow: numfmt --to=iec 1048576
   - allow: 'numfmt *'
+  #[test] allow: seq 1 10
   - allow: 'seq *'
+  #[test] allow: jot 5
   - allow: 'jot *'
 
   # ── Shell builtins ──
+  #[test] allow: : noop
   - allow: ': *'
+  #[test] allow: [ -f file.txt ]
   - allow: '[ *'
+  #[test] allow: cd /tmp
   - allow: 'cd *'
   #[test] allow: pwd
   - allow: 'pwd'
+  #[test] allow: read -r line
   - allow: 'read *'
 
   # ── Output ──
   #[test] allow: echo hello
   - allow: 'echo *'
+  #[test] allow: printf "%s\n" hello
   - allow: 'printf *'
+  #[test] allow: yes hello
   - allow: 'yes *'
+  #[test] allow: true
   - allow: 'true'
+  #[test] allow: false
   - allow: 'false'
+  #[test] allow: test -f file.txt
   - allow: 'test *'
 
   # ── Miscellaneous utilities ──
@@ -228,25 +348,35 @@ rules:
   - allow: 'sleep *'
 
   # ── Encoding and decoding ──
+  #[test] allow: base32 file.txt
   - allow: 'base32 *'
   #[test] allow: base64 file.txt
   - allow: 'base64 *'
+  #[test] allow: basenc --base16 file.txt
   - allow: 'basenc *'
 
   # ── DNS queries ──
   #[test] allow: dig example.com
   - allow: 'dig *'
+  #[test] allow: nslookup example.com
   - allow: 'nslookup *'
+  #[test] allow: host example.com
   - allow: 'host *'
+  #[test] allow: whois example.com
   - allow: 'whois *'
 
   # ── Network information ──
+  #[test] allow: netstat -an
   - allow: 'netstat *'
 
   # ── ELF/object information ──
+  #[test] allow: nm a.out
   - allow: 'nm *'
+  #[test] allow: objdump -d a.out
   - allow: 'objdump *'
+  #[test] allow: readelf -h a.out
   - allow: 'readelf *'
+  #[test] allow: otool -L /bin/ls
   - allow: 'otool *'
 
   # ── Commands not in allow list ──
