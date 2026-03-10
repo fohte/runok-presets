@@ -7,16 +7,23 @@
 
 rules:
   # ── File viewing ──
+  #[test] allow: cat /etc/hosts
   - allow: 'cat *'
   - allow: 'tac *'
+  #[test] allow: head -n 10 file.txt
   - allow: 'head *'
+  #[test] allow: tail -f /var/log/syslog
   - allow: 'tail *'
   - allow: 'nl *'
+  #[test] ask: less -o /tmp/out file.txt
+  #[test] ask: less -O /tmp/out file.txt
   - allow: 'less !-o|-O|--log-file|--LOG-FILE *'
   - allow: 'more *'
+  #[test] ask: bat --pager less file.txt
   - allow: 'bat !--pager *'
 
   # ── Directory and file information ──
+  #[test] allow: ls -la /tmp
   - allow: 'ls *'
   - allow: 'dir *'
   - allow: 'tree *'
@@ -24,7 +31,16 @@ rules:
   - allow: 'file *'
   - allow: 'du *'
   - allow: 'df *'
+  #[test] allow: find . -name "*.txt"
+  #[test] ask: find . -name "*.log" -exec rm {} \;
+  #[test] ask: find . -name "*.log" -execdir rm {} \;
+  #[test] ask: find . -name "*.log" -ok rm {} \;
+  #[test] ask: find . -name "*.log" -okdir rm {} \;
   - allow: 'find !-delete|-exec|-execdir|-ok|-okdir|-fprint|-fprint0|-fprintf|-fls *'
+  #[test] ask: fd -x rm
+  #[test] ask: fd --exec rm
+  #[test] ask: fd -X rm
+  #[test] ask: fd --exec-batch rm
   - allow: 'fd !-x|--exec|-X|--exec-batch *'
   - allow: 'basename *'
   - allow: 'dirname *'
@@ -34,15 +50,24 @@ rules:
   - allow: 'lsof *'
 
   # ── Text search ──
+  #[test] allow: grep -r pattern .
   - allow: 'grep *'
   - allow: 'egrep *'
   - allow: 'fgrep *'
+  #[test] ask: rg --pre pdftotext pattern
   - allow: 'rg !--pre *'
+  #[test] ask: ag --pager less pattern
   - allow: 'ag !--pager *'
+  #[test] ask: ack --pager less pattern
   - allow: 'ack !--pager *'
 
   # ── Text processing ──
+  #[test] allow: sed s/foo/bar/ file.txt
+  #[test] ask: sed -i s/foo/bar/ file.txt
+  #[test] ask: sed --in-place s/foo/bar/ file.txt
   - allow: 'sed !-i|--in-place *'
+  #[test] ask: sort -o output.txt input.txt
+  #[test] ask: sort --compress-program gzip file.txt
   - allow: 'sort !-o|--output|--compress-program *'
   - allow: 'uniq *'
   - allow: 'cut *'
@@ -58,11 +83,15 @@ rules:
   - allow: 'unexpand *'
   - allow: 'colrm *'
   - allow: 'pr *'
+  #[test] allow: wc -l file.txt
   - allow: 'wc *'
+  #[test] allow: jq .name package.json
   - allow: 'jq *'
+  #[test] ask: yq -i ".key = \"value\"" file.yml
   - allow: 'yq !-i|--inplace *'
 
   # ── File comparison ──
+  #[test] allow: diff a.txt b.txt
   - allow: 'diff *'
   - allow: 'diff3 *'
   - allow: 'sdiff !-o|--output *'
@@ -72,6 +101,7 @@ rules:
   # ── Binary and dump display ──
   - allow: 'od *'
   - allow: 'hexdump *'
+  #[test] ask: xxd -r dump.hex
   - allow: 'xxd !-r|--revert *'
   - allow: 'strings *'
 
@@ -79,6 +109,7 @@ rules:
   - allow: 'cksum *'
   - allow: 'sum *'
   - allow: 'md5 *'
+  #[test] allow: md5sum file.txt
   - allow: 'md5sum *'
   - allow: 'sha1sum *'
   - allow: 'sha224sum *'
@@ -109,17 +140,23 @@ rules:
   - allow: 'zipgrep *'
 
   # ── Archive listing (read-only mode) ──
+  #[test] allow: tar -t -f archive.tar.gz
+  #[test] ask: tar -t --use-compress-program gzip -f archive.tar
+  #[test] ask: tar --list --checkpoint-action exec=rm -f archive.tar
   - allow: 'tar -t|--list !--use-compress-program|--checkpoint-action *'
   - allow: 'unzip -l *'
   - allow: 'unzip -t *'
 
   # ── System information ──
+  #[test] allow: uname -a
   - allow: 'uname *'
   - allow: 'arch'
+  #[test] allow: hostname
   - allow: 'hostname'
   - allow: 'hostid'
   - allow: 'nproc'
   - allow: 'uptime'
+  #[test] ask: date -s "2024-01-01"
   - allow: 'date !-s|--set *'
   - allow: 'cal *'
   - allow: 'ncal *'
@@ -137,6 +174,7 @@ rules:
   - allow: 'pinky *'
 
   # ── Process information ──
+  #[test] allow: ps aux
   - allow: 'ps *'
   - allow: 'pgrep *'
   # top: interactive mode can send signals, but this preset targets LLM
@@ -151,10 +189,13 @@ rules:
   - allow: 'tput *'
 
   # ── Command lookup ──
+  #[test] allow: which bash
   - allow: 'which *'
   - allow: 'whereis *'
   - allow: 'whatis *'
   - allow: 'apropos *'
+  #[test] ask: man -P less grep
+  #[test] ask: man --pager less grep
   - allow: 'man !-P|--pager *'
   - allow: 'type *'
 
@@ -169,10 +210,12 @@ rules:
   - allow: ': *'
   - allow: '[ *'
   - allow: 'cd *'
+  #[test] allow: pwd
   - allow: 'pwd'
   - allow: 'read *'
 
   # ── Output ──
+  #[test] allow: echo hello
   - allow: 'echo *'
   - allow: 'printf *'
   - allow: 'yes *'
@@ -181,14 +224,17 @@ rules:
   - allow: 'test *'
 
   # ── Miscellaneous utilities ──
+  #[test] allow: sleep 1
   - allow: 'sleep *'
 
   # ── Encoding and decoding ──
   - allow: 'base32 *'
+  #[test] allow: base64 file.txt
   - allow: 'base64 *'
   - allow: 'basenc *'
 
   # ── DNS queries ──
+  #[test] allow: dig example.com
   - allow: 'dig *'
   - allow: 'nslookup *'
   - allow: 'host *'
@@ -202,3 +248,15 @@ rules:
   - allow: 'objdump *'
   - allow: 'readelf *'
   - allow: 'otool *'
+
+  # ── Commands not in allow list ──
+  #[test] ask: bc -e "system(\"id\")"
+  #[test] ask: dc -e "!id"
+  #[test] ask: rm -rf /tmp/test
+  #[test] ask: curl https://example.com
+  #[test] ask: chmod 755 file.sh
+  #[test] ask: kill -9 1234
+  #[test] ask: wget https://example.com
+  #[test] ask: mv file1 file2
+  #[test] ask: cp file1 file2
+  #[test] ask: mkdir /tmp/newdir
