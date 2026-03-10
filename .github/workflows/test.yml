@@ -77,10 +77,12 @@ jobs:
 
       - name: Install runok
         run: |
-          gh release download -R fohte/runok -p 'runok-x86_64-unknown-linux-gnu.tar.gz' -O - | tar xz
+          gh release download "$RUNOK_VERSION" -R fohte/runok -p 'runok-x86_64-unknown-linux-gnu.tar.gz' -O - | tar xz
           sudo mv runok /usr/local/bin/
         env:
           GH_TOKEN: ${{ github.token }}
+          # renovate: datasource=github-releases depName=fohte/runok
+          RUNOK_VERSION: v0.1.3
 
       - name: Run preset E2E tests
         run: tests/run
