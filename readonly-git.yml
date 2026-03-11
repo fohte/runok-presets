@@ -128,13 +128,6 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] archive !-o !--output *'
   #[test] allow: git var GIT_AUTHOR_IDENT
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] var *'
-  # symbolic-ref: --delete removes a symbolic reference.
-  # The two-argument write form (e.g. symbolic-ref HEAD refs/heads/branch)
-  # cannot be distinguished from the read form by pattern alone.
-  #[test] allow: git symbolic-ref HEAD
-  #[test] allow: git symbolic-ref --short HEAD
-  #[test] ask: git symbolic-ref --delete refs/symref
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] symbolic-ref !--delete *'
   #[test] allow: git patch-id --stable
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] patch-id *'
   #[test] allow: git stripspace --strip-comments
