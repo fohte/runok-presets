@@ -26,7 +26,7 @@ extends:
 
 ## Presets
 
-This collection covers tools that virtually every developer uses regardless of stack — currently common Unix utilities, popular modern alternatives, and git.
+This collection covers tools that virtually every developer uses regardless of stack — currently common Unix utilities, popular modern alternatives, git, and GitHub CLI (`gh`).
 
 Tools whose usage varies by project or team — such as infrastructure tools (docker, kubectl), cloud CLIs (aws, gcloud, az), language runtimes (node, python), and package managers (npm, cargo) — are not included. Define rules for those in your own `runok.yml`.
 
@@ -36,6 +36,7 @@ Tools whose usage varies by project or team — such as infrastructure tools (do
 | `definitions.yml`   | Wrapper command definitions (`bash -c`, `sudo`, `xargs`, `find -exec`, etc.) for recursive command evaluation.     |
 | `readonly-unix.yml` | Allow rules for common read-only Unix commands (`cat`, `grep`, `find`, `sed` without `-i`, etc.).                  |
 | `readonly-git.yml`  | Allow rules for read-only git subcommands (`status`, `diff`, `log`, `branch --list`, etc.).                        |
+| `readonly-gh.yml`   | Allow rules for read-only GitHub CLI subcommands (`pr list`, `issue view`, `api`, `search`, etc.).                 |
 
 ## Known Risks
 
