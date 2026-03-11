@@ -12,7 +12,9 @@ rules:
   #[test] ask: gh api -X PUT /repos/cli/cli/issues/1
   #[test] ask: gh api -X DELETE /repos/cli/cli/issues/1
   #[test] ask: gh api -X PATCH /repos/cli/cli/issues/1
-  - ask: 'gh [-R|--repo *] api * -X !GET *'
+  #[test] ask: gh api --method POST /repos/cli/cli/issues
+  #[test] ask: gh api --method DELETE /repos/cli/cli/issues/1
+  - ask: 'gh [-R|--repo *] api * -X|--method !GET *'
   #[test] ask: gh api graphql -f query="{ viewer { login } }"
   - ask: 'gh [-R|--repo *] api graphql *'
   #[test] allow: gh api /repos/cli/cli
@@ -51,7 +53,6 @@ rules:
   #[test] allow: gh label list
   #[test] allow: gh -R cli/cli label list
   #[test] allow: gh variable list
-  #[test] allow: gh variable get MY_VAR
   #[test] allow: gh gist list
   #[test] allow: gh gist view abc123
   #[test] allow: gh cache list
@@ -71,15 +72,15 @@ rules:
   - allow: 'gh [-R|--repo *] project *-list *'
 
   # ── variable get ──
+  #[test] allow: gh variable get MY_VAR
   #[test] allow: gh variable get DEPLOY_ENV
   #[test] allow: gh --repo cli/cli variable get DEPLOY_ENV
   - allow: 'gh [-R|--repo *] variable get *'
 
   # ── PR / issue read-only subcommands beyond list/view/status ──
   #[test] allow: gh pr diff 123
-  - allow: 'gh [-R|--repo *] pr diff *'
   #[test] allow: gh pr checks 123
-  - allow: 'gh [-R|--repo *] pr checks *'
+  - allow: 'gh [-R|--repo *] pr diff|checks *'
 
   # ── Ruleset check ──
   #[test] allow: gh ruleset check main
