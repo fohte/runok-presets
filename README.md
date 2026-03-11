@@ -32,3 +32,15 @@ extends:
   - 'github:fohte/runok-presets/definitions'
   - 'github:fohte/runok-presets/readonly-git'
 ```
+
+## Known Risks
+
+These presets are building blocks for runok's command permission rules, not a complete security policy. The level of protection depends entirely on which presets you choose and how you combine them with your own rules.
+
+While the presets are designed to allow only read-only operations, their rule patterns may not cover every edge case. Review the preset files to confirm they match your security requirements before use.
+
+If you find a rule that permits unintended or potentially dangerous commands, please [open an issue](https://github.com/fohte/runok-presets/issues) or submit a pull request.
+
+## License
+
+[MIT](LICENSE)
