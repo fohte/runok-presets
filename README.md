@@ -10,11 +10,10 @@ Official preset collection for [runok](https://github.com/fohte/runok).
 | `definitions.yml`   | Wrapper command definitions (`bash -c`, `sudo`, `xargs`, `find -exec`, etc.) for recursive command evaluation.     |
 | `readonly-unix.yml` | Allow rules for common read-only Unix commands (`cat`, `grep`, `find`, `sed` without `-i`, etc.).                  |
 | `readonly-git.yml`  | Allow rules for read-only git subcommands (`status`, `diff`, `log`, `branch --list`, etc.).                        |
-| `readonly-gh.yml`   | Allow rules for read-only GitHub CLI subcommands (`gh repo view`, `gh pr list`, `gh issue view`, etc.).            |
 
 ## Scope
 
-This collection targets tools that virtually every developer uses, regardless of stack or domain — currently Unix standard commands (coreutils, etc.), git, and GitHub CLI (`gh`).
+This collection targets tools that virtually every developer uses, regardless of stack or domain — currently Unix standard commands (coreutils, etc.) and git.
 
 Infrastructure tools (docker, kubectl), cloud CLIs (aws, gcloud, az), language runtimes (node, python), and package managers (npm, cargo) are intentionally excluded. Usage of these tools varies significantly across projects and teams.
 
