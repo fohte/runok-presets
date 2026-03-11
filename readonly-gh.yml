@@ -6,17 +6,20 @@
 # Write operations (create, merge, close, delete, edit, comment, etc.) are not included.
 
 rules:
-  # ── gh api: only explicit GET requests ──
-  #[test] allow: gh api -X GET /repos/cli/cli
-  #[test] allow: gh api -X GET /repos/cli/cli/pulls
-  #[test] allow: gh -R cli/cli api -X GET /repos/cli/cli
-  #[test] allow: gh --repo cli/cli api -X GET /repos/cli/cli
-  #[test] ask: gh api /repos/cli/cli
+  # ── gh api ──
+  # -X with non-GET methods is blocked; graphql may contain mutations.
   #[test] ask: gh api -X POST /repos/cli/cli/issues
   #[test] ask: gh api -X PUT /repos/cli/cli/issues/1
   #[test] ask: gh api -X DELETE /repos/cli/cli/issues/1
   #[test] ask: gh api -X PATCH /repos/cli/cli/issues/1
-  - allow: 'gh [-R|--repo *] api -X GET *'
+  - ask: 'gh [-R|--repo *] api * -X !GET *'
+  #[test] ask: gh api graphql -f query="{ viewer { login } }"
+  - ask: 'gh [-R|--repo *] api graphql *'
+  #[test] allow: gh api /repos/cli/cli
+  #[test] allow: gh api -X GET /repos/cli/cli/pulls
+  #[test] allow: gh -R cli/cli api /repos/cli/cli
+  #[test] allow: gh --repo cli/cli api /repos/cli/cli
+  - allow: 'gh [-R|--repo *] api *'
 
   # ── Generic read-only subcommands (list / view / status) ──
   #[test] allow: gh pr list
