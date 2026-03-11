@@ -39,8 +39,25 @@ for f in "$repo_root"/*.yml; do
     expected="${body%%: *}"
     command="${body#*: }"
 
-    # Place the target config as runok.yml in testdir.
-    cp "$testdir/$bn" "$testdir/runok.yml"
+    # Build runok.yml for testdir.
+    # If the file has #[test:extends] directives, generate a wrapper config
+    # that extends both the target file and the additional presets.
+    extends_line=$(grep '#\[test:extends\]' "$f" | head -1 || true)
+    if [ -n "$extends_line" ]; then
+      extra="${extends_line#*\#\[test:extends\] }"
+      # Build YAML extends list: the file itself + extra presets
+      {
+        echo "extends:"
+        echo "  - ./$bn"
+        IFS=',' read -ra parts <<< "$extra"
+        for part in "${parts[@]}"; do
+          part=$(echo "$part" | xargs) # trim whitespace
+          echo "  - $part"
+        done
+      } > "$testdir/runok.yml"
+    else
+      cp "$testdir/$bn" "$testdir/runok.yml"
+    fi
 
     # Run runok check with isolated config:
     # - XDG_CONFIG_HOME points to empty dir (no global config)

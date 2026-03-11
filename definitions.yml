@@ -5,17 +5,36 @@
 # These patterns tell runok which commands wrap other commands,
 # so that the inner command can be evaluated against rules.
 
+#[test:extends] ./readonly-unix.yml, ./readonly-git.yml
+
 definitions:
   wrappers:
+    #[test] allow: bash -c "cat /etc/hosts"
+    #[test] ask: bash -c "rm -rf /"
     - 'bash -c <cmd>'
     - 'sh -c <cmd>'
+    #[test] allow: sudo cat /etc/shadow
     - 'sudo <opts> <cmd>'
+    #[test] allow: xargs -I{} cat {} < filelist.txt
     - 'xargs <opts> <cmd>'
     - 'time <cmd>'
+    #[test] allow: env FOO=bar cat /etc/hosts
     - 'env <opts> <vars> <cmd>'
+    #[test] allow: command cat /etc/hosts
+    #[test] ask: command rm -rf /
     - 'command <cmd>'
+    #[test] allow: timeout 10 cat /etc/hosts
+    #[test] ask: timeout 10 rm -rf /
     - 'timeout <opts> * <cmd>'
+    #[test] allow: nice -n 10 cat /etc/hosts
+    #[test] ask: nice -n 10 rm -rf /
     - 'nice <opts> <cmd>'
+    #[test] allow: nohup cat /etc/hosts
+    #[test] ask: nohup rm -rf /
     - 'nohup <cmd>'
+    #[test] allow: stdbuf -oL cat /etc/hosts
+    #[test] ask: stdbuf -oL rm -rf /
     - 'stdbuf <opts> <cmd>'
+    #[test] allow: find . -name "*.log" -exec cat {} \;
+    #[test] ask: find . -name "*.log" -exec rm {} \;
     - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
