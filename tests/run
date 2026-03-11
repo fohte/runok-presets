@@ -2,10 +2,12 @@
 set -euo pipefail
 
 # Run E2E tests for runok presets.
-# Reads test cases from tests/test-cases.yml and verifies each command's
-# decision against expected values using `runok check --output-format json`.
+# Extracts test cases from #[test] comments in preset YAML files and verifies
+# each command's decision against expected values using `runok check`.
 #
-# Dependencies: runok, yq, jq
+# Format: #[test] <decision>: <command>
+#
+# Dependencies: runok, jq
 
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 
@@ -25,32 +27,38 @@ for f in "$repo_root"/*.yml; do
   cp "$f" "$testdir/$bn"
 done
 
-while IFS= read -r test_json; do
-  command=$(echo "$test_json" | jq -r '.command')
-  expected=$(echo "$test_json" | jq -r '.expected')
-  config=$(echo "$test_json" | jq -r '.config')
-  description=$(echo "$test_json" | jq -r '.description // empty')
+# Extract and run #[test] comments from each preset YAML file.
+for f in "$repo_root"/*.yml; do
+  bn=$(basename "$f")
+  [ "$bn" = "runok.yml" ] || [ "$bn" = "runok.local.yml" ] && continue
 
-  # Place the target config as runok.yml in testdir.
-  cp "$testdir/$config" "$testdir/runok.yml"
+  while IFS= read -r line; do
+    # Parse: #[test] <decision>: <command>
+    # Strip leading whitespace and the #[test] prefix, then split on first ": "
+    body="${line#*\#\[test\] }"
+    expected="${body%%: *}"
+    command="${body#*: }"
 
-  # Run runok check with isolated config:
-  # - XDG_CONFIG_HOME points to empty dir (no global config)
-  # - Working directory is testdir (isolated from project and ancestor configs)
-  # Pipe via stdin to preserve shell quoting (e.g. bash -c "cat /etc/hosts").
-  result=$(cd "$testdir" && echo "$command" | XDG_CONFIG_HOME="$empty_xdg" runok check --output-format json 2> /dev/null) || true
-  actual=$(echo "$result" | jq -r '.decision')
+    # Place the target config as runok.yml in testdir.
+    cp "$testdir/$bn" "$testdir/runok.yml"
 
-  total=$((total + 1))
-  if [ "$actual" != "$expected" ]; then
-    failures=$((failures + 1))
-    echo "FAIL: $command"
-    echo "  config:   $config"
-    echo "  expected: $expected"
-    echo "  actual:   $actual"
-    [ -n "$description" ] && echo "  note:     $description"
-  fi
-done < <(yq -o=json '.tests[]' "$repo_root/tests/test-cases.yml" | jq -c '.')
+    # Run runok check with isolated config:
+    # - XDG_CONFIG_HOME points to empty dir (no global config)
+    # - Working directory is testdir (isolated from project and ancestor configs)
+    # Pipe via stdin to preserve shell quoting (e.g. bash -c "cat /etc/hosts").
+    result=$(cd "$testdir" && echo "$command" | XDG_CONFIG_HOME="$empty_xdg" runok check --output-format json 2> /dev/null) || true
+    actual=$(echo "$result" | jq -r '.decision')
+
+    total=$((total + 1))
+    if [ "$actual" != "$expected" ]; then
+      failures=$((failures + 1))
+      echo "FAIL: $command"
+      echo "  config:   $bn"
+      echo "  expected: $expected"
+      echo "  actual:   $actual"
+    fi
+  done < <(grep '#\[test\]' "$f")
+done
 
 if [ "$total" -eq 0 ]; then
   echo "ERROR: no test cases found"
