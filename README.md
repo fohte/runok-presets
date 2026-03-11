@@ -26,7 +26,7 @@ extends:
 
 ## Presets
 
-This collection covers tools that virtually every developer uses regardless of stack — currently Unix standard commands (coreutils, etc.) and git.
+This collection covers tools that virtually every developer uses regardless of stack — currently common Unix utilities, popular modern alternatives, and git.
 
 Tools whose usage varies by project or team — such as infrastructure tools (docker, kubectl), cloud CLIs (aws, gcloud, az), language runtimes (node, python), and package managers (npm, cargo) — are not included. Define rules for those in your own `runok.yml`.
 
