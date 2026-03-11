@@ -15,6 +15,13 @@ rules:
   #[test] ask: gh api --method POST /repos/cli/cli/issues
   #[test] ask: gh api --method DELETE /repos/cli/cli/issues/1
   - ask: 'gh [-R|--repo *] api * -X|--method !GET *'
+  # -f/-F/--field/--raw-field/--input cause gh api to default to POST.
+  #[test] ask: gh api /repos/cli/cli/issues -f title=test -f body=test
+  #[test] ask: gh api /repos/cli/cli/issues -F title=test
+  #[test] ask: gh api /repos/cli/cli/issues --field title=test
+  #[test] ask: gh api /repos/cli/cli/issues --raw-field title=test
+  #[test] ask: gh api /repos/cli/cli/issues --input body.json
+  - ask: 'gh [-R|--repo *] api * -f|-F|--field|--raw-field|--input *'
   #[test] ask: gh api graphql -f query="{ viewer { login } }"
   - ask: 'gh [-R|--repo *] api graphql *'
   #[test] allow: gh api /repos/cli/cli
