@@ -17,6 +17,7 @@ extends:
   - ./definitions.yml
   - ./readonly-unix.yml
   - ./readonly-git.yml
+  - ./readonly-gh.yml
 
 rules:
   # Any command with --help or --version is safe to run.
