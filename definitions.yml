@@ -13,4 +13,9 @@ definitions:
     - 'xargs <opts> <cmd>'
     - 'time <cmd>'
     - 'env <opts> <vars> <cmd>'
+    - 'command <cmd>'
+    - 'timeout * <cmd>'
+    - 'nice * <cmd>'
+    - 'nohup <cmd>'
+    - 'stdbuf <opts> <cmd>'
     - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
