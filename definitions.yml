@@ -12,29 +12,56 @@ definitions:
     #[test] allow: bash -c "cat /etc/hosts"
     #[test] ask: bash -c "rm -rf /"
     - 'bash -c <cmd>'
+
+    #[test] allow: sh -c "cat /etc/hosts"
+    #[test] ask: sh -c "rm -rf /"
     - 'sh -c <cmd>'
+
     #[test] allow: sudo cat /etc/shadow
+    #[test] ask: sudo rm -rf /
+    #[test] allow: sudo -u root cat /etc/shadow
     - 'sudo <opts> <cmd>'
+
     #[test] allow: xargs -I{} cat {} < filelist.txt
+    #[test] ask: xargs -I{} rm {} < filelist.txt
     - 'xargs <opts> <cmd>'
+
+    #[test] allow: time cat /etc/hosts
+    #[test] ask: time rm -rf /
     - 'time <cmd>'
+
     #[test] allow: env FOO=bar cat /etc/hosts
+    #[test] ask: env FOO=bar rm -rf /
+    #[test] allow: env -S "FOO=bar" cat /etc/hosts
+    #[test] allow: env -u FOO cat /etc/hosts
+    #[test] allow: env -i FOO=bar cat /etc/hosts
     - 'env <opts> <vars> <cmd>'
+
     #[test] allow: command cat /etc/hosts
     #[test] ask: command rm -rf /
     - 'command <cmd>'
+
     #[test] allow: timeout 10 cat /etc/hosts
     #[test] ask: timeout 10 rm -rf /
+    #[test] allow: timeout --preserve-status 10 cat /etc/hosts
     - 'timeout <opts> * <cmd>'
+
     #[test] allow: nice -n 10 cat /etc/hosts
     #[test] ask: nice -n 10 rm -rf /
+    #[test] allow: nice cat /etc/hosts
     - 'nice <opts> <cmd>'
+
     #[test] allow: nohup cat /etc/hosts
     #[test] ask: nohup rm -rf /
     - 'nohup <cmd>'
+
     #[test] allow: stdbuf -oL cat /etc/hosts
     #[test] ask: stdbuf -oL rm -rf /
+    #[test] allow: stdbuf -i0 -oL -eL cat /etc/hosts
     - 'stdbuf <opts> <cmd>'
+
     #[test] allow: find . -name "*.log" -exec cat {} \;
     #[test] ask: find . -name "*.log" -exec rm {} \;
+    #[test] allow: find /tmp -name "*.log" -execdir cat {} \;
+    #[test] allow: find . -name "*.log" -exec cat {} +
     - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
