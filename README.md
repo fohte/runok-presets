@@ -13,9 +13,9 @@ Official preset collection for [runok](https://github.com/fohte/runok).
 
 ## What's included (and what's not)
 
-This collection targets tools that virtually every developer uses, regardless of stack or domain — currently Unix standard commands (coreutils, etc.) and git.
+**Included:** Tools that virtually every developer uses, regardless of stack or domain — currently Unix standard commands (coreutils, etc.) and git.
 
-Infrastructure tools (docker, kubectl), cloud CLIs (aws, gcloud, az), language runtimes (node, python), and package managers (npm, cargo) are intentionally excluded. Usage of these tools varies significantly across projects and teams.
+**Not included:** Infrastructure tools (docker, kubectl), cloud CLIs (aws, gcloud, az), language runtimes (node, python), package managers (npm, cargo), and other tools whose usage varies by project or team.
 
 If you need rules for tools not covered here, define them in your own `runok.yml`:
 
