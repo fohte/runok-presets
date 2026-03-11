@@ -98,12 +98,55 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-attr *'
   #[test] allow: git reflog show --date=relative
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog show *'
+  #[test] allow: git stash list
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] stash list *'
+  #[test] allow: git stash show -p stash@{0}
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] stash show *'
+  #[test] allow: git worktree list
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] worktree list *'
+  #[test] allow: git submodule status --recursive
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] submodule status *'
+  #[test] allow: git submodule summary HEAD
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] submodule summary *'
+  #[test] allow: git notes list
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] notes list *'
+  #[test] allow: git notes show HEAD
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] notes show *'
+  #[test] allow: git check-mailmap "User Name <user@example.com>"
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-mailmap *'
+  #[test] allow: git check-ref-format --branch refs/heads/main
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-ref-format *'
+  # hash-object: -w writes the object into the object database.
+  # Without -w it only computes the hash, which is read-only.
+  #[test] allow: git hash-object --stdin
+  #[test] ask: git hash-object -w --stdin
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] hash-object !-w *'
+  # archive: -o / --output writes to a file. --output is already caught by
+  # the global ask rule above; -o is blocked here via negation.
+  #[test] allow: git archive HEAD
+  #[test] ask: git archive -o /tmp/out.tar HEAD
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] archive !-o !--output *'
+  #[test] allow: git var GIT_AUTHOR_IDENT
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] var *'
+  #[test] allow: git symbolic-ref HEAD
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] symbolic-ref *'
+  #[test] allow: git patch-id --stable
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] patch-id *'
+  #[test] allow: git stripspace --strip-comments
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] stripspace *'
+  # interpret-trailers: without --parse it can modify commit messages.
+  #[test] allow: git interpret-trailers --parse
+  #[test] ask: git interpret-trailers --trailer "Signed-off-by: User"
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] interpret-trailers --parse *'
+  #[test] allow: git fmt-merge-msg --log
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] fmt-merge-msg *'
 
   # ── Subcommands allowed in read-only mode only ──
   #[test] allow: git branch
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch'
   #[test] allow: git branch -a --sort=-committerdate
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose] [--sort *] [-l|--list *]'
+  #[test] allow: git branch -vv
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose|-vv] [--sort *] [-l|--list *]'
   #[test] allow: git branch --show-current
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --show-current'
   #[test] allow: git branch --contains HEAD
@@ -128,6 +171,10 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-all *'
   #[test] allow: git config --list --show-origin
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config -l|--list *'
+  #[test] allow: git config --get-regexp "core.*"
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-regexp *'
+  #[test] allow: git config --get-urlmatch http https://example.com
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-urlmatch *'
 
   # ── Commands not in allow list ──
   #[test] ask: git tag v1.0.0
@@ -141,3 +188,9 @@ rules:
   #[test] ask: git rebase main
   #[test] ask: git merge feature
   #[test] ask: git stash
+  #[test] ask: git stash push -m "wip"
+  #[test] ask: git worktree add /tmp/wt main
+  #[test] ask: git submodule add https://example.com/repo
+  #[test] ask: git notes add -m "note" HEAD
+  #[test] ask: git hash-object -w file.txt
+  #[test] ask: git interpret-trailers --trailer "Signed-off-by: User"
