@@ -109,11 +109,7 @@ rules:
   # ── Browse ──
   #[test] allow: gh browse
   #[test] allow: gh browse --no-browser
-  #[test] allow: gh browse --no-browser src/main.go
   #[test] allow: gh browse src/main.go
-  #[test] allow: gh -R cli/cli browse --no-browser
-  #[test] allow: gh --repo cli/cli browse --no-browser
-  #[test] allow: gh -R cli/cli browse
   #[test] allow: gh --repo cli/cli browse
   - allow: 'gh [-R|--repo *] browse *'
 
