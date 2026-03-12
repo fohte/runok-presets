@@ -16,12 +16,22 @@ rules:
   #[test] ask: gh api --method DELETE /repos/cli/cli/issues/1
   - ask: 'gh [-R|--repo *] api * -X|--method !GET *'
   # -f/-F/--field/--raw-field/--input cause gh api to default to POST.
+  # However, when -X GET or --method GET is explicitly specified, gh converts
+  # field parameters to URL query strings (no POST), so we skip this rule.
   #[test] ask: gh api /repos/cli/cli/issues -f title=test -f body=test
   #[test] ask: gh api /repos/cli/cli/issues -F title=test
   #[test] ask: gh api /repos/cli/cli/issues --field title=test
   #[test] ask: gh api /repos/cli/cli/issues --raw-field title=test
   #[test] ask: gh api /repos/cli/cli/issues --input body.json
-  - ask: 'gh [-R|--repo *] api * -f|-F|--field|--raw-field|--input *'
+  #[test] ask: gh api -X POST /repos/cli/cli/issues -F title=test
+  #[test] allow: gh api -X GET /repos/cli/cli/pulls -F per_page=1
+  #[test] allow: gh api --method GET /repos/cli/cli/pulls -F per_page=1
+  #[test] allow: gh api -X GET /repos/cli/cli/commits -F per_page=1 --jq .[0].sha
+  #[test] allow: gh api -X GET /repos/cli/cli/pulls -f state=open -F per_page=10
+  #[test] allow: gh -R cli/cli api -X GET /repos/cli/cli/pulls --field per_page=1
+  #[test] allow: gh api -X GET /repos/cli/cli/pulls --raw-field per_page=1
+  - ask: 'gh [-R|--repo *] api * [-X|--method *] -f|-F|--field|--raw-field|--input *'
+    when: "!(has(flags.X) && flags.X == 'GET') && !(has(flags.method) && flags.method == 'GET')"
   #[test] ask: gh api graphql -f query="{ viewer { login } }"
   - ask: 'gh [-R|--repo *] api graphql *'
   # --paginate can fetch enormous result sets and cause excessive API usage.
