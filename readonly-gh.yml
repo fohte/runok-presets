@@ -24,6 +24,11 @@ rules:
   - ask: 'gh [-R|--repo *] api * -f|-F|--field|--raw-field|--input *'
   #[test] ask: gh api graphql -f query="{ viewer { login } }"
   - ask: 'gh [-R|--repo *] api graphql *'
+  # --paginate can fetch enormous result sets and cause excessive API usage.
+  #[test] ask: gh api --paginate /repos/cli/cli/issues
+  #[test] ask: gh api -X GET --paginate /repos/cli/cli/pulls
+  #[test] ask: gh -R cli/cli api --paginate /repos/cli/cli/issues
+  - ask: 'gh [-R|--repo *] api * --paginate *'
   #[test] allow: gh api /repos/cli/cli
   #[test] allow: gh api -X GET /repos/cli/cli/pulls
   #[test] allow: gh -R cli/cli api /repos/cli/cli
@@ -101,13 +106,12 @@ rules:
   #[test] allow: gh search code "fmt.Println"
   - allow: 'gh [-R|--repo *] search *'
 
-  # ── Browse (URL display only, no browser opening) ──
+  # ── Browse ──
+  #[test] allow: gh browse
   #[test] allow: gh browse --no-browser
-  #[test] allow: gh browse --no-browser src/main.go
-  #[test] allow: gh -R cli/cli browse --no-browser
-  #[test] allow: gh --repo cli/cli browse --no-browser
-  #[test] ask: gh browse
-  - allow: 'gh [-R|--repo *] browse --no-browser *'
+  #[test] allow: gh browse src/main.go
+  #[test] allow: gh --repo cli/cli browse
+  - allow: 'gh [-R|--repo *] browse *'
 
   # ── Config get ──
   #[test] allow: gh config get editor
