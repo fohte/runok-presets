@@ -9,7 +9,7 @@ Add an `extends` entry in your `runok.yml`:
 ```yaml
 # Use the base preset (includes all presets)
 extends:
-  - 'github:fohte/runok-presets/base'
+  - 'github:fohte/runok-presets/base@v1'
 
 rules:
   # Add your own rules here
@@ -20,9 +20,12 @@ You can also pick individual presets:
 
 ```yaml
 extends:
-  - 'github:fohte/runok-presets/definitions'
-  - 'github:fohte/runok-presets/readonly-git'
+  - 'github:fohte/runok-presets/definitions@v1'
+  - 'github:fohte/runok-presets/readonly-git@v1'
 ```
+
+> [!TIP]
+> You can also pin to an exact version (e.g., `@v1.0.0`) instead of `@v1`.
 
 ## Presets
 
