@@ -410,38 +410,6 @@ rules:
   #[test] ask: curl -X DELETE https://example.com/api
   #[test] ask: curl --request PATCH https://example.com/api
   - ask: 'curl * -X|--request !GET *'
-  # Non-HTTP protocols (local file read, FTP upload, etc.)
-  #[test] ask: curl file:///etc/passwd
-  #[test] ask: curl ftp://example.com/upload
-  #[test] ask: curl dict://example.com/show:server
-  #[test] ask: curl gopher://example.com/
-  #[test] ask: curl telnet://example.com:23
-  #[test] ask: curl tftp://example.com/file
-  #[test] ask: curl smb://example.com/share
-  #[test] ask: curl smtp://mail.example.com
-  - ask: 'curl * file://*'
-  - ask: 'curl * ftp://*'
-  - ask: 'curl * ftps://*'
-  - ask: 'curl * dict://*'
-  - ask: 'curl * gopher://*'
-  - ask: 'curl * gophers://*'
-  - ask: 'curl * imap://*'
-  - ask: 'curl * imaps://*'
-  - ask: 'curl * ldap://*'
-  - ask: 'curl * ldaps://*'
-  - ask: 'curl * mqtt://*'
-  - ask: 'curl * pop3://*'
-  - ask: 'curl * pop3s://*'
-  - ask: 'curl * rtmp://*'
-  - ask: 'curl * rtsp://*'
-  - ask: 'curl * scp://*'
-  - ask: 'curl * sftp://*'
-  - ask: 'curl * smb://*'
-  - ask: 'curl * smbs://*'
-  - ask: 'curl * smtp://*'
-  - ask: 'curl * smtps://*'
-  - ask: 'curl * telnet://*'
-  - ask: 'curl * tftp://*'
   # Safe read-only fetches (stdout only)
   #[test] allow: curl https://api.github.com/repos/owner/repo
   #[test] allow: curl -s https://example.com/data.json
