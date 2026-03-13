@@ -328,6 +328,20 @@ rules:
   - allow: 'pwd'
   #[test] allow: read -r -p "Enter: " input
   - allow: 'read *'
+  #[test] allow: break
+  #[test] allow: break 2
+  - allow: 'break *'
+  #[test] allow: continue
+  #[test] allow: continue 2
+  - allow: 'continue *'
+  #[test] allow: return
+  #[test] allow: return 0
+  #[test] allow: return 1
+  - allow: 'return *'
+  #[test] allow: exit
+  #[test] allow: exit 0
+  #[test] allow: exit 1
+  - allow: 'exit *'
 
   # ── Output ──
   #[test] allow: echo $PATH | tr ':' '\n'
