@@ -1,6 +1,6 @@
 [tools]
 lefthook = "2.1.0"
-yq = "4.45.4"
+yq = "4.52.4"
 
 # lefthook hooks
 actionlint = "1.7.10"
