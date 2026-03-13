@@ -338,6 +338,10 @@ rules:
   #[test] allow: return 0
   #[test] allow: return 1
   - allow: 'return *'
+  #[test] allow: exit
+  #[test] allow: exit 0
+  #[test] allow: exit 1
+  - allow: 'exit *'
 
   # ── Output ──
   #[test] allow: echo $PATH | tr ':' '\n'
