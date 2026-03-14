@@ -304,6 +304,9 @@ rules:
   - allow: 'man !-P|--pager *'
   #[test] allow: type -a python3
   - allow: 'type *'
+  #[test] allow: command -v git
+  #[test] allow: command -V git
+  - allow: 'command -v|-V *'
 
   # ── Math and numbers ──
   #[test] allow: expr 100 / 3
