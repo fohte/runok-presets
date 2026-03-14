@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/fohte/runok-presets/compare/v1.0.0...v1.0.1) (2026-03-14)
+
+
+### Bug Fixes
+
+* **readonly-unix:** allow `command -v` / `command -V` ([#110](https://github.com/fohte/runok-presets/issues/110)) ([6bf13e7](https://github.com/fohte/runok-presets/commit/6bf13e7833511b979886035bb37684a1dd00b4d7))
+* **readonly-unix:** allow shell control flow builtins ([#24](https://github.com/fohte/runok-presets/issues/24)) ([d46b3b3](https://github.com/fohte/runok-presets/commit/d46b3b39f35e76af3a768f74b8138747859783a5))
+
 ## [1.0.0](https://github.com/fohte/runok-presets/compare/v0.1.0...v1.0.0) (2026-03-12)
 
 
