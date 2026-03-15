@@ -251,34 +251,58 @@ rules:
     tests:
       - allow: 'git branch'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose|-vv] [--sort *] [-l|--list *]'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose|-vv] [--sort *] [-l|--list *] [--format *] [--color *] [--no-color] [--column] [--column *] [--no-column] [--abbrev *] [--no-abbrev] [-i|--ignore-case] [--omit-empty]'
     tests:
       - allow: 'git branch -a --sort=-committerdate'
       - allow: 'git branch -vv'
+      - allow: 'git branch --format="%(refname:short)"'
+      - allow: 'git branch --color=always'
+      - allow: 'git branch --no-color'
+      - allow: 'git branch --column'
+      - allow: 'git branch --column=dense'
+      - allow: 'git branch --no-column'
+      - allow: 'git branch --abbrev=8'
+      - allow: 'git branch --no-abbrev'
+      - allow: 'git branch -i --list "feat/*"'
+      - allow: 'git branch --ignore-case -a'
+      - allow: 'git branch --omit-empty --list "feat/*"'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --show-current'
     tests:
       - allow: 'git branch --show-current'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --contains|--merged|--no-merged *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --contains|--no-contains|--merged|--no-merged|--points-at *'
     tests:
       - allow: 'git branch --contains HEAD'
+      - allow: 'git branch --no-contains HEAD'
+      - allow: 'git branch --points-at HEAD'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag'
     tests:
       - allow: 'git tag'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag [-n *] -l|--list *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag [-n *] [-l|--list *] [--sort *] [--format *] [--color *] [--no-color] [--column] [--column *] [--no-column] [-i|--ignore-case] [--omit-empty]'
     tests:
       - allow: 'git tag -l "v1.*"'
+      - allow: 'git tag --sort=-v:refname'
+      - allow: 'git tag -n 3'
+      - allow: 'git tag -n3'
+      - allow: 'git tag --format="%(refname:short)"'
+      - allow: 'git tag --color=always'
+      - allow: 'git tag --column'
+      - allow: 'git tag --no-column'
+      - allow: 'git tag -i -l "v*"'
+      - allow: 'git tag --omit-empty -l "v*"'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag -v|--verify *'
     tests:
       - allow: 'git tag -v v1.0.0'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag --contains|--merged|--no-merged *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag --contains|--no-contains|--merged|--no-merged|--points-at *'
     tests:
       - allow: 'git tag --contains v1.0.0'
+      - allow: 'git tag --no-contains v1.0.0'
+      - allow: 'git tag --points-at HEAD'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote -v|--verbose'
     tests:
