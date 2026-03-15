@@ -22,6 +22,25 @@ rules:
     tests:
       - allow: 'git --version'
 
+  # runok read-only subcommands are safe for all preset users.
+  - allow: 'runok check *'
+    tests:
+      - allow: 'runok check -- git status'
+      - allow: 'runok check --output-format json -- ls -la'
+
+  - allow: 'runok test *'
+    tests:
+      - allow: 'runok test'
+      - allow: 'runok test -c runok.yml'
+
+  - allow: 'runok audit *'
+    tests:
+      - allow: 'runok audit'
+
+  - allow: 'runok config-schema'
+    tests:
+      - allow: 'runok config-schema'
+
 tests:
   cases:
     - allow: 'git log --oneline | head -20'
