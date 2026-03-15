@@ -8,27 +8,16 @@
 definitions:
   wrappers:
     - 'bash -c <cmd>'
-
     - 'sh -c <cmd>'
-
     - 'sudo <opts> <cmd>'
-
     - 'xargs <opts> <cmd>'
-
     - 'time <cmd>'
-
     - 'env <opts> <vars> <cmd>'
-
     - 'command <cmd>'
-
     - 'timeout <opts> * <cmd>'
-
     - 'nice <opts> <cmd>'
-
     - 'nohup <cmd>'
-
     - 'stdbuf <opts> <cmd>'
-
     - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
 
 tests:
@@ -36,35 +25,58 @@ tests:
     - ./readonly-unix.yml
     - ./readonly-git.yml
   cases:
+    # bash -c
     - allow: 'bash -c "cat /etc/hosts"'
     - ask: 'bash -c "rm -rf /"'
+
+    # sh -c
     - allow: 'sh -c "cat /etc/hosts"'
     - ask: 'sh -c "rm -rf /"'
+
+    # sudo
     - allow: 'sudo cat /etc/shadow'
     - ask: 'sudo rm -rf /'
     - allow: 'sudo -u root cat /etc/shadow'
+
+    # xargs
     - allow: 'xargs -I{} cat {} < filelist.txt'
     - ask: 'xargs -I{} rm {} < filelist.txt'
+
+    # time
     - allow: 'time cat /etc/hosts'
     - ask: 'time rm -rf /'
+
+    # env
     - allow: 'env FOO=bar cat /etc/hosts'
     - ask: 'env FOO=bar rm -rf /'
     - allow: 'env -S "FOO=bar" cat /etc/hosts'
     - allow: 'env -u FOO cat /etc/hosts'
     - allow: 'env -i FOO=bar cat /etc/hosts'
+
+    # command
     - allow: 'command cat /etc/hosts'
     - ask: 'command rm -rf /'
+
+    # timeout
     - allow: 'timeout 10 cat /etc/hosts'
     - ask: 'timeout 10 rm -rf /'
     - allow: 'timeout --preserve-status 10 cat /etc/hosts'
+
+    # nice
     - allow: 'nice -n 10 cat /etc/hosts'
     - ask: 'nice -n 10 rm -rf /'
     - allow: 'nice cat /etc/hosts'
+
+    # nohup
     - allow: 'nohup cat /etc/hosts'
     - ask: 'nohup rm -rf /'
+
+    # stdbuf
     - allow: 'stdbuf -oL cat /etc/hosts'
     - ask: 'stdbuf -oL rm -rf /'
     - allow: 'stdbuf -i0 -oL -eL cat /etc/hosts'
+
+    # find -exec
     - allow: 'find . -name "*.log" -exec cat {} \;'
     - ask: 'find . -name "*.log" -exec rm {} \;'
     - allow: 'find /tmp -name "*.log" -execdir cat {} \;'

@@ -17,6 +17,7 @@ rules:
   - allow: '* --help'
     tests:
       - allow: 'ls --help'
+
   - allow: '* --version'
     tests:
       - allow: 'git --version'

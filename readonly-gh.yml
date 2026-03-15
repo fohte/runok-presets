@@ -34,6 +34,7 @@ rules:
       - allow: 'gh -R cli/cli api -X GET /repos/cli/cli/pulls --field per_page=1'
       - allow: 'gh api -X GET /repos/cli/cli/pulls --raw-field per_page=1'
     when: "!(has(flags.X) && flags.X == 'GET') && !(has(flags.method) && flags.method == 'GET')"
+
   - ask: 'gh [-R|--repo *] api graphql *'
     tests:
       - ask: 'gh api graphql -f query="{ viewer { login } }"'
@@ -43,6 +44,7 @@ rules:
       - ask: 'gh api --paginate /repos/cli/cli/issues'
       - ask: 'gh api -X GET --paginate /repos/cli/cli/pulls'
       - ask: 'gh -R cli/cli api --paginate /repos/cli/cli/issues'
+
   - allow: 'gh [-R|--repo *] api *'
     tests:
       - allow: 'gh api /repos/cli/cli'
@@ -97,6 +99,7 @@ rules:
       - allow: 'gh gpg-key list'
       - allow: 'gh config list'
       - allow: 'gh auth status'
+
   - allow: 'gh [-R|--repo *] project *-list *'
 
   # ── variable get ──
@@ -149,8 +152,6 @@ rules:
   - allow: 'gh status *'
     tests:
       - allow: 'gh status'
-
-  # ── Commands not in allow list (write / destructive operations) ──
 
 tests:
   cases:

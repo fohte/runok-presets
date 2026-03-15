@@ -10,26 +10,33 @@ rules:
   - allow: 'cat *'
     tests:
       - allow: 'cat /etc/hosts'
+
   - allow: 'tac *'
     tests:
       - allow: 'tac /var/log/syslog'
+
   - allow: 'head *'
     tests:
       - allow: 'head -n 20 /etc/passwd'
+
   - allow: 'tail *'
     tests:
       - allow: 'tail -f /var/log/syslog'
+
   - allow: 'nl *'
     tests:
       - allow: 'nl -ba src/main.c'
+
   - allow: 'less !-o|-O|--log-file|--LOG-FILE *'
     tests:
       - allow: 'less file.txt'
       - ask: 'less -o /tmp/out file.txt'
       - ask: 'less -O /tmp/out file.txt'
+
   - allow: 'more *'
     tests:
       - allow: 'more /etc/hosts'
+
   - allow: 'bat !--pager *'
     tests:
       - ask: 'bat --pager less file.txt'
@@ -38,24 +45,31 @@ rules:
   - allow: 'ls *'
     tests:
       - allow: 'ls -la /tmp'
+
   - allow: 'dir *'
     tests:
       - allow: 'dir /var/log'
+
   - allow: 'tree *'
     tests:
       - allow: 'tree -L 2 src/'
+
   - allow: 'stat *'
     tests:
       - allow: 'stat /etc/passwd'
+
   - allow: 'file *'
     tests:
       - allow: 'file /usr/bin/env'
+
   - allow: 'du *'
     tests:
       - allow: 'du -sh /var/log/*'
+
   - allow: 'df *'
     tests:
       - allow: 'df -h'
+
   - allow: 'find !-delete|-exec|-execdir|-ok|-okdir|-fprint|-fprint0|-fprintf|-fls *'
     tests:
       - allow: 'find . -name "*.txt"'
@@ -63,27 +77,34 @@ rules:
       - ask: 'find . -name "*.log" -execdir rm {} \;'
       - ask: 'find . -name "*.log" -ok rm {} \;'
       - ask: 'find . -name "*.log" -okdir rm {} \;'
+
   - allow: 'fd !-x|--exec|-X|--exec-batch *'
     tests:
       - ask: 'fd -x rm'
       - ask: 'fd --exec rm'
       - ask: 'fd -X rm'
       - ask: 'fd --exec-batch rm'
+
   - allow: 'basename *'
     tests:
       - allow: 'basename /usr/local/bin/python3'
+
   - allow: 'dirname *'
     tests:
       - allow: 'dirname /usr/local/bin/python3'
+
   - allow: 'readlink *'
     tests:
       - allow: 'readlink -f /usr/bin/python3'
+
   - allow: 'realpath *'
     tests:
       - allow: 'realpath ../project'
+
   - allow: 'pathchk *'
     tests:
       - allow: 'pathchk /tmp/output.log'
+
   - allow: 'lsof *'
     tests:
       - allow: 'lsof -i :3000'
@@ -92,20 +113,25 @@ rules:
   - allow: 'grep *'
     tests:
       - allow: 'grep -rn TODO src/'
+
   - allow: 'egrep *'
     tests:
       - allow: 'egrep "^(import|from)" src/*.py'
+
   - allow: 'fgrep *'
     tests:
       - allow: 'fgrep "error" /var/log/syslog'
+
   - allow: 'rg !--pre *'
     tests:
       - allow: 'rg "fn main" src/'
       - ask: 'rg --pre pdftotext pattern'
+
   - allow: 'ag !--pager *'
     tests:
       - allow: 'ag "TODO|FIXME" src/'
       - ask: 'ag --pager less pattern'
+
   - allow: 'ack !--pager *'
     tests:
       - allow: 'ack --type=python "def " src/'
@@ -117,58 +143,76 @@ rules:
       - allow: "sed -n '1,10p' /etc/passwd"
       - ask: 'sed -i s/foo/bar/ file.txt'
       - ask: 'sed --in-place s/foo/bar/ file.txt'
+
   - allow: 'sort !-o|--output|--compress-program *'
     tests:
       - ask: 'sort -o output.txt input.txt'
       - ask: 'sort --compress-program gzip file.txt'
+
   - allow: 'uniq *'
     tests:
       - allow: 'sort access.log | uniq -c'
+
   - allow: 'cut *'
     tests:
       - allow: 'cat /etc/passwd | cut -d: -f1'
+
   - allow: 'tr *'
     tests:
       - allow: "echo hello | tr '[:lower:]' '[:upper:]'"
+
   - allow: 'paste *'
     tests:
       - allow: 'paste -d, names.txt emails.txt'
+
   - allow: 'join *'
     tests:
       - allow: 'join -t: /etc/passwd /etc/group'
+
   - allow: 'fold *'
     tests:
       - allow: 'fold -s -w 72 README.md'
+
   - allow: 'fmt *'
     tests:
       - allow: 'fmt -w 80 README.md'
+
   - allow: 'col *'
     tests:
       - allow: 'col -bx'
+
   - allow: 'column *'
     tests:
       - allow: 'column -t -s, data.csv'
+
   - allow: 'rev *'
     tests:
       - allow: 'echo hello | rev'
+
   - allow: 'expand *'
     tests:
       - allow: 'expand -t 4 Makefile'
+
   - allow: 'unexpand *'
     tests:
       - allow: 'unexpand --first-only Makefile'
+
   - allow: 'colrm *'
     tests:
       - allow: 'colrm 40 72'
+
   - allow: 'pr *'
     tests:
       - allow: 'pr -h "Report" data.txt'
+
   - allow: 'wc *'
     tests:
       - allow: 'find . -name "*.go" | wc -l'
+
   - allow: 'jq *'
     tests:
       - allow: 'jq .name package.json'
+
   - allow: 'yq !-i|--inplace *'
     tests:
       - allow: "yq '.dependencies' pubspec.yaml"
@@ -178,16 +222,20 @@ rules:
   - allow: 'diff *'
     tests:
       - allow: 'diff <(sort file1.txt) <(sort file2.txt)'
+
   - allow: 'diff3 *'
     tests:
       - allow: 'diff3 mine.conf base.conf theirs.conf'
+
   - allow: 'sdiff !-o|--output *'
     tests:
       - allow: 'sdiff old.conf new.conf'
       - ask: 'sdiff -o merged.txt a.txt b.txt'
+
   - allow: 'cmp *'
     tests:
       - allow: 'cmp binary1 binary2'
+
   - allow: 'comm *'
     tests:
       - allow: 'comm -12 sorted1.txt sorted2.txt'
@@ -196,13 +244,16 @@ rules:
   - allow: 'od *'
     tests:
       - allow: 'od -A x -t x1z firmware.bin'
+
   - allow: 'hexdump *'
     tests:
       - allow: 'hexdump -C /dev/urandom -n 64'
+
   - allow: 'xxd !-r|--revert *'
     tests:
       - allow: 'xxd -l 128 firmware.bin'
       - ask: 'xxd -r dump.hex'
+
   - allow: 'strings *'
     tests:
       - allow: 'strings /usr/bin/env'
@@ -211,33 +262,43 @@ rules:
   - allow: 'cksum *'
     tests:
       - allow: 'cksum /etc/hosts'
+
   - allow: 'sum *'
     tests:
       - allow: 'sum /etc/hosts'
+
   - allow: 'md5 *'
     tests:
       - allow: 'md5 /etc/hosts'
+
   - allow: 'md5sum *'
     tests:
       - allow: 'md5sum /etc/passwd'
+
   - allow: 'sha1sum *'
     tests:
       - allow: 'sha1sum package-lock.json'
+
   - allow: 'sha224sum *'
     tests:
       - allow: 'sha224sum archive.tar.gz'
+
   - allow: 'sha256sum *'
     tests:
       - allow: 'sha256sum download.iso'
+
   - allow: 'sha384sum *'
     tests:
       - allow: 'sha384sum release.tar.gz'
+
   - allow: 'sha512sum *'
     tests:
       - allow: 'sha512sum backup.img'
+
   - allow: 'shasum *'
     tests:
       - allow: 'shasum -a 256 package.tgz'
+
   - allow: 'b2sum *'
     tests:
       - allow: 'b2sum large-file.dat'
@@ -246,56 +307,73 @@ rules:
   - allow: 'zcat *'
     tests:
       - allow: 'zcat access.log.gz'
+
   - allow: 'bzcat *'
     tests:
       - allow: 'bzcat archive.tar.bz2'
+
   - allow: 'xzcat !-z|--rm *'
     tests:
       - allow: 'xzcat backup.tar.xz'
       - ask: 'xzcat -z file'
+
   - allow: 'zstdcat !-z|--rm|-o *'
     tests:
       - allow: 'zstdcat database.sql.zst'
       - ask: 'zstdcat -o output file.zst'
+
   - allow: 'zgrep *'
     tests:
       - allow: 'zgrep "ERROR" /var/log/syslog.1.gz'
+
   - allow: 'bzgrep *'
     tests:
       - allow: 'bzgrep "404" access.log.bz2'
+
   - allow: 'zegrep *'
     tests:
       - allow: 'zegrep "WARN|ERROR" app.log.gz'
+
   - allow: 'zfgrep *'
     tests:
       - allow: 'zfgrep "Connection refused" syslog.gz'
+
   - allow: 'zdiff *'
     tests:
       - allow: 'zdiff config.old.gz config.new.gz'
+
   - allow: 'zcmp *'
     tests:
       - allow: 'zcmp backup1.gz backup2.gz'
+
   - allow: 'bzdiff *'
     tests:
       - allow: 'bzdiff dump1.sql.bz2 dump2.sql.bz2'
+
   - allow: 'bzcmp *'
     tests:
       - allow: 'bzcmp archive1.bz2 archive2.bz2'
+
   - allow: 'zmore *'
     tests:
       - allow: 'zmore /var/log/syslog.2.gz'
+
   - allow: 'zless *'
     tests:
       - allow: 'zless /var/log/auth.log.gz'
+
   - allow: 'bzmore *'
     tests:
       - allow: 'bzmore archive.log.bz2'
+
   - allow: 'bzless *'
     tests:
       - allow: 'bzless debug.log.bz2'
+
   - allow: 'zipinfo *'
     tests:
       - allow: 'zipinfo release-v2.0.zip'
+
   - allow: 'zipgrep *'
     tests:
       - allow: 'zipgrep "class Main" source.zip'
@@ -306,9 +384,11 @@ rules:
       - allow: 'tar -t -f archive.tar.gz'
       - ask: 'tar -t --use-compress-program gzip -f archive.tar'
       - ask: 'tar --list --checkpoint-action exec=rm -f archive.tar'
+
   - allow: 'unzip -l *'
     tests:
       - allow: 'unzip -l dist.zip'
+
   - allow: 'unzip -t *'
     tests:
       - allow: 'unzip -t download.zip'
@@ -317,28 +397,36 @@ rules:
   - allow: 'uname *'
     tests:
       - allow: 'uname -a'
+
   - allow: 'arch'
     tests:
       - allow: 'arch'
+
   - allow: 'hostname'
     tests:
       - allow: 'hostname'
+
   - allow: 'hostid'
     tests:
       - allow: 'hostid'
+
   - allow: 'nproc'
     tests:
       - allow: 'nproc'
+
   - allow: 'uptime'
     tests:
       - allow: 'uptime'
+
   - allow: 'date !-s|--set *'
     tests:
       - allow: 'date +%Y-%m-%d'
       - ask: 'date -s "2024-01-01"'
+
   - allow: 'cal *'
     tests:
       - allow: 'cal 12 2024'
+
   - allow: 'ncal *'
     tests:
       - allow: 'ncal -3'
@@ -347,30 +435,39 @@ rules:
   - allow: 'id *'
     tests:
       - allow: 'id -un'
+
   - allow: 'whoami'
     tests:
       - allow: 'whoami'
+
   - allow: 'who *'
     tests:
       - allow: 'who -b'
+
   - allow: 'w'
     tests:
       - allow: 'w'
+
   - allow: 'users'
     tests:
       - allow: 'users'
+
   - allow: 'groups *'
     tests:
       - allow: 'groups root'
+
   - allow: 'logname'
     tests:
       - allow: 'logname'
+
   - allow: 'last *'
     tests:
       - allow: 'last -n 5'
+
   - allow: 'finger *'
     tests:
       - allow: 'finger -l root'
+
   - allow: 'pinky *'
     tests:
       - allow: 'pinky -l root'
@@ -379,6 +476,7 @@ rules:
   - allow: 'ps *'
     tests:
       - allow: 'ps aux | grep nginx'
+
   - allow: 'pgrep *'
     tests:
       - allow: 'pgrep -la node'
@@ -392,15 +490,19 @@ rules:
   - allow: 'printenv *'
     tests:
       - allow: 'printenv PATH'
+
   - allow: 'locale *'
     tests:
       - allow: 'locale -a'
+
   - allow: 'getconf *'
     tests:
       - allow: 'getconf LONG_BIT'
+
   - allow: 'tty'
     tests:
       - allow: 'tty'
+
   - allow: 'tput *'
     tests:
       - allow: 'tput lines'
@@ -409,23 +511,29 @@ rules:
   - allow: 'which *'
     tests:
       - allow: 'which bash'
+
   - allow: 'whereis *'
     tests:
       - allow: 'whereis python3'
+
   - allow: 'whatis *'
     tests:
       - allow: 'whatis grep'
+
   - allow: 'apropos *'
     tests:
       - allow: 'apropos "text editor"'
+
   - allow: 'man !-P|--pager *'
     tests:
       - allow: 'man grep'
       - ask: 'man -P less grep'
       - ask: 'man --pager less grep'
+
   - allow: 'type *'
     tests:
       - allow: 'type -a python3'
+
   - allow: 'command -v|-V *'
     tests:
       - allow: 'command -v git'
@@ -435,15 +543,19 @@ rules:
   - allow: 'expr *'
     tests:
       - allow: 'expr 100 / 3'
+
   - allow: 'factor *'
     tests:
       - allow: 'factor 1234567'
+
   - allow: 'numfmt *'
     tests:
       - allow: 'numfmt --to=iec 1073741824'
+
   - allow: 'seq *'
     tests:
       - allow: 'seq -s, 1 5'
+
   - allow: 'jot *'
     tests:
       - allow: 'jot -r 10 1 100'
@@ -452,31 +564,39 @@ rules:
   - allow: ': *'
     tests:
       - allow: ': this is a comment'
+
   - allow: '[ *'
     tests:
       - allow: '[ -d /tmp ]'
+
   - allow: 'cd *'
     tests:
       - allow: 'cd /tmp'
+
   - allow: 'pwd'
     tests:
       - allow: 'pwd'
+
   - allow: 'read *'
     tests:
       - allow: 'read -r -p "Enter: " input'
+
   - allow: 'break *'
     tests:
       - allow: 'break'
       - allow: 'break 2'
+
   - allow: 'continue *'
     tests:
       - allow: 'continue'
       - allow: 'continue 2'
+
   - allow: 'return *'
     tests:
       - allow: 'return'
       - allow: 'return 0'
       - allow: 'return 1'
+
   - allow: 'exit *'
     tests:
       - allow: 'exit'
@@ -487,18 +607,23 @@ rules:
   - allow: 'echo *'
     tests:
       - allow: "echo $PATH | tr ':' '\\n'"
+
   - allow: 'printf *'
     tests:
       - allow: 'printf "%-20s %s\n" key value'
+
   - allow: 'yes *'
     tests:
       - allow: 'yes n'
+
   - allow: 'true'
     tests:
       - allow: 'true'
+
   - allow: 'false'
     tests:
       - allow: 'false'
+
   - allow: 'test *'
     tests:
       - allow: 'test -d /var/log'
@@ -512,9 +637,11 @@ rules:
   - allow: 'base32 *'
     tests:
       - allow: 'base32 -d encoded.txt'
+
   - allow: 'base64 *'
     tests:
       - allow: 'base64 file.txt'
+
   - allow: 'basenc *'
     tests:
       - allow: 'basenc --base64url token.bin'
@@ -523,12 +650,15 @@ rules:
   - allow: 'dig *'
     tests:
       - allow: 'dig example.com'
+
   - allow: 'nslookup *'
     tests:
       - allow: 'nslookup -type=MX example.com'
+
   - allow: 'host *'
     tests:
       - allow: 'host -t AAAA example.com'
+
   - allow: 'whois *'
     tests:
       - allow: 'whois -h whois.arin.net 8.8.8.8'
@@ -542,12 +672,15 @@ rules:
   - allow: 'nm *'
     tests:
       - allow: 'nm -D /usr/lib/libc.so'
+
   - allow: 'objdump *'
     tests:
       - allow: 'objdump -d -M intel /usr/bin/ls'
+
   - allow: 'readelf *'
     tests:
       - allow: 'readelf -S /usr/bin/ls'
+
   - allow: 'otool *'
     tests:
       - allow: 'otool -L /usr/local/bin/node'
@@ -586,6 +719,7 @@ rules:
       - ask: 'curl --data-urlencode "name=value" https://example.com'
       - ask: 'curl --json ''{"key":"val"}'' https://example.com/api'
       - ask: 'curl --data="key=value" https://example.com'
+
   - ask: 'curl * -F|--form|--form-string|--form-escape *'
     tests:
       - ask: 'curl -F "file=@/tmp/upload.txt" https://example.com'
@@ -638,8 +772,6 @@ rules:
       - allow: 'curl -u user:pass https://example.com/api'
       - allow: 'curl --user user:pass https://example.com/api'
       - allow: 'curl http://example.com'
-
-  # ── Commands not in allow list ──
 
 tests:
   cases:

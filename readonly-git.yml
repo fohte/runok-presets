@@ -25,85 +25,112 @@ rules:
       - allow: 'git --git-dir /tmp/.git log --oneline'
       - allow: 'git --work-tree /tmp diff HEAD'
       - allow: 'git -C /tmp --git-dir /tmp/.git --work-tree /tmp status'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] log *'
     tests:
       - allow: 'git log --oneline --graph -20'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff *'
     tests:
       - allow: 'git diff --stat HEAD~3'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show *'
     tests:
       - allow: 'git show HEAD:README.md'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] blame *'
     tests:
       - allow: 'git blame README.md'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] annotate *'
     tests:
       - allow: 'git annotate -L 10,20 src/main.rs'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] shortlog *'
     tests:
       - allow: 'git shortlog -sn --no-merges'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] describe *'
     tests:
       - allow: 'git describe --tags'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] grep *'
     tests:
       - allow: 'git grep -n "TODO" -- "*.py"'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] help *'
     tests:
       - allow: 'git help diff'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] version'
     tests:
       - allow: 'git version'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-files *'
     tests:
       - allow: 'git ls-files --others --exclude-standard'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-tree *'
     tests:
       - allow: 'git ls-tree -r --name-only HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-remote *'
     tests:
       - allow: 'git ls-remote --tags origin'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] cat-file *'
     tests:
       - allow: 'git cat-file -p HEAD^{tree}'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] rev-parse *'
     tests:
       - allow: 'git rev-parse --short HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] rev-list *'
     tests:
       - allow: 'git rev-list --count HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] name-rev *'
     tests:
       - allow: 'git name-rev --name-only HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-tree *'
     tests:
       - allow: 'git diff-tree --no-commit-id --name-only -r HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-index *'
     tests:
       - allow: 'git diff-index --cached HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-files *'
     tests:
       - allow: 'git diff-files'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] difftool !--extcmd *'
     tests:
       - allow: 'git difftool --no-prompt HEAD~1'
       - ask: 'git difftool --extcmd=/tmp/evil HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] for-each-ref *'
     tests:
       - allow: 'git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/heads'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-ref *'
     tests:
       - allow: 'git show-ref'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-branch *'
     tests:
       - allow: 'git show-branch --all'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] verify-commit *'
     tests:
       - allow: 'git verify-commit HEAD~1'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] verify-tag *'
     tests:
       - allow: 'git verify-tag v2.0.0'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] count-objects *'
     tests:
       - allow: 'git count-objects -v'
@@ -112,54 +139,71 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] fsck *'
     tests:
       - allow: 'git fsck'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] cherry *'
     tests:
       - allow: 'git cherry -v main'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] merge-base *'
     tests:
       - allow: 'git merge-base --fork-point main HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] merge-tree *'
     tests:
       - allow: 'git merge-tree --write-tree HEAD main'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] range-diff *'
     tests:
       - allow: 'git range-diff main~3..main~1 HEAD~2..HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] whatchanged *'
     tests:
       - allow: 'git whatchanged --since="1 week ago"'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-ignore *'
     tests:
       - allow: 'git check-ignore -v node_modules dist .env'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-attr *'
     tests:
       - allow: 'git check-attr -a -- src/main.rs'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog show *'
     tests:
       - allow: 'git reflog show --date=relative'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] stash list *'
     tests:
       - allow: 'git stash list'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] stash show *'
     tests:
       - allow: 'git stash show -p stash@{0}'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] worktree list *'
     tests:
       - allow: 'git worktree list'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] submodule status *'
     tests:
       - allow: 'git submodule status --recursive'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] submodule summary *'
     tests:
       - allow: 'git submodule summary HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] notes list *'
     tests:
       - allow: 'git notes list'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] notes show *'
     tests:
       - allow: 'git notes show HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-mailmap *'
     tests:
       - allow: 'git check-mailmap "User Name <user@example.com>"'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-ref-format *'
     tests:
       - allow: 'git check-ref-format --branch refs/heads/main'
@@ -178,12 +222,15 @@ rules:
       - allow: 'git archive HEAD'
       - ask: 'git archive -o /tmp/out.tar HEAD'
       - ask: 'git archive -ofile.tar HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] var *'
     tests:
       - allow: 'git var GIT_AUTHOR_IDENT'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] patch-id *'
     tests:
       - allow: 'git patch-id --stable'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] stripspace *'
     tests:
       - allow: 'git stripspace --strip-comments'
@@ -194,6 +241,7 @@ rules:
       - allow: 'git interpret-trailers --parse'
       - ask: 'git interpret-trailers --trailer "Signed-off-by: User"'
       - ask: 'git interpret-trailers --parse --in-place file.txt'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] fmt-merge-msg *'
     tests:
       - allow: 'git fmt-merge-msg --log'
@@ -202,54 +250,67 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch'
     tests:
       - allow: 'git branch'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose|-vv] [--sort *] [-l|--list *]'
     tests:
       - allow: 'git branch -a --sort=-committerdate'
       - allow: 'git branch -vv'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --show-current'
     tests:
       - allow: 'git branch --show-current'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch --contains|--merged|--no-merged *'
     tests:
       - allow: 'git branch --contains HEAD'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag'
     tests:
       - allow: 'git tag'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag [-n *] -l|--list *'
     tests:
       - allow: 'git tag -l "v1.*"'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag -v|--verify *'
     tests:
       - allow: 'git tag -v v1.0.0'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag --contains|--merged|--no-merged *'
     tests:
       - allow: 'git tag --contains v1.0.0'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote -v|--verbose'
     tests:
       - allow: 'git remote -v'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote show *'
     tests:
       - allow: 'git remote show upstream'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote get-url *'
     tests:
       - allow: 'git remote get-url origin'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get *'
     tests:
       - allow: 'git config --get remote.origin.url'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-all *'
     tests:
       - allow: 'git config --get-all remote.origin.fetch'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config -l|--list *'
     tests:
       - allow: 'git config --list --show-origin'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-regexp *'
     tests:
       - allow: 'git config --get-regexp "core.*"'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get-urlmatch *'
     tests:
       - allow: 'git config --get-urlmatch http https://example.com'
-
-  # ── Commands not in allow list ──
 
 tests:
   cases:
