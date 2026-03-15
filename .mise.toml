@@ -11,7 +11,7 @@ shellcheck = "0.11.0"
 shfmt = "3.12.0"
 
 # CI
-yq = "4.45.4"
+yq = "4.52.4"
 
 [settings]
 npm.bun = true
