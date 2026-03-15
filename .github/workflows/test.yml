@@ -86,7 +86,7 @@ jobs:
 
       - name: Run preset E2E tests
         run: |
-          for f in *.yml; do
+          for f in base.yml definitions.yml readonly-unix.yml readonly-git.yml readonly-gh.yml; do
             echo "--- Testing $f ---"
             runok test -c "$f"
           done
