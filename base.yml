@@ -6,13 +6,6 @@
 #   extends:
 #     - 'github:fohte/runok-presets/base'
 
-#[test] allow: git log --oneline | head -20
-#[test] allow: git shortlog -sn | head -10
-#[test] allow: git ls-files | grep "\.ts$"
-#[test] allow: ps aux | grep nginx
-#[test] allow: cat /etc/passwd | cut -d: -f1 | sort
-#[test] allow: diff <(git show HEAD:README.md) <(cat README.md)
-#[test] allow: cat /etc/hosts
 extends:
   - ./definitions.yml
   - ./readonly-unix.yml
@@ -21,7 +14,19 @@ extends:
 
 rules:
   # Any command with --help or --version is safe to run.
-  #[test] allow: ls --help
   - allow: '* --help'
-  #[test] allow: git --version
+    tests:
+      - allow: 'ls --help'
   - allow: '* --version'
+    tests:
+      - allow: 'git --version'
+
+tests:
+  cases:
+    - allow: 'git log --oneline | head -20'
+    - allow: 'git shortlog -sn | head -10'
+    - allow: 'git ls-files | grep "\.ts$"'
+    - allow: 'ps aux | grep nginx'
+    - allow: 'cat /etc/passwd | cut -d: -f1 | sort'
+    - allow: 'diff <(git show HEAD:README.md) <(cat README.md)'
+    - allow: 'cat /etc/hosts'

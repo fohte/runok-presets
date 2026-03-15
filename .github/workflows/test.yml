@@ -85,4 +85,8 @@ jobs:
           RUNOK_VERSION: v0.2.0
 
       - name: Run preset E2E tests
-        run: tests/run
+        run: |
+          for f in *.yml; do
+            echo "--- Testing $f ---"
+            runok test -c "$f"
+          done
