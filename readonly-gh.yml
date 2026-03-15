@@ -8,194 +8,212 @@
 rules:
   # ── gh api ──
   # -X with non-GET methods is blocked; graphql may contain mutations.
-  #[test] ask: gh api -X POST /repos/cli/cli/issues
-  #[test] ask: gh api -X PUT /repos/cli/cli/issues/1
-  #[test] ask: gh api -X DELETE /repos/cli/cli/issues/1
-  #[test] ask: gh api -X PATCH /repos/cli/cli/issues/1
-  #[test] ask: gh api --method POST /repos/cli/cli/issues
-  #[test] ask: gh api --method DELETE /repos/cli/cli/issues/1
   - ask: 'gh [-R|--repo *] api * -X|--method !GET *'
+    tests:
+      - ask: 'gh api -X POST /repos/cli/cli/issues'
+      - ask: 'gh api -X PUT /repos/cli/cli/issues/1'
+      - ask: 'gh api -X DELETE /repos/cli/cli/issues/1'
+      - ask: 'gh api -X PATCH /repos/cli/cli/issues/1'
+      - ask: 'gh api --method POST /repos/cli/cli/issues'
+      - ask: 'gh api --method DELETE /repos/cli/cli/issues/1'
   # -f/-F/--field/--raw-field/--input cause gh api to default to POST.
   # However, when -X GET or --method GET is explicitly specified, gh converts
   # field parameters to URL query strings (no POST), so we skip this rule.
-  #[test] ask: gh api /repos/cli/cli/issues -f title=test -f body=test
-  #[test] ask: gh api /repos/cli/cli/issues -F title=test
-  #[test] ask: gh api /repos/cli/cli/issues --field title=test
-  #[test] ask: gh api /repos/cli/cli/issues --raw-field title=test
-  #[test] ask: gh api /repos/cli/cli/issues --input body.json
-  #[test] ask: gh api -X POST /repos/cli/cli/issues -F title=test
-  #[test] allow: gh api -X GET /repos/cli/cli/pulls -F per_page=1
-  #[test] allow: gh api --method GET /repos/cli/cli/pulls -F per_page=1
-  #[test] allow: gh api -X GET /repos/cli/cli/commits -F per_page=1 --jq .[0].sha
-  #[test] allow: gh api -X GET /repos/cli/cli/pulls -f state=open -F per_page=10
-  #[test] allow: gh -R cli/cli api -X GET /repos/cli/cli/pulls --field per_page=1
-  #[test] allow: gh api -X GET /repos/cli/cli/pulls --raw-field per_page=1
   - ask: 'gh [-R|--repo *] api * [-X|--method *] -f|-F|--field|--raw-field|--input *'
+    tests:
+      - ask: 'gh api /repos/cli/cli/issues -f title=test -f body=test'
+      - ask: 'gh api /repos/cli/cli/issues -F title=test'
+      - ask: 'gh api /repos/cli/cli/issues --field title=test'
+      - ask: 'gh api /repos/cli/cli/issues --raw-field title=test'
+      - ask: 'gh api /repos/cli/cli/issues --input body.json'
+      - ask: 'gh api -X POST /repos/cli/cli/issues -F title=test'
+      - allow: 'gh api -X GET /repos/cli/cli/pulls -F per_page=1'
+      - allow: 'gh api --method GET /repos/cli/cli/pulls -F per_page=1'
+      - allow: 'gh api -X GET /repos/cli/cli/commits -F per_page=1 --jq .[0].sha'
+      - allow: 'gh api -X GET /repos/cli/cli/pulls -f state=open -F per_page=10'
+      - allow: 'gh -R cli/cli api -X GET /repos/cli/cli/pulls --field per_page=1'
+      - allow: 'gh api -X GET /repos/cli/cli/pulls --raw-field per_page=1'
     when: "!(has(flags.X) && flags.X == 'GET') && !(has(flags.method) && flags.method == 'GET')"
-  #[test] ask: gh api graphql -f query="{ viewer { login } }"
+
   - ask: 'gh [-R|--repo *] api graphql *'
+    tests:
+      - ask: 'gh api graphql -f query="{ viewer { login } }"'
   # --paginate can fetch enormous result sets and cause excessive API usage.
-  #[test] ask: gh api --paginate /repos/cli/cli/issues
-  #[test] ask: gh api -X GET --paginate /repos/cli/cli/pulls
-  #[test] ask: gh -R cli/cli api --paginate /repos/cli/cli/issues
   - ask: 'gh [-R|--repo *] api * --paginate *'
-  #[test] allow: gh api /repos/cli/cli
-  #[test] allow: gh api -X GET /repos/cli/cli/pulls
-  #[test] allow: gh -R cli/cli api /repos/cli/cli
-  #[test] allow: gh --repo cli/cli api /repos/cli/cli
+    tests:
+      - ask: 'gh api --paginate /repos/cli/cli/issues'
+      - ask: 'gh api -X GET --paginate /repos/cli/cli/pulls'
+      - ask: 'gh -R cli/cli api --paginate /repos/cli/cli/issues'
+
   - allow: 'gh [-R|--repo *] api *'
+    tests:
+      - allow: 'gh api /repos/cli/cli'
+      - allow: 'gh api -X GET /repos/cli/cli/pulls'
+      - allow: 'gh -R cli/cli api /repos/cli/cli'
+      - allow: 'gh --repo cli/cli api /repos/cli/cli'
 
   # ── Generic read-only subcommands (list / view / status) ──
-  #[test] allow: gh pr list
-  #[test] allow: gh pr list --state open --limit 20
-  #[test] allow: gh -R cli/cli pr list
-  #[test] allow: gh --repo cli/cli pr list
-  #[test] allow: gh pr view 123
-  #[test] allow: gh pr view 123 --json title,body
-  #[test] allow: gh pr status
-  #[test] allow: gh issue list
-  #[test] allow: gh issue list --label bug
-  #[test] allow: gh issue view 456
-  #[test] allow: gh issue view 456 --json title,body
-  #[test] allow: gh issue status
-  #[test] allow: gh repo list
-  #[test] allow: gh repo list fohte --limit 10
-  #[test] allow: gh repo view cli/cli
-  #[test] allow: gh repo view cli/cli --json name,description
-  #[test] allow: gh run list
-  #[test] allow: gh run list --limit 5
-  #[test] allow: gh -R cli/cli run list
-  #[test] allow: gh --repo cli/cli run list
-  #[test] allow: gh run view 12345
-  #[test] allow: gh run view 12345 --log
-  #[test] allow: gh workflow list
-  #[test] allow: gh workflow view deploy.yml
-  #[test] allow: gh release list
-  #[test] allow: gh release view v1.0.0
-  #[test] allow: gh label list
-  #[test] allow: gh -R cli/cli label list
-  #[test] allow: gh variable list
-  #[test] allow: gh gist list
-  #[test] allow: gh gist view abc123
-  #[test] allow: gh cache list
-  #[test] allow: gh ruleset list
-  #[test] allow: gh ruleset view 123
-  #[test] allow: gh project list
-  #[test] allow: gh project view 1
-  #[test] allow: gh project field-list 1
-  #[test] allow: gh project item-list 1
-  #[test] allow: gh codespace list
-  #[test] allow: gh extension list
-  #[test] allow: gh ssh-key list
-  #[test] allow: gh gpg-key list
-  #[test] allow: gh config list
-  #[test] allow: gh auth status
   - allow: 'gh [-R|--repo *] * list|view|status *'
+    tests:
+      - allow: 'gh pr list'
+      - allow: 'gh pr list --state open --limit 20'
+      - allow: 'gh -R cli/cli pr list'
+      - allow: 'gh --repo cli/cli pr list'
+      - allow: 'gh pr view 123'
+      - allow: 'gh pr view 123 --json title,body'
+      - allow: 'gh pr status'
+      - allow: 'gh issue list'
+      - allow: 'gh issue list --label bug'
+      - allow: 'gh issue view 456'
+      - allow: 'gh issue view 456 --json title,body'
+      - allow: 'gh issue status'
+      - allow: 'gh repo list'
+      - allow: 'gh repo list fohte --limit 10'
+      - allow: 'gh repo view cli/cli'
+      - allow: 'gh repo view cli/cli --json name,description'
+      - allow: 'gh run list'
+      - allow: 'gh run list --limit 5'
+      - allow: 'gh -R cli/cli run list'
+      - allow: 'gh --repo cli/cli run list'
+      - allow: 'gh run view 12345'
+      - allow: 'gh run view 12345 --log'
+      - allow: 'gh workflow list'
+      - allow: 'gh workflow view deploy.yml'
+      - allow: 'gh release list'
+      - allow: 'gh release view v1.0.0'
+      - allow: 'gh label list'
+      - allow: 'gh -R cli/cli label list'
+      - allow: 'gh variable list'
+      - allow: 'gh gist list'
+      - allow: 'gh gist view abc123'
+      - allow: 'gh cache list'
+      - allow: 'gh ruleset list'
+      - allow: 'gh ruleset view 123'
+      - allow: 'gh project list'
+      - allow: 'gh project view 1'
+      - allow: 'gh project field-list 1'
+      - allow: 'gh project item-list 1'
+      - allow: 'gh codespace list'
+      - allow: 'gh extension list'
+      - allow: 'gh ssh-key list'
+      - allow: 'gh gpg-key list'
+      - allow: 'gh config list'
+      - allow: 'gh auth status'
+
   - allow: 'gh [-R|--repo *] project *-list *'
 
   # ── variable get ──
-  #[test] allow: gh variable get MY_VAR
-  #[test] allow: gh variable get DEPLOY_ENV
-  #[test] allow: gh --repo cli/cli variable get DEPLOY_ENV
   - allow: 'gh [-R|--repo *] variable get *'
+    tests:
+      - allow: 'gh variable get MY_VAR'
+      - allow: 'gh variable get DEPLOY_ENV'
+      - allow: 'gh --repo cli/cli variable get DEPLOY_ENV'
 
   # ── PR / issue read-only subcommands beyond list/view/status ──
-  #[test] allow: gh pr diff 123
-  #[test] allow: gh pr checks 123
   - allow: 'gh [-R|--repo *] pr diff|checks *'
+    tests:
+      - allow: 'gh pr diff 123'
+      - allow: 'gh pr checks 123'
 
   # ── Ruleset check ──
-  #[test] allow: gh ruleset check main
   - allow: 'gh [-R|--repo *] ruleset check *'
+    tests:
+      - allow: 'gh ruleset check main'
 
   # ── Search ──
-  #[test] allow: gh search repos cli
-  #[test] allow: gh search issues "bug label:help-wanted"
-  #[test] allow: gh search prs "fix in:title"
-  #[test] allow: gh search commits "initial commit"
-  #[test] allow: gh search code "fmt.Println"
   - allow: 'gh [-R|--repo *] search *'
+    tests:
+      - allow: 'gh search repos cli'
+      - allow: 'gh search issues "bug label:help-wanted"'
+      - allow: 'gh search prs "fix in:title"'
+      - allow: 'gh search commits "initial commit"'
+      - allow: 'gh search code "fmt.Println"'
 
   # ── Browse ──
-  #[test] allow: gh browse
-  #[test] allow: gh browse --no-browser
-  #[test] allow: gh browse src/main.go
-  #[test] allow: gh --repo cli/cli browse
   - allow: 'gh [-R|--repo *] browse *'
+    tests:
+      - allow: 'gh browse'
+      - allow: 'gh browse --no-browser'
+      - allow: 'gh browse src/main.go'
+      - allow: 'gh --repo cli/cli browse'
 
   # ── Config get ──
-  #[test] allow: gh config get editor
   - allow: 'gh [-R|--repo *] config get *'
+    tests:
+      - allow: 'gh config get editor'
 
   # ── Attestation (read-only) ──
-  #[test] allow: gh attestation verify artifact.tar.gz
-  #[test] allow: gh attestation trusted-root
   - allow: 'gh [-R|--repo *] attestation verify|trusted-root *'
-  #[test] ask: gh attestation download artifact.tar.gz
+    tests:
+      - allow: 'gh attestation verify artifact.tar.gz'
+      - allow: 'gh attestation trusted-root'
 
   # ── Status (top-level) ──
-  #[test] allow: gh status
   - allow: 'gh status *'
+    tests:
+      - allow: 'gh status'
 
-  # ── Commands not in allow list (write / destructive operations) ──
-  #[test] ask: gh pr create --title "test" --body "test"
-  #[test] ask: gh pr merge 123
-  #[test] ask: gh pr close 123
-  #[test] ask: gh pr edit 123 --title "new title"
-  #[test] ask: gh pr comment 123 --body "comment"
-  #[test] ask: gh pr review 123 --approve
-  #[test] ask: gh pr ready 123
-  #[test] ask: gh pr reopen 123
-  #[test] ask: gh pr revert 123
-  #[test] ask: gh pr checkout 123
-  #[test] ask: gh pr lock 123
-  #[test] ask: gh pr unlock 123
-  #[test] ask: gh pr update-branch
-  #[test] ask: gh issue create --title "bug" --body "desc"
-  #[test] ask: gh issue close 456
-  #[test] ask: gh issue edit 456 --title "new title"
-  #[test] ask: gh issue comment 456 --body "comment"
-  #[test] ask: gh issue reopen 456
-  #[test] ask: gh issue delete 456
-  #[test] ask: gh issue transfer 456 cli/cli
-  #[test] ask: gh issue lock 456
-  #[test] ask: gh issue pin 456
-  #[test] ask: gh repo create my-repo
-  #[test] ask: gh repo delete my-repo
-  #[test] ask: gh repo fork cli/cli
-  #[test] ask: gh repo clone cli/cli
-  #[test] ask: gh repo edit --description "new desc"
-  #[test] ask: gh repo archive my-repo
-  #[test] ask: gh repo rename new-name
-  #[test] ask: gh run rerun 12345
-  #[test] ask: gh run cancel 12345
-  #[test] ask: gh run watch 12345
-  #[test] ask: gh run delete 12345
-  #[test] ask: gh run download 12345
-  #[test] ask: gh workflow run deploy.yml
-  #[test] ask: gh workflow enable deploy.yml
-  #[test] ask: gh workflow disable deploy.yml
-  #[test] ask: gh release create v2.0.0
-  #[test] ask: gh release delete v1.0.0
-  #[test] ask: gh release edit v1.0.0 --notes "updated"
-  #[test] ask: gh auth login
-  #[test] ask: gh auth logout
-  #[test] ask: gh gist create file.txt
-  #[test] ask: gh gist edit abc123
-  #[test] ask: gh gist delete abc123
-  #[test] ask: gh label create bug
-  #[test] ask: gh label edit bug --name bugfix
-  #[test] ask: gh label delete bug
-  #[test] ask: gh config set editor vim
-  #[test] ask: gh secret set MY_SECRET
-  #[test] ask: gh secret delete MY_SECRET
-  #[test] ask: gh variable set MY_VAR
-  #[test] ask: gh variable delete MY_VAR
-  #[test] ask: gh cache delete --all
-  #[test] ask: gh project create --title "My Project"
-  #[test] ask: gh project close 1
-  #[test] ask: gh project delete 1
-  #[test] ask: gh project edit 1 --title "new"
-  #[test] ask: gh codespace create
-  #[test] ask: gh codespace delete
-  #[test] ask: gh extension install owner/repo
+tests:
+  cases:
+    - ask: 'gh attestation download artifact.tar.gz'
+    - ask: 'gh pr create --title "test" --body "test"'
+    - ask: 'gh pr merge 123'
+    - ask: 'gh pr close 123'
+    - ask: 'gh pr edit 123 --title "new title"'
+    - ask: 'gh pr comment 123 --body "comment"'
+    - ask: 'gh pr review 123 --approve'
+    - ask: 'gh pr ready 123'
+    - ask: 'gh pr reopen 123'
+    - ask: 'gh pr revert 123'
+    - ask: 'gh pr checkout 123'
+    - ask: 'gh pr lock 123'
+    - ask: 'gh pr unlock 123'
+    - ask: 'gh pr update-branch'
+    - ask: 'gh issue create --title "bug" --body "desc"'
+    - ask: 'gh issue close 456'
+    - ask: 'gh issue edit 456 --title "new title"'
+    - ask: 'gh issue comment 456 --body "comment"'
+    - ask: 'gh issue reopen 456'
+    - ask: 'gh issue delete 456'
+    - ask: 'gh issue transfer 456 cli/cli'
+    - ask: 'gh issue lock 456'
+    - ask: 'gh issue pin 456'
+    - ask: 'gh repo create my-repo'
+    - ask: 'gh repo delete my-repo'
+    - ask: 'gh repo fork cli/cli'
+    - ask: 'gh repo clone cli/cli'
+    - ask: 'gh repo edit --description "new desc"'
+    - ask: 'gh repo archive my-repo'
+    - ask: 'gh repo rename new-name'
+    - ask: 'gh run rerun 12345'
+    - ask: 'gh run cancel 12345'
+    - ask: 'gh run watch 12345'
+    - ask: 'gh run delete 12345'
+    - ask: 'gh run download 12345'
+    - ask: 'gh workflow run deploy.yml'
+    - ask: 'gh workflow enable deploy.yml'
+    - ask: 'gh workflow disable deploy.yml'
+    - ask: 'gh release create v2.0.0'
+    - ask: 'gh release delete v1.0.0'
+    - ask: 'gh release edit v1.0.0 --notes "updated"'
+    - ask: 'gh auth login'
+    - ask: 'gh auth logout'
+    - ask: 'gh gist create file.txt'
+    - ask: 'gh gist edit abc123'
+    - ask: 'gh gist delete abc123'
+    - ask: 'gh label create bug'
+    - ask: 'gh label edit bug --name bugfix'
+    - ask: 'gh label delete bug'
+    - ask: 'gh config set editor vim'
+    - ask: 'gh secret set MY_SECRET'
+    - ask: 'gh secret delete MY_SECRET'
+    - ask: 'gh variable set MY_VAR'
+    - ask: 'gh variable delete MY_VAR'
+    - ask: 'gh cache delete --all'
+    - ask: 'gh project create --title "My Project"'
+    - ask: 'gh project close 1'
+    - ask: 'gh project delete 1'
+    - ask: 'gh project edit 1 --title "new"'
+    - ask: 'gh codespace create'
+    - ask: 'gh codespace delete'
+    - ask: 'gh extension install owner/repo'
