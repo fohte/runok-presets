@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.0](https://github.com/fohte/runok-presets/compare/v1.0.0...v1.1.0) (2026-03-15)
+
+
+### Features
+
+* **base:** allow read-only `runok` subcommands ([#130](https://github.com/fohte/runok-presets/issues/130)) ([2998048](https://github.com/fohte/runok-presets/commit/299804812ac99eb74124ff874a46cee61e59f13e))
+
+
+### Bug Fixes
+
+* **readonly-git:** add missing read-only options for `git tag` and `git branch` ([#129](https://github.com/fohte/runok-presets/issues/129)) ([a51dfe4](https://github.com/fohte/runok-presets/commit/a51dfe4fd6ff70d405d4a96f749dd9b69fd04150))
+* **readonly-unix:** allow `command -v` / `command -V` ([#110](https://github.com/fohte/runok-presets/issues/110)) ([6bf13e7](https://github.com/fohte/runok-presets/commit/6bf13e7833511b979886035bb37684a1dd00b4d7))
+* **readonly-unix:** allow `curl -o /dev/null` ([#123](https://github.com/fohte/runok-presets/issues/123)) ([f601775](https://github.com/fohte/runok-presets/commit/f601775ffaaf20238d3bc26f00a11fa657a938d6))
+* **readonly-unix:** allow shell control flow builtins ([#24](https://github.com/fohte/runok-presets/issues/24)) ([d46b3b3](https://github.com/fohte/runok-presets/commit/d46b3b39f35e76af3a768f74b8138747859783a5))
+
+
+### Dependencies
+
+* update dependency fohte/runok to v0.2.0 ([#127](https://github.com/fohte/runok-presets/issues/127)) ([ea6edeb](https://github.com/fohte/runok-presets/commit/ea6edebf6e8df1118fb14f27b2a3920711f64969))
+
 ## [1.0.0](https://github.com/fohte/runok-presets/compare/v0.1.0...v1.0.0) (2026-03-12)
 
 
