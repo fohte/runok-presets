@@ -82,7 +82,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           # renovate: datasource=github-releases depName=fohte/runok
-          RUNOK_VERSION: v0.1.5
+          RUNOK_VERSION: v0.2.0
 
       - name: Run preset E2E tests
         run: tests/run
