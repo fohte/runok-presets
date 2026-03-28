@@ -32,6 +32,11 @@ Use [Conventional Commits](https://www.conventionalcommits.org/). Scope correspo
 - `fix(readonly-unix): allow sed without -i flag`
 - Valid scopes: `base`, `definitions`, `readonly-unix`, `readonly-git`, `readonly-gh`
 
+### Semver type guidelines
+
+- `feat` (minor bump): Adding allow rules for a **new command or subcommand** not previously covered (e.g. `git stash list`, `gh run view`)
+- `fix` (patch bump): Extending coverage of an **already-covered command** to handle missing variations (e.g. adding implicit `git config <key>` when `git config --get <key>` is already allowed, or adding missing flags to an existing rule)
+
 ## Scope policy
 
 Only common Unix tools, git, and gh. Docker, kubectl, AWS CLI, language runtimes, etc. are out of scope.
