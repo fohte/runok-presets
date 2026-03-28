@@ -39,7 +39,7 @@ Only common Unix tools, git, and gh. Docker, kubectl, AWS CLI, language runtimes
 ## Design patterns
 
 - Allow read-only commands; write/destructive operations are `ask` or implicitly blocked (no rule)
-- Place `ask` rules **before** `allow` rules to block dangerous patterns first, then permit the rest
+- `ask` rules take priority over `allow` rules regardless of order in the file; place `ask` before `allow` for readability
 - Negation patterns exclude dangerous flags: e.g. `sed !-i|--in-place *`
 - git commands share optional location args: `git [-C *] [--git-dir *] [--work-tree *] <subcommand> *`
 - gh commands share optional repo arg: `gh [-R|--repo *] <subcommand> *`
