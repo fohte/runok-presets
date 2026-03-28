@@ -353,6 +353,8 @@ tests:
     - ask: 'git push origin main'
     - ask: 'git branch new-branch'
     - ask: 'git config user.name "test"'
+    - ask: 'git config user.email "foo@bar.com"'
+    - ask: 'git config --global user.name "test"'
     - ask: 'git reset --hard HEAD'
     - ask: 'git checkout -- file.txt'
     - ask: 'git rebase main'
