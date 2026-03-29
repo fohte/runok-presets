@@ -317,13 +317,15 @@ rules:
       - allow: 'git remote get-url origin'
 
   # implicit get: `git config <key>` (without --get) is read-only
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] config [--global|--system|--local|--worktree] *.*'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] config [--global] [--system] [--local] [--worktree] [-f|--file *] *.*'
     tests:
       - allow: 'git config core.hooksPath'
       - allow: 'git config --global core.hooksPath'
       - allow: 'git config --system core.hooksPath'
       - allow: 'git config --local core.hooksPath'
       - allow: 'git config --worktree core.hooksPath'
+      - allow: 'git config -f /tmp/config core.hooksPath'
+      - allow: 'git config --file /tmp/config core.hooksPath'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] config --get *'
     tests:
