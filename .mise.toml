@@ -3,7 +3,7 @@ lefthook = "2.1.4"
 
 # lefthook hooks
 actionlint = "1.7.11"
-bun = "1.3.10"
+bun = "1.3.11"
 "github:fohte/basefmt" = "0.1.0"
 "npm:@commitlint/cli" = "20.4.4"
 "npm:prettier" = "3.8.1"
