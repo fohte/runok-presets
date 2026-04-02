@@ -32,6 +32,28 @@ Use [Conventional Commits](https://www.conventionalcommits.org/). Scope correspo
 - `fix(readonly-unix): allow sed without -i flag`
 - Valid scopes: `base`, `definitions`, `readonly-unix`, `readonly-git`, `readonly-gh`
 
+### Semver type guidelines
+
+The key principle: semver is determined by **user-facing impact on command permissions**, not by code change size.
+
+- **major**: Changes that **break existing workflows** -- previously allowed commands become ask/deny
+  - Deleting or narrowing allow rules
+  - Changing allow → ask/deny
+  - Deleting/renaming preset files
+  - Removing presets from `base.yml` extends
+  - Deleting/narrowing wrapper definitions
+  - Adding/tightening `when` clauses or negation patterns on existing rules
+- **minor**: **Structural additions** that don't change existing behavior
+  - Adding new preset files
+  - Adding new presets to `base.yml` extends
+  - Adding new wrapper definitions
+  - Adding new definitions categories (paths, vars, sandbox)
+- **patch**: Changes that **don't break existing workflows**
+  - Adding allow rules (both new commands and variations of existing ones)
+  - Expanding allow rule patterns
+  - Fixing unintended over-denial (bug fix)
+  - Tests, comments, equivalent rewrites, documentation
+
 ## Scope policy
 
 Only common Unix tools, git, and gh. Docker, kubectl, AWS CLI, language runtimes, etc. are out of scope.
