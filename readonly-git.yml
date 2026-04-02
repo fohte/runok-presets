@@ -6,17 +6,6 @@
 # Destructive subcommands (push, commit, rebase, etc.) are not included.
 
 rules:
-  # ── Options that write to files ──
-  # --output writes output to a file instead of stdout. This applies to
-  # diff, log, show, shortlog, whatchanged, and other diff-based commands.
-  - ask: 'git * --output* *'
-    tests:
-      - ask: 'git diff --output=/tmp/out HEAD'
-      - ask: 'git log --output=/tmp/out'
-      - ask: 'git show --output=/tmp/out HEAD'
-      - ask: 'git shortlog --output=/tmp/out'
-      - ask: 'git whatchanged --output=/tmp/out'
-
   # ── Fully read-only subcommands ──
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] status *'
     tests:
@@ -26,17 +15,20 @@ rules:
       - allow: 'git --work-tree /tmp diff HEAD'
       - allow: 'git -C /tmp --git-dir /tmp/.git --work-tree /tmp status'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] log *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] log !--output* *'
     tests:
       - allow: 'git log --oneline --graph -20'
+      - ask: 'git log --output=/tmp/out'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff !--output* *'
     tests:
       - allow: 'git diff --stat HEAD~3'
+      - ask: 'git diff --output=/tmp/out HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] show *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] show !--output* *'
     tests:
       - allow: 'git show HEAD:README.md'
+      - ask: 'git show --output=/tmp/out HEAD'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] blame *'
     tests:
@@ -46,9 +38,10 @@ rules:
     tests:
       - allow: 'git annotate -L 10,20 src/main.rs'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] shortlog *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] shortlog !--output* *'
     tests:
       - allow: 'git shortlog -sn --no-merges'
+      - ask: 'git shortlog --output=/tmp/out'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] describe *'
     tests:
@@ -94,17 +87,20 @@ rules:
     tests:
       - allow: 'git name-rev --name-only HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-tree *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-tree !--output* *'
     tests:
       - allow: 'git diff-tree --no-commit-id --name-only -r HEAD'
+      - ask: 'git diff-tree --output=/tmp/out HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-index *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-index !--output* *'
     tests:
       - allow: 'git diff-index --cached HEAD'
+      - ask: 'git diff-index --output=/tmp/out HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-files *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-files !--output* *'
     tests:
       - allow: 'git diff-files'
+      - ask: 'git diff-files --output=/tmp/out'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] difftool !--extcmd *'
     tests:
@@ -156,9 +152,10 @@ rules:
     tests:
       - allow: 'git range-diff main~3..main~1 HEAD~2..HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] whatchanged *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] whatchanged !--output* *'
     tests:
       - allow: 'git whatchanged --since="1 week ago"'
+      - ask: 'git whatchanged --output=/tmp/out'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] check-ignore *'
     tests:

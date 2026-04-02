@@ -7,50 +7,41 @@
 
 rules:
   # ── gh api ──
-  # -X with non-GET methods is blocked; graphql may contain mutations.
-  - ask: 'gh [-R|--repo *] api * -X|--method !GET *'
+  # -X GET / --method GET is always safe, even with field parameters or --paginate.
+  # --paginate can fetch enormous result sets and cause excessive API usage,
+  # even with GET requests.
+  - allow: 'gh [-R|--repo *] api * -X|--method GET !--paginate *'
     tests:
-      - ask: 'gh api -X POST /repos/cli/cli/issues'
-      - ask: 'gh api -X PUT /repos/cli/cli/issues/1'
-      - ask: 'gh api -X DELETE /repos/cli/cli/issues/1'
-      - ask: 'gh api -X PATCH /repos/cli/cli/issues/1'
-      - ask: 'gh api --method POST /repos/cli/cli/issues'
-      - ask: 'gh api --method DELETE /repos/cli/cli/issues/1'
-  # -f/-F/--field/--raw-field/--input cause gh api to default to POST.
-  # However, when -X GET or --method GET is explicitly specified, gh converts
-  # field parameters to URL query strings (no POST), so we skip this rule.
-  - ask: 'gh [-R|--repo *] api * [-X|--method *] -f|-F|--field|--raw-field|--input *'
-    tests:
-      - ask: 'gh api /repos/cli/cli/issues -f title=test -f body=test'
-      - ask: 'gh api /repos/cli/cli/issues -F title=test'
-      - ask: 'gh api /repos/cli/cli/issues --field title=test'
-      - ask: 'gh api /repos/cli/cli/issues --raw-field title=test'
-      - ask: 'gh api /repos/cli/cli/issues --input body.json'
-      - ask: 'gh api -X POST /repos/cli/cli/issues -F title=test'
+      - allow: 'gh api -X GET /repos/cli/cli/pulls'
       - allow: 'gh api -X GET /repos/cli/cli/pulls -F per_page=1'
       - allow: 'gh api --method GET /repos/cli/cli/pulls -F per_page=1'
       - allow: 'gh api -X GET /repos/cli/cli/commits -F per_page=1 --jq .[0].sha'
       - allow: 'gh api -X GET /repos/cli/cli/pulls -f state=open -F per_page=10'
       - allow: 'gh -R cli/cli api -X GET /repos/cli/cli/pulls --field per_page=1'
       - allow: 'gh api -X GET /repos/cli/cli/pulls --raw-field per_page=1'
-    when: "!(has(flags.X) && flags.X == 'GET') && !(has(flags.method) && flags.method == 'GET')"
-
-  - ask: 'gh [-R|--repo *] api graphql *'
+      - ask: 'gh api -X POST /repos/cli/cli/issues'
+      - ask: 'gh api -X PUT /repos/cli/cli/issues/1'
+      - ask: 'gh api -X DELETE /repos/cli/cli/issues/1'
+      - ask: 'gh api -X PATCH /repos/cli/cli/issues/1'
+      - ask: 'gh api --method POST /repos/cli/cli/issues'
+      - ask: 'gh api --method DELETE /repos/cli/cli/issues/1'
+  # Without explicit -X/-method, allow only if no field/input/graphql/paginate flags
+  # (which default to POST or can cause excessive API usage).
+  - allow: 'gh [-R|--repo *] api !graphql !-X|--method !-f|-F|--field|--raw-field|--input !--paginate *'
     tests:
+      - allow: 'gh api /repos/cli/cli'
+      - allow: 'gh -R cli/cli api /repos/cli/cli'
+      - allow: 'gh --repo cli/cli api /repos/cli/cli'
+      - ask: 'gh api /repos/cli/cli/issues -f title=test -f body=test'
+      - ask: 'gh api /repos/cli/cli/issues -F title=test'
+      - ask: 'gh api /repos/cli/cli/issues --field title=test'
+      - ask: 'gh api /repos/cli/cli/issues --raw-field title=test'
+      - ask: 'gh api /repos/cli/cli/issues --input body.json'
+      - ask: 'gh api -X POST /repos/cli/cli/issues -F title=test'
       - ask: 'gh api graphql -f query="{ viewer { login } }"'
-  # --paginate can fetch enormous result sets and cause excessive API usage.
-  - ask: 'gh [-R|--repo *] api * --paginate *'
-    tests:
       - ask: 'gh api --paginate /repos/cli/cli/issues'
       - ask: 'gh api -X GET --paginate /repos/cli/cli/pulls'
       - ask: 'gh -R cli/cli api --paginate /repos/cli/cli/issues'
-
-  - allow: 'gh [-R|--repo *] api *'
-    tests:
-      - allow: 'gh api /repos/cli/cli'
-      - allow: 'gh api -X GET /repos/cli/cli/pulls'
-      - allow: 'gh -R cli/cli api /repos/cli/cli'
-      - allow: 'gh --repo cli/cli api /repos/cli/cli'
 
   # ── Generic read-only subcommands (list / view / status) ──
   - allow: 'gh [-R|--repo *] * list|view|status *'
