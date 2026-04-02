@@ -87,17 +87,20 @@ rules:
     tests:
       - allow: 'git name-rev --name-only HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-tree *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-tree !--output* *'
     tests:
       - allow: 'git diff-tree --no-commit-id --name-only -r HEAD'
+      - ask: 'git diff-tree --output=/tmp/out HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-index *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-index !--output* *'
     tests:
       - allow: 'git diff-index --cached HEAD'
+      - ask: 'git diff-index --output=/tmp/out HEAD'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-files *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] diff-files !--output* *'
     tests:
       - allow: 'git diff-files'
+      - ask: 'git diff-files --output=/tmp/out'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] difftool !--extcmd *'
     tests:
