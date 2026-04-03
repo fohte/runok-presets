@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/fohte/runok-presets/compare/v1.1.0...v1.1.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* **readonly-git:** allow implicit `git config <key>` without `--get` ([#134](https://github.com/fohte/runok-presets/issues/134)) ([649718f](https://github.com/fohte/runok-presets/commit/649718fb2f9015637709461fe5f601249e6c8bf1))
+* **readonly-unix, readonly-git, readonly-gh:** replace ask rules with allow negation patterns ([#139](https://github.com/fohte/runok-presets/issues/139)) ([dfbdd15](https://github.com/fohte/runok-presets/commit/dfbdd15c2a52bfd6852bde5163276dd7b4728ce1))
+
 ## [1.1.0](https://github.com/fohte/runok-presets/compare/v1.0.0...v1.1.0) (2026-03-15)
 
 
