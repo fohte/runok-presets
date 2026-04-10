@@ -569,6 +569,13 @@ rules:
     tests:
       - allow: '[ -d /tmp ]'
 
+  # `[[` must be quoted: unquoted `[` starts an optional-group syntax in runok patterns
+  - allow: '"[[" *'
+    tests:
+      - allow: '[[ -d /tmp ]]'
+      - allow: '[[ "$commits" -gt 1 ]]'
+      - allow: '[[ "$a" == "b" ]]'
+
   - allow: 'cd *'
     tests:
       - allow: 'cd /tmp'
