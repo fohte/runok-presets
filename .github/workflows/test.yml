@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/create-github-app-token@v3
+      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }}
@@ -58,7 +58,7 @@ jobs:
 
       - name: Commit formatted files
         if: ${{ !cancelled() && steps.check-auto-format.outputs.skip_commit != 'true' }}
-        uses: suzuki-shunsuke/commit-action@v0.1.1
+        uses: suzuki-shunsuke/commit-action@f12e2d628a4ab72dcefe7890ae07e8dbf1e201b9 # v0.1.1
         with:
           commit_message: 'style: auto-format'
           workflow: deny
