@@ -177,6 +177,19 @@ rules:
       - ask: 'gh api graphql --field query="mutation { createIssue(input: {}) { issue { id } } }"'
       - allow: 'gh api graphql --raw-field query="query { viewer { login } }"'
       - ask: 'gh api graphql --raw-field query="mutation { createIssue(input: {}) { issue { id } } }"'
+      # Real-world query shapes (single-quoted, multi-line, search queries)
+      - allow: "gh api graphql -f query='{ viewer { login } }'"
+      - allow: 'gh api graphql -f query=''{ search(query: "repo:foo author:bar", type: DISCUSSION, first: 5) { nodes { ... on Discussion { number title } } } }'''
+      - allow: |-
+          gh api graphql -f query='
+          {
+            repository(owner: "foo", name: "bar") {
+              discussion(number: 1) {
+                body
+                comments(first: 10) { nodes { body } }
+              }
+            }
+          }'
 
 tests:
   cases:
