@@ -44,8 +44,6 @@ rules:
       - ask: 'gh api /repos/cli/cli/issues --raw-field title=test'
       - ask: 'gh api /repos/cli/cli/issues --input body.json'
       - ask: 'gh api -X POST /repos/cli/cli/issues -F title=test'
-      # graphql is excluded from this rule, but allowed by the GraphQL rules below
-      - allow: 'gh api graphql -f query="{ viewer { login } }"'
       - ask: 'gh api --paginate /repos/cli/cli/issues'
       - ask: 'gh api -X GET --paginate /repos/cli/cli/pulls'
       - ask: 'gh -R cli/cli api --paginate /repos/cli/cli/issues'
@@ -153,11 +151,13 @@ rules:
 
   # ── GraphQL read-only queries ──
   # gh api graphql requires -f/-F/--raw-field/--field to pass the query.
-  # Allow only when the query value does not start with "mutation".
+  # Allow only when the query value does not start with "mutation"
+  # (ignoring leading whitespace such as spaces or newlines).
   # --paginate is excluded to prevent excessive API usage.
-  # --input is not covered because file contents cannot be inspected.
-  - allow: 'gh [-R|--repo *] api graphql !--paginate <flag:query-field> *'
-    when: '!flag_groups["query-field"].exists(v, v.startsWith("query=mutation"))'
+  # --input is excluded because file contents cannot be inspected, so a
+  # mutation could be hidden inside the payload file.
+  - allow: 'gh [-R|--repo *] api graphql !--paginate !--input <flag:query-field> *'
+    when: '!flag_groups["query-field"].exists(v, v.matches("^query=\\s*mutation"))'
     tests:
       - allow: 'gh api graphql -f query="query { viewer { login } }"'
       - allow: 'gh api graphql -f query="{ viewer { login } }"'
@@ -177,6 +177,14 @@ rules:
       - ask: 'gh api graphql --field query="mutation { createIssue(input: {}) { issue { id } } }"'
       - allow: 'gh api graphql --raw-field query="query { viewer { login } }"'
       - ask: 'gh api graphql --raw-field query="mutation { createIssue(input: {}) { issue { id } } }"'
+      # Mutation hidden behind leading whitespace must still be ask
+      - ask: 'gh api graphql -f query=" mutation { createIssue(input: {}) { issue { id } } }"'
+      - ask: "gh api graphql -f query='\nmutation { foo }'"
+      # --input bypass: cannot inspect payload file, so reject even when
+      # combined with a harmless -f value
+      - ask: 'gh api graphql --input payload.json'
+      - ask: 'gh api graphql --input payload.json -f query="{ viewer { login } }"'
+      - ask: 'gh api graphql -f query="{ viewer { login } }" --input payload.json'
       # Real-world query shapes (single-quoted, multi-line, search queries)
       - allow: "gh api graphql -f query='{ viewer { login } }'"
       - allow: 'gh api graphql -f query=''{ search(query: "repo:foo author:bar", type: DISCUSSION, first: 5) { nodes { ... on Discussion { number title } } } }'''
@@ -257,5 +265,12 @@ tests:
     - ask: 'gh extension install owner/repo'
     # GraphQL mutation must remain ask
     - ask: 'gh api graphql -f query="mutation { createIssue(input: {}) { issue { id } } }"'
+    # Leading whitespace before "mutation" must not bypass the check
+    - ask: 'gh api graphql -f query=" mutation { createIssue(input: {}) { issue { id } } }"'
     - ask: 'gh api graphql --input query.graphql'
+    # --input combined with a harmless -f must still be ask
+    - ask: 'gh api graphql --input payload.json -f query="{ viewer { login } }"'
     - ask: 'gh api graphql --paginate -f query="query { viewer { login } }"'
+    # graphql is excluded from the generic "no field flags" rule, but
+    # allowed by the dedicated GraphQL rule above
+    - allow: 'gh api graphql -f query="{ viewer { login } }"'
