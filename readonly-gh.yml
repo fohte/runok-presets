@@ -1,9 +1,15 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fohte/runok/main/schema/runok.schema.json
 
+required_runok_version: '>=0.2.3'
+
 # Read-only GitHub CLI (gh) commands.
 #
 # Allows gh subcommands that do not modify any state.
 # Write operations (create, merge, close, delete, edit, comment, etc.) are not included.
+
+definitions:
+  flag_groups:
+    query-field: '-f|-F|--raw-field|--field *'
 
 rules:
   # ── gh api ──
@@ -38,7 +44,8 @@ rules:
       - ask: 'gh api /repos/cli/cli/issues --raw-field title=test'
       - ask: 'gh api /repos/cli/cli/issues --input body.json'
       - ask: 'gh api -X POST /repos/cli/cli/issues -F title=test'
-      - ask: 'gh api graphql -f query="{ viewer { login } }"'
+      # graphql is excluded from this rule, but allowed by the GraphQL rules below
+      - allow: 'gh api graphql -f query="{ viewer { login } }"'
       - ask: 'gh api --paginate /repos/cli/cli/issues'
       - ask: 'gh api -X GET --paginate /repos/cli/cli/pulls'
       - ask: 'gh -R cli/cli api --paginate /repos/cli/cli/issues'
@@ -144,6 +151,33 @@ rules:
     tests:
       - allow: 'gh status'
 
+  # ── GraphQL read-only queries ──
+  # gh api graphql requires -f/-F/--raw-field/--field to pass the query.
+  # Allow only when the query value does not start with "mutation".
+  # --paginate is excluded to prevent excessive API usage.
+  # --input is not covered because file contents cannot be inspected.
+  - allow: 'gh [-R|--repo *] api graphql !--paginate <flag:query-field> *'
+    when: '!flag_groups["query-field"].exists(v, v.startsWith("query=mutation"))'
+    tests:
+      - allow: 'gh api graphql -f query="query { viewer { login } }"'
+      - allow: 'gh api graphql -f query="{ viewer { login } }"'
+      - allow: 'gh api graphql -f query="query { repository(owner: \"cli\", name: \"cli\") { name } }"'
+      - allow: 'gh api graphql -f query="query { repository(name: \"mutation-testing-tool\") { name } }"'
+      - allow: 'gh api graphql -f query="query { viewer { login } }" -f variables="{}"'
+      - allow: 'gh -R cli/cli api graphql -f query="query { viewer { login } }"'
+      - allow: 'gh api graphql -f query="query { viewer { login } }" --jq .data.viewer.login'
+      - ask: 'gh api graphql -f query="mutation { createIssue(input: {}) { issue { id } } }"'
+      - ask: 'gh api graphql -f query="mutation CreateIssue { createIssue(input: {}) { issue { id } } }"'
+      - ask: 'gh api graphql -f query="mutation { createIssue(input: {}) { issue { id } } }" -f variables="{}"'
+      - ask: 'gh api graphql -f variables="{}" -f query="mutation { createIssue(input: {}) { issue { id } } }"'
+      - ask: 'gh api graphql --paginate -f query="query { viewer { login } }"'
+      - allow: 'gh api graphql -F query="query { viewer { login } }"'
+      - ask: 'gh api graphql -F query="mutation { createIssue(input: {}) { issue { id } } }"'
+      - allow: 'gh api graphql --field query="query { viewer { login } }"'
+      - ask: 'gh api graphql --field query="mutation { createIssue(input: {}) { issue { id } } }"'
+      - allow: 'gh api graphql --raw-field query="query { viewer { login } }"'
+      - ask: 'gh api graphql --raw-field query="mutation { createIssue(input: {}) { issue { id } } }"'
+
 tests:
   cases:
     - ask: 'gh attestation download artifact.tar.gz'
@@ -208,3 +242,7 @@ tests:
     - ask: 'gh codespace create'
     - ask: 'gh codespace delete'
     - ask: 'gh extension install owner/repo'
+    # GraphQL mutation must remain ask
+    - ask: 'gh api graphql -f query="mutation { createIssue(input: {}) { issue { id } } }"'
+    - ask: 'gh api graphql --input query.graphql'
+    - ask: 'gh api graphql --paginate -f query="query { viewer { login } }"'
