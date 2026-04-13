@@ -1,6 +1,10 @@
 # runok-presets
 
-Official preset collection for [runok](https://github.com/fohte/runok).
+[![CI](https://github.com/fohte/runok-presets/actions/workflows/test.yml/badge.svg)](https://github.com/fohte/runok-presets/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/fohte/runok-presets)](https://github.com/fohte/runok-presets/releases)
+[![License](https://img.shields.io/github/license/fohte/runok-presets)](LICENSE)
+
+[Official preset collection](https://runok.fohte.net/configuration/official-presets/) for [runok](https://github.com/fohte/runok), a command execution permission manager for LLM agents.
 
 ## Usage
 
