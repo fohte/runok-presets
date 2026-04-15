@@ -4,4 +4,17 @@
     'github>fohte/renovate-config:base.json5',
     'customManagers:githubActionsVersions',
   ],
+  packageRules: [
+    // `fohte/runok` is referenced only by the test workflow to download the
+    // CLI binary, so it is a CI-only dependency. It is detected by
+    // `customManagers:githubActionsVersions` as the `custom.regex` manager
+    // (not `github-actions`), so the base config's `ci:` prefix rule does not
+    // apply. Override here to prevent release-please from bumping the
+    // package version for this CI-only update.
+    {
+      matchDepNames: ['fohte/runok'],
+      commitMessagePrefix: 'ci:',
+      semanticCommitScope: null,
+    },
+  ],
 }
