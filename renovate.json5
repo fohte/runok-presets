@@ -12,8 +12,9 @@
     // apply. Override here to prevent release-please from bumping the
     // package version for this CI-only update.
     {
-      matchDepNames: ['fohte/runok'],
-      commitMessagePrefix: 'ci:',
+      matchManagers: ['custom.regex'],
+      matchPackageNames: ['fohte/runok'],
+      semanticCommitType: 'ci',
       semanticCommitScope: null,
     },
   ],
