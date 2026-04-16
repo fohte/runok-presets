@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/fohte/runok-presets/compare/v1.1.1...v1.2.0) (2026-04-16)
+
+
+### Features
+
+* **readonly-gh:** allow gh api graphql read-only queries ([#150](https://github.com/fohte/runok-presets/issues/150)) ([b01d79b](https://github.com/fohte/runok-presets/commit/b01d79ba438ea6da6dfd04f8d466ffa09010a2f8))
+
+
+### Dependencies
+
+* update dependency fohte/runok to v0.2.3 ([#149](https://github.com/fohte/runok-presets/issues/149)) ([8cb7fe2](https://github.com/fohte/runok-presets/commit/8cb7fe2e215283a31752e64c07b8c5debab8690a))
+
 ## [1.1.1](https://github.com/fohte/runok-presets/compare/v1.1.0...v1.1.1) (2026-04-11)
 
 
