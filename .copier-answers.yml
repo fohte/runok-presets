@@ -1,11 +1,12 @@
 # Changes here will be overwritten by Copier
-_commit: v0.6.1
+_commit: v0.6.4
 _src_path: https://github.com/fohte/generic-boilerplate
 auto_merge_release_pr: false
 description: Official preset collection for runok
 is_public: true
 project_name: runok-presets
 release_type: simple
+repo_language: en
 subpackages: []
 type: base
 use_release_please: true
