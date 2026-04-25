@@ -610,6 +610,13 @@ rules:
       - allow: 'exit 0'
       - allow: 'exit 1'
 
+  - allow: 'wait *'
+    tests:
+      - allow: 'wait'
+      - allow: 'wait 1234'
+      - allow: 'wait %1'
+      - allow: 'wait -n'
+
   # ── Output ──
   - allow: 'echo *'
     tests:
