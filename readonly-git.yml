@@ -165,9 +165,25 @@ rules:
     tests:
       - allow: 'git check-attr -a -- src/main.rs'
 
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog'
+    tests:
+      - allow: 'git reflog'
+
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] [--all] [--single-worktree] [--date *] [-n *] [--format *] [--abbrev *] [--no-abbrev]'
+    tests:
+      - allow: 'git reflog --all'
+      - allow: 'git reflog --single-worktree'
+      - allow: 'git reflog --date=relative'
+      - allow: 'git reflog show'
+      - allow: 'git reflog show --all'
+      - allow: 'git reflog -n 5'
+      - allow: 'git reflog --abbrev=8'
+      - allow: 'git reflog --no-abbrev'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog show *'
     tests:
       - allow: 'git reflog show --date=relative'
+      - allow: 'git reflog show HEAD'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] stash list *'
     tests:
@@ -248,6 +264,11 @@ rules:
     tests:
       - allow: 'git branch'
 
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch -l|--list'
+    tests:
+      - allow: 'git branch -l'
+      - allow: 'git branch --list'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] branch [-a|--all] [-r|--remotes] [-v|--verbose|-vv] [--sort *] [-l|--list *] [--format *] [--color *] [--no-color] [--column] [--column *] [--no-column] [--abbrev *] [--no-abbrev] [-i|--ignore-case] [--omit-empty]'
     tests:
       - allow: 'git branch -a --sort=-committerdate'
@@ -278,6 +299,11 @@ rules:
     tests:
       - allow: 'git tag'
 
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag -l|--list'
+    tests:
+      - allow: 'git tag -l'
+      - allow: 'git tag --list'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] tag [-n *] [-l|--list *] [--sort *] [--format *] [--color *] [--no-color] [--column] [--column *] [--no-column] [-i|--ignore-case] [--omit-empty]'
     tests:
       - allow: 'git tag -l "v1.*"'
@@ -300,6 +326,10 @@ rules:
       - allow: 'git tag --contains v1.0.0'
       - allow: 'git tag --no-contains v1.0.0'
       - allow: 'git tag --points-at HEAD'
+
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote'
+    tests:
+      - allow: 'git remote'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] remote -v|--verbose'
     tests:
