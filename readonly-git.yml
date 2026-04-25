@@ -165,25 +165,30 @@ rules:
     tests:
       - allow: 'git check-attr -a -- src/main.rs'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog'
+  # reflog expire/delete modify the reflog; --output writes to a file.
+  # Positional negations require a positional slot, so the bare/flag-only form
+  # needs a separate rule from the form with a positional ref argument.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] !--output* [--all] [--single-worktree] [--date *] [-n *] [--format *] [--abbrev *] [--no-abbrev]'
     tests:
       - allow: 'git reflog'
-
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] [--all] [--single-worktree] [--date *] [-n *] [--format *] [--abbrev *] [--no-abbrev]'
-    tests:
+      - allow: 'git reflog show'
       - allow: 'git reflog --all'
       - allow: 'git reflog --single-worktree'
       - allow: 'git reflog --date=relative'
-      - allow: 'git reflog show'
-      - allow: 'git reflog show --all'
       - allow: 'git reflog -n 5'
       - allow: 'git reflog --abbrev=8'
       - allow: 'git reflog --no-abbrev'
+      - allow: 'git reflog show --all'
+      - ask: 'git reflog --output=/tmp/out'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog show *'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] !expire|delete !--output* *'
     tests:
-      - allow: 'git reflog show --date=relative'
+      - allow: 'git reflog master'
       - allow: 'git reflog show HEAD'
+      - allow: 'git reflog show --date=relative'
+      - ask: 'git reflog expire'
+      - ask: 'git reflog delete'
+      - ask: 'git reflog show --output=/tmp/out'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] stash list *'
     tests:
