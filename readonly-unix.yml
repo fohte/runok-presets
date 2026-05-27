@@ -705,8 +705,9 @@ rules:
     tests:
       - allow: 'umask'
 
-  # `-r` clears, `-d` deletes, `-p` adds path entries to the hash table.
-  # Bare and `-t` are read-only.
+  # `-r` clears, `-d` deletes, `-p` adds explicit path entries.
+  # Bare `hash` lists; `hash NAME` adds a $PATH lookup to the cache
+  # (in-shell only, no filesystem effect).
   - allow: 'hash !-r|-d|-p *'
     tests:
       - allow: 'hash'
