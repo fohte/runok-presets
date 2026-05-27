@@ -70,8 +70,56 @@ jobs:
         if: steps.lefthook.outcome == 'failure'
         run: exit 1
 
-  e2e:
+  e2e-setup:
     runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.compute.outputs.versions }}
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Compute runok version matrix
+        id: compute
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          latest=$(gh release view -R fohte/runok --json tagName -q .tagName)
+
+          # Pick the highest floor across all presets so the chosen min satisfies every required_runok_version.
+          min_bare=$(grep -hE "^required_runok_version:" -- ./*.yml \
+            | sed -E "s/.*>=[[:space:]]*([0-9]+\.[0-9]+\.[0-9]+).*/\1/" \
+            | sort -V | tail -n1)
+          if [ -z "$min_bare" ]; then
+            echo "::error::no required_runok_version found in any preset"
+            exit 1
+          fi
+          min="v${min_bare}"
+
+          highest="v$(printf '%s\n%s\n' "${latest#v}" "$min_bare" | sort -V | tail -n1)"
+          if [ "$highest" != "$latest" ]; then
+            echo "::error::required_runok_version floor ($min) exceeds latest runok release ($latest)"
+            exit 1
+          fi
+
+          if [ "$latest" = "$min" ]; then
+            versions=$(jq -nc --arg v "$latest" '[$v]')
+          else
+            versions=$(jq -nc --arg l "$latest" --arg m "$min" '[$l, $m]')
+          fi
+          echo "latest=$latest min=$min versions=$versions"
+          echo "versions=$versions" >> "$GITHUB_OUTPUT"
+
+  e2e:
+    needs: e2e-setup
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        runok_version: ${{ fromJSON(needs.e2e-setup.outputs.versions) }}
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -79,13 +127,12 @@ jobs:
       - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
 
       - name: Install runok
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUNOK_VERSION: ${{ matrix.runok_version }}
         run: |
           gh release download "$RUNOK_VERSION" -R fohte/runok -p 'runok-x86_64-unknown-linux-gnu.tar.gz' -O - | tar xz
           sudo mv runok /usr/local/bin/
-        env:
-          GH_TOKEN: ${{ github.token }}
-          # renovate: datasource=github-releases depName=fohte/runok
-          RUNOK_VERSION: v0.3.0
 
       - name: Run preset E2E tests
         run: |
