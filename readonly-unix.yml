@@ -617,6 +617,15 @@ rules:
       - allow: 'wait %1'
       - allow: 'wait -n'
 
+  # Shell builtin: only mutates current shell state (options, positional
+  # parameters). No filesystem or process side effects.
+  - allow: 'set *'
+    tests:
+      - allow: 'set'
+      - allow: 'set -e'
+      - allow: 'set -euo pipefail'
+      - allow: 'set -- a b c'
+
   # ── Output ──
   - allow: 'echo *'
     tests:
