@@ -626,6 +626,109 @@ rules:
       - allow: 'set -euo pipefail'
       - allow: 'set -- a b c'
 
+  - allow: 'jobs *'
+    tests:
+      - allow: 'jobs'
+      - allow: 'jobs -l'
+      - allow: 'jobs -p'
+
+  - allow: 'shift *'
+    tests:
+      - allow: 'shift'
+      - allow: 'shift 2'
+
+  - allow: 'getopts *'
+    tests:
+      - allow: 'getopts ":hv" opt'
+      - allow: 'getopts "abc:" flag'
+
+  # Arithmetic evaluation. Only mutates shell variables; no external effects.
+  - allow: 'let *'
+    tests:
+      - allow: 'let x=1+2'
+      - allow: 'let "x = $a * 2"'
+
+  - allow: 'local *'
+    tests:
+      - allow: 'local x'
+      - allow: 'local -r name="value"'
+      - allow: 'local -a arr=(a b c)'
+
+  - allow: 'declare *'
+    tests:
+      - allow: 'declare'
+      - allow: 'declare -p'
+      - allow: 'declare -r name="value"'
+      - allow: 'declare -A map'
+
+  - allow: 'typeset *'
+    tests:
+      - allow: 'typeset'
+      - allow: 'typeset -p'
+      - allow: 'typeset -r name="value"'
+
+  - allow: 'times'
+    tests:
+      - allow: 'times'
+
+  - allow: 'caller *'
+    tests:
+      - allow: 'caller'
+      - allow: 'caller 0'
+      - allow: 'caller 1'
+
+  - allow: 'help *'
+    tests:
+      - allow: 'help'
+      - allow: 'help cd'
+      - allow: 'help -s set'
+
+  - allow: 'pushd *'
+    tests:
+      - allow: 'pushd /tmp'
+      - allow: 'pushd +1'
+      - allow: 'pushd -n /tmp'
+
+  - allow: 'popd *'
+    tests:
+      - allow: 'popd'
+      - allow: 'popd +1'
+
+  - allow: 'dirs *'
+    tests:
+      - allow: 'dirs'
+      - allow: 'dirs -v'
+      - allow: 'dirs -l'
+
+  # Bare `umask` prints the current mask (read-only). Any argument sets it.
+  - allow: 'umask'
+    tests:
+      - allow: 'umask'
+
+  # `-r` clears, `-d` deletes, `-p` adds path entries to the hash table.
+  # Bare and `-t` are read-only.
+  - allow: 'hash !-r|-d|-p *'
+    tests:
+      - allow: 'hash'
+      - allow: 'hash -t ls'
+      - allow: 'hash -l'
+      - ask: 'hash -r'
+      - ask: 'hash -d ls'
+      - ask: 'hash -p /usr/bin/ls ls'
+
+  # Bare `history` lists entries. Flags below mutate the history file/list.
+  - allow: 'history !-c|-d|-w|-r|-a|-n|-s *'
+    tests:
+      - allow: 'history'
+      - allow: 'history 10'
+      - ask: 'history -c'
+      - ask: 'history -d 5'
+      - ask: 'history -w'
+      - ask: 'history -r'
+      - ask: 'history -a'
+      - ask: 'history -n'
+      - ask: 'history -s some command'
+
   # ── Output ──
   - allow: 'echo *'
     tests:
