@@ -93,7 +93,17 @@ jobs:
           min_bare=$(grep -hE "^required_runok_version:" -- ./*.yml \
             | sed -E "s/.*>=[[:space:]]*([0-9]+\.[0-9]+\.[0-9]+).*/\1/" \
             | sort -V | tail -n1)
+          if [ -z "$min_bare" ]; then
+            echo "::error::no required_runok_version found in any preset"
+            exit 1
+          fi
           min="v${min_bare}"
+
+          highest="v$(printf '%s\n%s\n' "${latest#v}" "$min_bare" | sort -V | tail -n1)"
+          if [ "$highest" != "$latest" ]; then
+            echo "::error::required_runok_version floor ($min) exceeds latest runok release ($latest)"
+            exit 1
+          fi
 
           if [ "$latest" = "$min" ]; then
             versions=$(jq -nc --arg v "$latest" '[$v]')
