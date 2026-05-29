@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.0](https://github.com/fohte/runok-presets/compare/v1.1.1...v1.2.0) (2026-05-29)
+
+
+### Features
+
+* **readonly-gh:** allow gh api graphql read-only queries ([#150](https://github.com/fohte/runok-presets/issues/150)) ([b01d79b](https://github.com/fohte/runok-presets/commit/b01d79ba438ea6da6dfd04f8d466ffa09010a2f8))
+* **readonly-unix:** allow additional shell builtins ([#166](https://github.com/fohte/runok-presets/issues/166)) ([6783594](https://github.com/fohte/runok-presets/commit/678359487363c061a22ce48f90f9e92d5a4c61d1))
+* **readonly-unix:** allow set builtin ([#164](https://github.com/fohte/runok-presets/issues/164)) ([708b342](https://github.com/fohte/runok-presets/commit/708b3426a4ba6b1cc34d13306bf08c9c9be234e9))
+* **readonly-unix:** allow wait builtin ([#155](https://github.com/fohte/runok-presets/issues/155)) ([4a232f5](https://github.com/fohte/runok-presets/commit/4a232f55000467d5b23d2732a088514685f1c307))
+
+
+### Bug Fixes
+
+* **readonly-git:** allow bare list flags for branch/tag, bare remote, and bare reflog ([#156](https://github.com/fohte/runok-presets/issues/156)) ([035f820](https://github.com/fohte/runok-presets/commit/035f820385fcb80f0d357204577ea95a26587b02))
+
+
+### Dependencies
+
+* update dependency fohte/runok to v0.2.3 ([#149](https://github.com/fohte/runok-presets/issues/149)) ([8cb7fe2](https://github.com/fohte/runok-presets/commit/8cb7fe2e215283a31752e64c07b8c5debab8690a))
+
 ## [1.1.1](https://github.com/fohte/runok-presets/compare/v1.1.0...v1.1.1) (2026-04-11)
 
 
