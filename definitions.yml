@@ -9,6 +9,8 @@ definitions:
   wrappers:
     - 'bash -c <cmd>'
     - 'sh -c <cmd>'
+    - 'zsh -c <cmd>'
+    - 'eval <cmd>'
     - 'sudo <opts> <cmd>'
     - 'xargs <opts> <cmd>'
     - 'time <cmd>'
@@ -32,6 +34,14 @@ tests:
     # sh -c
     - allow: 'sh -c "cat /etc/hosts"'
     - ask: 'sh -c "rm -rf /"'
+
+    # zsh -c
+    - allow: 'zsh -c "cat /etc/hosts"'
+    - ask: 'zsh -c "rm -rf /"'
+
+    # eval
+    - allow: 'eval "cat /etc/hosts"'
+    - ask: 'eval "rm -rf /"'
 
     # sudo
     - allow: 'sudo cat /etc/shadow'
