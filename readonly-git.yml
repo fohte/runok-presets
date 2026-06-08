@@ -115,6 +115,18 @@ rules:
     tests:
       - allow: 'git show-ref'
 
+  # Read form returns HEAD's target ref. Write form (`symbolic-ref HEAD <ref>`)
+  # and `--delete` modify the ref and are intentionally excluded.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] symbolic-ref [-q|--quiet] [--short] HEAD'
+    tests:
+      - allow: 'git symbolic-ref HEAD'
+      - allow: 'git symbolic-ref --short HEAD'
+      - allow: 'git symbolic-ref -q HEAD'
+      - allow: 'git symbolic-ref --quiet --short HEAD'
+      - ask: 'git symbolic-ref HEAD refs/heads/main'
+      - ask: 'git symbolic-ref --delete HEAD'
+      - ask: 'git symbolic-ref -m "reason" HEAD refs/heads/main'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-branch *'
     tests:
       - allow: 'git show-branch --all'
@@ -176,6 +188,9 @@ rules:
       - allow: 'git reflog --single-worktree'
       - allow: 'git reflog --date=relative'
       - allow: 'git reflog -n 5'
+      - allow: 'git reflog -5'
+      - allow: 'git reflog -100'
+      - allow: 'git reflog show -20'
       - allow: 'git reflog --abbrev=8'
       - allow: 'git reflog --no-abbrev'
       - allow: 'git reflog show --all'
