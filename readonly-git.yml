@@ -180,7 +180,8 @@ rules:
   # reflog expire/delete modify the reflog; --output writes to a file.
   # Positional negations require a positional slot, so the bare/flag-only form
   # needs a separate rule from the form with a positional ref argument.
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] !--output* [--all] [--single-worktree] [--date *] [-n *] [--format *] [--abbrev *] [--no-abbrev]'
+  # `-<n>` is git's shorthand for `-n <n>` (e.g. `git reflog -5` == `git reflog -n 5`).
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] !--output* [--all] [--single-worktree] [--date *] [-n *] [-0*|-1*|-2*|-3*|-4*|-5*|-6*|-7*|-8*|-9*] [--format *] [--abbrev *] [--no-abbrev]'
     tests:
       - allow: 'git reflog'
       - allow: 'git reflog show'
