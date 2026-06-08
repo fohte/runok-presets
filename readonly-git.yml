@@ -115,6 +115,18 @@ rules:
     tests:
       - allow: 'git show-ref'
 
+  # Read form returns HEAD's target ref. Write form (`symbolic-ref HEAD <ref>`)
+  # and `--delete` modify the ref and are intentionally excluded.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] symbolic-ref [-q|--quiet] [--short] HEAD'
+    tests:
+      - allow: 'git symbolic-ref HEAD'
+      - allow: 'git symbolic-ref --short HEAD'
+      - allow: 'git symbolic-ref -q HEAD'
+      - allow: 'git symbolic-ref --quiet --short HEAD'
+      - ask: 'git symbolic-ref HEAD refs/heads/main'
+      - ask: 'git symbolic-ref --delete HEAD'
+      - ask: 'git symbolic-ref -m "reason" HEAD refs/heads/main'
+
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-branch *'
     tests:
       - allow: 'git show-branch --all'
@@ -168,7 +180,8 @@ rules:
   # reflog expire/delete modify the reflog; --output writes to a file.
   # Positional negations require a positional slot, so the bare/flag-only form
   # needs a separate rule from the form with a positional ref argument.
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] !--output* [--all] [--single-worktree] [--date *] [-n *] [--format *] [--abbrev *] [--no-abbrev]'
+  # `-<n>` is git's shorthand for `-n <n>` (e.g. `git reflog -5` == `git reflog -n 5`).
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] reflog [show] !--output* [--all] [--single-worktree] [--date *] [-n *] [-0*|-1*|-2*|-3*|-4*|-5*|-6*|-7*|-8*|-9*] [--format *] [--abbrev *] [--no-abbrev]'
     tests:
       - allow: 'git reflog'
       - allow: 'git reflog show'
@@ -176,6 +189,9 @@ rules:
       - allow: 'git reflog --single-worktree'
       - allow: 'git reflog --date=relative'
       - allow: 'git reflog -n 5'
+      - allow: 'git reflog -5'
+      - allow: 'git reflog -100'
+      - allow: 'git reflog show -20'
       - allow: 'git reflog --abbrev=8'
       - allow: 'git reflog --no-abbrev'
       - allow: 'git reflog show --all'
