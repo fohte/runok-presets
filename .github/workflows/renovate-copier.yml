@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-slim
     if: >-
       github.actor == 'renovate[bot]' &&
-      startsWith(github.head_ref, 'renovate/https-github.com-fohte-generic-boilerplate-')
+      startsWith(github.head_ref, 'renovate/https-github-com-fohte-generic-boilerplate-')
 
     steps:
       - name: Federate GitHub token via octo-sts
@@ -35,9 +35,48 @@ jobs:
             chmod +x scripts/bootstrap
           fi
 
+      - name: Detect copier conflicts
+        id: detect
+        run: |
+          # copier-specific marker (not git's `<<<<<<< HEAD`).
+          # The pattern is split (`'before '` + `updating`) so this workflow
+          # does not self-match when checked into the repo.
+          if git grep --untracked -l '<<<<<<< before '"updating" > /tmp/copier-conflicts.txt && [ -s /tmp/copier-conflicts.txt ]; then
+            echo "has_conflicts=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_conflicts=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install mise
+        if: steps.detect.outputs.has_conflicts == 'true'
+        continue-on-error: true
+        uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4.1.0
+        with:
+          version: 2026.6.10
+          install: false
+
+      - name: Resolve copier conflicts with mergiraf
+        if: steps.detect.outputs.has_conflicts == 'true'
+        continue-on-error: true
+        env:
+          # renovate: datasource=gitea-tags depName=mergiraf/mergiraf registryUrl=https://codeberg.org
+          MERGIRAF_VERSION: v0.17.0
+        run: |
+          set -uo pipefail
+          if ! command -v mise > /dev/null; then
+            echo "mise not installed; leaving conflict markers in place."
+            exit 0
+          fi
+          while IFS= read -r f; do
+            echo "mergiraf solve: $f"
+            if ! mise exec "aqua:codeberg.org/mergiraf/mergiraf@${MERGIRAF_VERSION}" -- mergiraf solve --keep-backup=false "$f"; then
+              echo "  -> mergiraf left conflicts in $f"
+            fi
+          done < /tmp/copier-conflicts.txt
+
       - name: Commit and push changes
         uses: suzuki-shunsuke/commit-action@06e3b49d4706498d325d29bd85adc82ecf2f5d8f # v1.0.0
         with:
-          commit_message: 'chore: restore executable bit on scripts/bootstrap'
+          commit_message: 'chore: post-process copier update'
           workflow: deny
           github_token: ${{ steps.octo-sts.outputs.token }}
