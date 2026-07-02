@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/fohte/runok-presets/compare/v1.2.0...v1.3.0) (2026-07-02)
+
+
+### Features
+
+* **definitions:** add `zsh -c` and `eval` wrappers ([#168](https://github.com/fohte/runok-presets/issues/168)) ([f6f4270](https://github.com/fohte/runok-presets/commit/f6f42707a1be3b6e7bf930489c9e17dc7b3c2ee1))
+* **readonly-git:** add `symbolic-ref HEAD` read form and `reflog -<n>` shorthand ([#170](https://github.com/fohte/runok-presets/issues/170)) ([d1f6085](https://github.com/fohte/runok-presets/commit/d1f608557f686e0bf9edd5252a73e1822ed990f1))
+
+
+### Dependencies
+
+* update dependency jdx/mise to v2026.6.11 ([#177](https://github.com/fohte/runok-presets/issues/177)) ([662b707](https://github.com/fohte/runok-presets/commit/662b707940be94a3e7c3ad05389b418805466412))
+
 ## [1.2.0](https://github.com/fohte/runok-presets/compare/v1.1.1...v1.2.0) (2026-05-29)
 
 
