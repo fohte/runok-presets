@@ -82,6 +82,8 @@ rules:
   # --git-dir is also rev-parse's own flag (prints $GIT_DIR). Bare, it
   # collides with the [--git-dir *] prefix group above, which needs a
   # value token that isn't there, so the general rule fails to match.
+  # Only this exact form is covered; combining --git-dir at the end with
+  # other bare query flags hits the same collision and stays unmatched.
   - allow: 'git [-C *] [--work-tree *] rev-parse --git-dir'
     tests:
       - allow: 'git rev-parse --git-dir'
