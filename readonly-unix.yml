@@ -588,6 +588,11 @@ rules:
     tests:
       - allow: 'read -r -p "Enter: " input'
 
+  - allow: 'mapfile|readarray *'
+    tests:
+      - allow: 'mapfile -t pkgs < <(cat package.json)'
+      - allow: 'readarray -t lines < file.txt'
+
   - allow: 'break *'
     tests:
       - allow: 'break'
