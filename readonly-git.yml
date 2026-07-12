@@ -6,6 +6,36 @@
 # Destructive subcommands (push, commit, rebase, etc.) are not included.
 
 rules:
+  # ── `-h` help override (safe regardless of subcommand) ──
+  #
+  # git's parse-options.c convention makes `-h` behave like `--help` on any
+  # subcommand: it only prints usage and exits, no matter how destructive the
+  # subcommand normally is. This complements base.yml's `* --help`, which
+  # only covers the long form.
+  #
+  # `-h` can't be matched with a trailing wildcard (`* -h`): a preceding
+  # value-taking flag can consume it as that flag's argument instead of git
+  # treating it as help (`git commit -m -h` really commits with message
+  # "-h"), and a literal `-h` after `--` is a pathspec, not a flag. Requiring
+  # `-h` to be the only token directly after the subcommand rules out both
+  # cases, since nothing can occupy the position that would otherwise
+  # swallow it.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] -h'
+    tests:
+      - allow: 'git -h'
+
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] add|am|apply|bisect|branch|checkout|cherry-pick|clean|clone|commit|config|fetch|filter-branch|gc|init|merge|mv|notes|prune|pull|push|rebase|remote|repack|reset|restore|revert|rm|stash|submodule|switch|tag|worktree -h'
+    tests:
+      - allow: 'git commit -h'
+      - allow: 'git push -h'
+      - allow: 'git rebase -h'
+      - allow: 'git reset -h'
+      - ask: 'git commit -h -m "test"'
+      - ask: 'git commit -m -h'
+      - ask: 'git commit --author -h'
+      - ask: 'git commit -- -h'
+      - ask: 'git commit -m "msg" -- -h'
+
   # ── Fully read-only subcommands ──
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] status *'
     tests:
@@ -58,20 +88,6 @@ rules:
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] version'
     tests:
       - allow: 'git version'
-
-  # git's parse-options.c convention makes `-h` behave like `--help` on every
-  # subcommand: it only prints usage and exits, regardless of how destructive
-  # the subcommand normally is. This complements base.yml's `* --help`, which
-  # only covers the long form. As with that rule, `-h` must be the final
-  # token to be treated as a pure help invocation.
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] * -h'
-    tests:
-      - allow: 'git -h'
-      - allow: 'git commit -h'
-      - allow: 'git push -h'
-      - allow: 'git rebase -h'
-      - allow: 'git reset -h'
-      - ask: 'git commit -h -m "test"'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] ls-files *'
     tests:
