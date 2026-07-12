@@ -588,6 +588,23 @@ rules:
     tests:
       - allow: 'read -r -p "Enter: " input'
 
+  # -C invokes an arbitrary callback command per line read, so it must be excluded.
+  # bash lets -t bundle with it (e.g. -tC), so match on substring, not an exact flag token.
+  # -c only sets the callback quantum and is harmless without -C, so it stays allowed.
+  - allow: 'mapfile !-*C* *'
+    tests:
+      - allow: 'mapfile -t pkgs < <(cat package.json)'
+      - allow: 'mapfile -c 10 arr < file.txt'
+      - ask: "mapfile -c 1 -C 'rm -rf ~' < file.txt"
+      - ask: "mapfile -tC 'rm -rf ~' arr"
+
+  - allow: 'readarray !-*C* *'
+    tests:
+      - allow: 'readarray -t lines < file.txt'
+      - allow: 'readarray -c 10 arr < file.txt'
+      - ask: "readarray -c 1 -C 'rm -rf ~' < file.txt"
+      - ask: "readarray -tC 'rm -rf ~' arr"
+
   - allow: 'break *'
     tests:
       - allow: 'break'

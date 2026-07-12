@@ -21,6 +21,11 @@ definitions:
     - 'nohup <cmd>'
     - 'stdbuf <opts> <cmd>'
     - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
+    # bare `*` (not `<opts>`) is required on both sides: `<opts>` never matches when
+    # zero tokens precede a literal flag, e.g. `mapfile -C <cmd>` alone. `-*C` (not
+    # `-C`) matches bash's `-t`/`-C` flag bundling, e.g. `mapfile -tC <cmd>`.
+    - 'mapfile * -*C <cmd> *'
+    - 'readarray * -*C <cmd> *'
 
 tests:
   extends:
@@ -91,3 +96,17 @@ tests:
     - ask: 'find . -name "*.log" -exec rm {} \;'
     - allow: 'find /tmp -name "*.log" -execdir cat {} \;'
     - allow: 'find . -name "*.log" -exec cat {} +'
+
+    # mapfile -C
+    - allow: "mapfile -t -C 'cat /etc/hosts' arr"
+    - ask: "mapfile -t -C 'rm -rf /' arr"
+    - allow: "mapfile -C 'cat /etc/hosts' arr"
+    - allow: "mapfile -tC 'cat /etc/hosts' arr"
+    - ask: "mapfile -tC 'rm -rf /' arr"
+
+    # readarray -C
+    - allow: "readarray -t -C 'cat /etc/hosts' arr"
+    - ask: "readarray -t -C 'rm -rf /' arr"
+    - allow: "readarray -C 'cat /etc/hosts' arr"
+    - allow: "readarray -tC 'cat /etc/hosts' arr"
+    - ask: "readarray -tC 'rm -rf /' arr"
