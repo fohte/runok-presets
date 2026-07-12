@@ -588,10 +588,16 @@ rules:
     tests:
       - allow: 'read -r -p "Enter: " input'
 
-  - allow: 'mapfile|readarray *'
+  # -C/-c invoke an arbitrary callback command per line read, so they must be excluded
+  - allow: 'mapfile !-C|-c *'
     tests:
       - allow: 'mapfile -t pkgs < <(cat package.json)'
+      - ask: "mapfile -c 1 -C 'rm -rf ~' < file.txt"
+
+  - allow: 'readarray !-C|-c *'
+    tests:
       - allow: 'readarray -t lines < file.txt'
+      - ask: "readarray -c 1 -C 'rm -rf ~' < file.txt"
 
   - allow: 'break *'
     tests:
