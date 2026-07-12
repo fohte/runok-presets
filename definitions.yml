@@ -21,6 +21,8 @@ definitions:
     - 'nohup <cmd>'
     - 'stdbuf <opts> <cmd>'
     - "find * -exec|-execdir|-ok|-okdir <cmd> \\;|+"
+    - 'mapfile * -C <cmd> *'
+    - 'readarray * -C <cmd> *'
 
 tests:
   extends:
@@ -91,3 +93,11 @@ tests:
     - ask: 'find . -name "*.log" -exec rm {} \;'
     - allow: 'find /tmp -name "*.log" -execdir cat {} \;'
     - allow: 'find . -name "*.log" -exec cat {} +'
+
+    # mapfile -C
+    - allow: "mapfile -t -C 'cat /etc/hosts' arr"
+    - ask: "mapfile -t -C 'rm -rf /' arr"
+
+    # readarray -C
+    - allow: "readarray -t -C 'cat /etc/hosts' arr"
+    - ask: "readarray -t -C 'rm -rf /' arr"
