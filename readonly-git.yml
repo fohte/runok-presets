@@ -24,12 +24,14 @@ rules:
     tests:
       - allow: 'git -h'
 
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] add|am|apply|bisect|branch|checkout|cherry-pick|clean|clone|commit|config|fetch|filter-branch|gc|init|merge|mv|notes|prune|pull|push|rebase|remote|repack|reset|restore|revert|rm|stash|submodule|switch|tag|worktree -h'
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] add|am|apply|bisect|branch|checkout|cherry-pick|clean|clone|commit|config|fetch|filter-branch|gc|init|interpret-trailers|merge|mv|notes|prune|pull|push|rebase|remote|repack|reset|restore|revert|rm|stash|submodule|switch|symbolic-ref|tag|worktree -h'
     tests:
       - allow: 'git commit -h'
       - allow: 'git push -h'
       - allow: 'git rebase -h'
       - allow: 'git reset -h'
+      - allow: 'git symbolic-ref -h'
+      - allow: 'git interpret-trailers -h'
       - ask: 'git commit -h -m "test"'
       - ask: 'git commit -m -h'
       - ask: 'git commit --author -h'
