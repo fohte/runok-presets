@@ -13,19 +13,22 @@ rules:
   # subcommand normally is. This complements base.yml's `* --help`, which
   # only covers the long form.
   #
-  # `-h` can't be matched with a trailing wildcard (`* -h`): a preceding
-  # value-taking flag can consume it as that flag's argument instead of git
-  # treating it as help (`git commit -m -h` really commits with message
-  # "-h"), and a literal `-h` after `--` is a pathspec, not a flag. Requiring
-  # `-h` to be the only token directly after the subcommand rules out both
-  # cases, since nothing can occupy the position that would otherwise
-  # swallow it.
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] -h'
+  # `-h` can't be matched by position (a trailing wildcard `* -h`, or an
+  # enumerated `<subcommand> -h`): a preceding value-taking flag can consume
+  # it as that flag's argument instead of git treating it as help (`git
+  # commit -m -h` really commits with message "-h"), a literal `-h` after
+  # `--` is a pathspec, not a flag, and extra positional arguments after the
+  # subcommand can likewise make git run for real instead of showing help
+  # (`git config key value -h` actually sets `key`). Matching on `flags`/
+  # `args` instead of token position sidesteps all three, and covers every
+  # subcommand (including future ones) without enumerating them: allow only
+  # when `-h` is the sole flag present besides the location options already
+  # carved out above, and the subcommand is the only positional argument.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] *'
+    when: "'h' in flags && size(args) <= 1 && !flags.exists(k, k != 'h' && k != 'C' && k != 'git-dir' && k != 'work-tree')"
     tests:
       - allow: 'git -h'
-
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] add|am|apply|bisect|branch|checkout|cherry-pick|clean|clone|commit|config|fetch|filter-branch|gc|init|interpret-trailers|merge|mv|notes|prune|pull|push|rebase|remote|repack|reset|restore|revert|rm|stash|submodule|switch|symbolic-ref|tag|worktree -h'
-    tests:
+      - allow: 'git -C /tmp commit -h'
       - allow: 'git commit -h'
       - allow: 'git push -h'
       - allow: 'git rebase -h'
@@ -37,6 +40,9 @@ rules:
       - ask: 'git commit --author -h'
       - ask: 'git commit -- -h'
       - ask: 'git commit -m "msg" -- -h'
+      - ask: 'git config test.key value -h'
+      - ask: 'git worktree add /tmp/wt -h'
+      - ask: 'git checkout -b newbranch -h'
 
   # ── Fully read-only subcommands ──
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] status *'
