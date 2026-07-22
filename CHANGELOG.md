@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.0](https://github.com/fohte/runok-presets/compare/v1.2.0...v1.3.0) (2026-07-22)
+
+
+### Features
+
+* **definitions:** add `zsh -c` and `eval` wrappers ([#168](https://github.com/fohte/runok-presets/issues/168)) ([f6f4270](https://github.com/fohte/runok-presets/commit/f6f42707a1be3b6e7bf930489c9e17dc7b3c2ee1))
+* **readonly-git:** add `symbolic-ref HEAD` read form and `reflog -<n>` shorthand ([#170](https://github.com/fohte/runok-presets/issues/170)) ([d1f6085](https://github.com/fohte/runok-presets/commit/d1f608557f686e0bf9edd5252a73e1822ed990f1))
+* **readonly-unix:** allow mapfile/readarray ([#198](https://github.com/fohte/runok-presets/issues/198)) ([b25d503](https://github.com/fohte/runok-presets/commit/b25d50308df3ec4dc68187499e51224adbc70f39))
+
+
+### Bug Fixes
+
+* **readonly-git:** allow rev-parse --git-dir, sparse-checkout list, and multi-pattern branch --list ([#197](https://github.com/fohte/runok-presets/issues/197)) ([a81ecba](https://github.com/fohte/runok-presets/commit/a81ecbaa706da5a9566ff547ddf1c9929a6bd216))
+
+
+### Dependencies
+
+* update dependency jdx/mise to v2026.6.11 ([#177](https://github.com/fohte/runok-presets/issues/177)) ([662b707](https://github.com/fohte/runok-presets/commit/662b707940be94a3e7c3ad05389b418805466412))
+
 ## [1.2.0](https://github.com/fohte/runok-presets/compare/v1.1.1...v1.2.0) (2026-05-29)
 
 
