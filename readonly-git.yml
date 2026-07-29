@@ -124,17 +124,22 @@ rules:
     tests:
       - allow: 'git show-ref'
 
-  # Read form returns HEAD's target ref. Write form (`symbolic-ref HEAD <ref>`)
-  # and `--delete` modify the ref and are intentionally excluded.
-  - allow: 'git [-C *] [--git-dir *] [--work-tree *] symbolic-ref [-q|--quiet] [--short] HEAD'
+  # Read form resolves <name> and only prints its target, so it's read-only
+  # regardless of which ref is named. Write form (`symbolic-ref <name> <ref>`)
+  # and `--delete` need an extra token, which the lack of a trailing wildcard
+  # here rejects.
+  - allow: 'git [-C *] [--git-dir *] [--work-tree *] symbolic-ref [-q|--quiet] [--short] HEAD|refs/*'
     tests:
       - allow: 'git symbolic-ref HEAD'
       - allow: 'git symbolic-ref --short HEAD'
       - allow: 'git symbolic-ref -q HEAD'
       - allow: 'git symbolic-ref --quiet --short HEAD'
+      - allow: 'git symbolic-ref refs/remotes/origin/HEAD'
+      - allow: 'git symbolic-ref --short refs/remotes/origin/HEAD'
       - ask: 'git symbolic-ref HEAD refs/heads/main'
       - ask: 'git symbolic-ref --delete HEAD'
       - ask: 'git symbolic-ref -m "reason" HEAD refs/heads/main'
+      - ask: 'git symbolic-ref refs/remotes/origin/HEAD refs/heads/main'
 
   - allow: 'git [-C *] [--git-dir *] [--work-tree *] show-branch *'
     tests:
