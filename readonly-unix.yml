@@ -405,18 +405,45 @@ rules:
   - allow: 'hostname'
     tests:
       - allow: 'hostname'
+      # A bare positional argument sets the hostname (superuser only on
+      # most systems, but not a flag, so negation cannot exclude it).
+      - ask: 'hostname newname'
 
-  - allow: 'hostid'
+  # Display-only flags: query the current hostname/FQDN/domain/IP without
+  # changing anything. Kept as a separate rule from the bare-only one above
+  # since a trailing positional argument (excluded here) would rename the host.
+  - allow: 'hostname -f|-s|-d|-i|-A|-I|--fqdn|--short|--domain|--ip-address|--all-fqdns|--all-ip-addresses'
+    tests:
+      - allow: 'hostname -f'
+      - allow: 'hostname -s'
+      - allow: 'hostname -d'
+      - allow: 'hostname -i'
+      - allow: 'hostname -A'
+      - allow: 'hostname -I'
+      - allow: 'hostname --fqdn'
+      - allow: 'hostname --short'
+      - allow: 'hostname --domain'
+      - allow: 'hostname --ip-address'
+      - allow: 'hostname --all-fqdns'
+      - allow: 'hostname --all-ip-addresses'
+
+  - allow: 'hostid *'
     tests:
       - allow: 'hostid'
+      # No option sets a value (man hostid); unrecognized args just error.
+      - allow: 'hostid -x'
 
-  - allow: 'nproc'
+  - allow: 'nproc *'
     tests:
       - allow: 'nproc'
+      - allow: 'nproc --all'
+      - allow: 'nproc --ignore=2'
 
-  - allow: 'uptime'
+  - allow: 'uptime *'
     tests:
       - allow: 'uptime'
+      - allow: 'uptime -p'
+      - allow: 'uptime -s'
 
   - allow: 'date !-s|--set *'
     tests:
@@ -444,13 +471,17 @@ rules:
     tests:
       - allow: 'who -b'
 
-  - allow: 'w'
+  - allow: 'w *'
     tests:
       - allow: 'w'
+      - allow: 'w -h'
+      - allow: 'w -i'
+      - allow: 'w -n'
 
-  - allow: 'users'
+  - allow: 'users *'
     tests:
       - allow: 'users'
+      - allow: 'users /var/log/wtmp'
 
   - allow: 'groups *'
     tests:
@@ -499,9 +530,11 @@ rules:
     tests:
       - allow: 'getconf LONG_BIT'
 
-  - allow: 'tty'
+  - allow: 'tty *'
     tests:
       - allow: 'tty'
+      - allow: 'tty -s'
+      - allow: 'tty --silent'
 
   - allow: 'tput *'
     tests:
@@ -580,9 +613,11 @@ rules:
     tests:
       - allow: 'cd /tmp'
 
-  - allow: 'pwd'
+  - allow: 'pwd *'
     tests:
       - allow: 'pwd'
+      - allow: 'pwd -L'
+      - allow: 'pwd -P'
 
   - allow: 'read *'
     tests:
@@ -760,13 +795,17 @@ rules:
     tests:
       - allow: 'yes n'
 
-  - allow: 'true'
+  - allow: 'true *'
     tests:
       - allow: 'true'
+      - allow: 'true --help'
+      - allow: 'true anything'
 
-  - allow: 'false'
+  - allow: 'false *'
     tests:
       - allow: 'false'
+      - allow: 'false --help'
+      - allow: 'false anything'
 
   - allow: 'test *'
     tests:
