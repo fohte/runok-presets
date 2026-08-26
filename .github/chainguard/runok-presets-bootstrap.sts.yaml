@@ -1,0 +1,6 @@
+issuer: https://token.actions.githubusercontent.com
+subject_pattern: ^repo:fohte@11088009/runok-presets@1175747685:ref:refs/heads/.+$
+claim_pattern:
+  job_workflow_ref: ^fohte/runok-presets/\.github/workflows/bootstrap\.yml@[^@]+$
+permissions:
+  contents: write
