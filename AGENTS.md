@@ -1,6 +1,4 @@
-<<<<<<< before updating
-
-# CLAUDE.md
+# AGENTS.md
 
 Official preset collection for [runok](https://github.com/fohte/runok), a command execution permission manager for LLM agents.
 
@@ -74,9 +72,6 @@ For rule pattern syntax details, use the `/runok` skill.
 
 - [release-please](https://github.com/googleapis/release-please) automates versioning and releases
 - CI runs `runok test -c <file>` for all preset files
-  \=======
-
-# AGENTS.md
 
 ## Code organization rules
 
@@ -85,5 +80,3 @@ For rule pattern syntax details, use the `/runok` skill.
 When a change would push a file's non-test code past ~500 lines, split it along responsibility seams before adding more. Splits must be move-only commits: no logic changes, renames, or reformatting mixed in. Keep external import paths unchanged by keeping the entrypoint file in place and re-exporting the pieces you split out into new files. Tests move together with the code they verify.
 
 Prefer creating a new focused file over appending to the largest existing one.
-
-> > > > > > > after updating
